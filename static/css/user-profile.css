@@ -1,0 +1,82 @@
+/* Add this CSS to your stylesheet */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumb-option {
+    background-color: #51565c;
+    color: #fff;
+    padding: 20px 0;
+}
+
+.breadcrumb__text h4 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.breadcrumb__links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.card-body {
+    background-color: #fff;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    color: #555;
+}
+
+.btn-outline-dark {
+    color: #333;
+    border-color: #333;
+}
+
+.btn-outline-dark:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    color: #d9534f;
+    border-color: #d9534f;
+}
+
+.btn-outline-danger:hover {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.btn-outline-info {
+    color: #5bc0de;
+    border-color: #5bc0de;
+}
+
+.btn-outline-info:hover {
+    background-color: #5bc0de;
+    color: #fff;
+}

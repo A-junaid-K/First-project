@@ -1,0 +1,9 @@
+.icon-hover:hover {
+  border-color: #faca16 !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: #faca16 !important;
+}
+
+.icon-hover:hover i {
+  color: #faca16 !important;
+}

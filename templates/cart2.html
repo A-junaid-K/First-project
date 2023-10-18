@@ -1,0 +1,187 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Material Design for Bootstrap</title>
+     Font Awesome
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    Google Fonts Roboto
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    MDB 
+    <link rel="stylesheet" href="css/mdb.min.css" />
+    < Custom styles 
+    <link rel="stylesheet" href="static/css/productList.css" /> -->
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Merrel Cart</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <!-- MDB -->
+    <!-- <link rel="stylesheet" href="css/mdb.min.css" /> -->
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/static/css/productList.css" />
+</head>
+<body>
+    <!--Main Navigation-->
+<header>
+  <!-- Jumbotron -->
+  <div class="p-3 text-center bg-white border-bottom">
+    <div class="container">
+      <div class="row gy-3">
+        <!-- Left elements -->
+        <div class="col-lg-2 col-sm-4 col-4">
+          <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
+            <img src="/static/images/logo.png" height="35" />
+          </a>
+        </div>
+        <!-- Left elements -->
+
+        <!-- Center elements -->
+        <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+          <div class="d-flex float-end">
+            <a href="/user/log-out" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Log out</p> </a>
+            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
+            <!-- <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a> -->
+          </div>
+        </div>
+        <!-- Center elements -->
+
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12">
+          <div class="input-group float-center">
+            <div class="form-outline">
+              <input type="search" id="form1" class="form-control" />
+              <label class="form-label" for="form1">Search</label>
+            </div>
+            <button type="button" class="btn btn-primary shadow-0">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Right elements -->
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+
+  <!-- Heading -->
+  <div class="bg-primary mb-4">
+    <div class="container py-4">
+      <!-- Breadcrumb -->
+      <nav class="d-flex mb-2">
+        <h6 class="mb-0">
+          <a href="/" class="text-white-50">Home</a>
+          <span class="text-white-50 mx-2"> > </span>
+          <a href="/user/products-list" class="text-white-50">Product</a>
+          <span class="text-white-50 mx-2"> > </span>
+          <a href="" class="text-white"><u>Data</u></a>
+        </h6>
+      </nav>
+      <!-- Breadcrumb -->
+    </div>
+  </div>
+  <!-- Heading -->
+</header>
+
+<!-- sidebar + content -->
+<section class="">
+  <div class="container">
+    <div class="row">
+      <!-- sidebar -->
+      <!-- content -->
+      <div class="col-lg-9">
+        {{range .}}
+        
+        <div class="row justify-content-center mb-3">
+          <div class="col-md-12">
+            <div class="card shadow-0 border rounded-3">
+              <div class="card-body">
+                <div class="row g-0">
+                  <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                      <a href="/user/product-details/{{.ID}}">
+                      <img src="/static/images/{{.Image}}" class="w-100" />
+                    </a>
+                      <a href="#!">
+                        <div class="hover-overlay">
+                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-md-5 col-sm-7">
+                    <h5 style="font-weight: bolder;" >{{.Brand_Name}}</h5>
+                    <h5 style="font-weight: 400;">{{.Name}}</h5>
+                    <br>
+                    <h5 style="font-weight: 400;">size : {{.Size}}</h5>
+                    <br>
+                    <p class="text mb-4 mb-md-0">{{.Description}}</p>
+                  </div>
+                  <div class="col-xl-3 col-md-3 col-sm-5">
+                    <div class="d-flex flex-row align-items-center mb-1">
+                      <h4 class="mb-1 me-1">{{.Price}}</h4>
+                      <span class="text-danger"><s>$49.99</s></span>
+                    </div>
+                    <h6 class="text-success">Free shipping</h6>
+                    <!-- <h6 class="text-succes">Nike</h6> -->
+                    <div class="mt-4">
+                        <form action="/user/remove-from-cart/{{.Product_ID}}" method="GET" >
+                      <!-- <button class="btn btn-primary shadow-0" type="button" href="/user/checkout" >checkout</button> -->
+                      <a href="/user/checkout" class="btn btn-primary shadow-0" >Checkout</a>
+                      <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
+                      <!-- <button style="color: rgb(255, 122, 122);margin-top: 10px;" class="btn btn-primary shadow-0" type="button" href="/user/remove-from-cart" >Remove</button> -->
+                      <a href="/user/remove-from-cart/{{.Product_ID}}" class="btn btn-primary shadow-0" style="color: rgb(255, 122, 122); margin-top: 10px;">Remove</a>
+
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          {{end}}
+     <!--//error here-->
+    
+        <hr />
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Footer -->
+<footer class="text-center text-lg-start text-muted bg-primary mt-3">
+  <!-- Section: Links  -->
+
+  <div class="">
+    <div class="container">
+      <div class="d-flex justify-content-between py-4 border-top">
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- Footer -->
+    <!-- MDB -->
+    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
+    <!-- Custom scripts -->
+    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
+
+    <!-- gpt -->
+        <!-- Bootstrap JS (Popper.js and Bootstrap JavaScript) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <!-- Your custom scripts -->
+    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
+</body>
+</html>
+

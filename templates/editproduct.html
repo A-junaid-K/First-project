@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            font-size: large;
+            background-color: #2c2a2a;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 15px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Product</h1>
+    {{range .}}
+    <div class="container">
+        <form action="/edit-product/{{.Id}}" method="post" enctype="multipart/form-data">
+            <label for="productName">Name:</label>
+            <input type="text" id="productName" name="productName" placeholder="{{.Name}}" required>
+
+            <label for="productDescription">Description:</label>
+            <textarea id="productDescription" name="productDescription" placeholder="{{.Description}}" required></textarea>
+
+            <label for="productStock">Stock:</label>
+            <input type="number" id="productStock" name="productStock" step="01" required>
+
+            <label for="productPrice">Price:</label>
+            <input type="number" id="productPrice" name="productPrice" step="01" required>
+       
+            <!-- <label for="selectBox">Select category:</label>
+                <select id="selectBox" name="categoryName" style="margin-bottom: 20px;" >
+                    <option value="apple">{{.Category_Name}}</option>
+                    <!- <option value="banana">Banana</option>
+                    <option value="cherry">Cherry</option>
+                    <option value="date">Date</option> ->
+                </select> -->
+ 
+                <label for="categoryName">Edit category:</label>
+                <input type="text" id="catewgoryName" name="categoryName" required>
+
+            <!-- <label for="selectBox">Select brand:</label>
+                <select id="selectBox" name="catagoryName" style="margin-bottom: 20px;" >
+                    <option value="apple">{{.Brand_Name}}</option>
+                    <!- <option value="banana">Banana</option>
+                    <option value="cherry">Cherry</option>
+                    <option value="date">Date</option> ->
+                </select> -->
+         
+                <label for="brandName">Edit brand:</label>
+                <input type="text" id="brandName" name="brandName" required>
+
+            <label for="productImage">Edit Image:</label>
+            <input type="file" id="productImage" name="productImage" accept="image/*" required>
+
+            <input type="submit" value="Edit Product">
+            <p style="color: crimson;" >{{.error}}</p>
+            <p style="color: #4CAF50;" >{{.message}}</p>
+        </form>
+    </div>
+    {{end}}
+</body>
+</html>
