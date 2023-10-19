@@ -2,9 +2,9 @@ package models
 
 import "time"
 
-type Catagory_Offer struct {
+type Category_Offer struct {
 	ID          uint `gorm:"primaryKey;unique"`
-	Catagory_Id uint `gorm:"not null"`
+	Category_Id uint `gorm:"not null"`
 	Offer       bool `gorm:"not null"`
 	Percentage  uint
 }
