@@ -30,5 +30,12 @@ func SyncDatabase() {
 	DB.AutoMigrate(&models.Coupon{})
 	DB.AutoMigrate(&models.Address{})
 	DB.AutoMigrate(&models.Contactdetails{})
+	DB.AutoMigrate(&models.Order{})
+	DB.AutoMigrate(&models.OrderItem{})
+	DB.AutoMigrate(&models.Coupon{})
+	DB.AutoMigrate(&models.Category_Offer{})
+	DB.AutoMigrate(&models.Payment{})
+	DB.AutoMigrate(&models.RazorPay{})
+	
 
 }

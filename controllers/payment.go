@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/first_project/database"
@@ -66,13 +67,19 @@ func PostCheckout(c *gin.Context) {
 
 	if paymentMethod == cod {
 		Cod(c)
+		Success(c)
 	} else if paymentMethod == razorpay {
 		Razorpay(c)
+		RazorpaySuccess(c)
+		Success(c)
 	} else {
 		c.HTML(400, "payment.html", gin.H{"error": "Select any payment method"})
 		return
 	}
 
+	var address []models.Address
+	database.DB.Where("user_id=?", userid).Find(&address)
+	c.HTML(200, "payment.html", address)
 }
 
 //-----------------------------------------Razor pay-------------------------------//
@@ -109,11 +116,16 @@ func Razorpay(c *gin.Context) {
 	}
 
 	value := body["id"]
-	c.HTML(http.StatusOK, "app.html", gin.H{
+	c.HTML(http.StatusOK, "payment.html", gin.H{
 		"userid":     userid,
 		"totalprice": totalprice,
 		"paymentid":  value,
 	})
+
+	var address []models.Address
+	database.DB.Where("user_id=?", userid).Find(&address)
+	c.HTML(200, "payment.html", address)
+
 }
 
 func RazorpaySuccess(c *gin.Context) {
@@ -242,6 +254,23 @@ func RazorpaySuccess(c *gin.Context) {
 	//giving success message
 	c.HTML(200, "payment.html", gin.H{"message": "successfully ordered your cart"})
 
+	var addresss []models.Address
+	database.DB.Where("user_id=?", userid).Find(&addresss)
+	c.HTML(200, "payment.html", address)
+}
+
+func Success(c *gin.Context) {
+
+	pid, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"Error": "Error in string conversion",
+		})
+	}
+
+	c.HTML(200, "success.html", gin.H{
+		"paymentid": pid,
+	})
 }
 
 //--------------------------COD------------------------------//
@@ -312,7 +341,6 @@ func Cod(c *gin.Context) {
 		Brand_Name    string
 		Category_Name string
 	}
-
 	var order1 models.Order
 	database.DB.Last(&order1)
 
@@ -358,6 +386,7 @@ func Cod(c *gin.Context) {
 		c.HTML(400, "payment.html", gin.H{"error": "failed to delete used cart" + err.Error()})
 		return
 	}
+
 	//giving success message
 	c.HTML(200, "payment.html", gin.H{"message": "successfully ordered your cart"})
 
