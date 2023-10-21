@@ -51,9 +51,15 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/remove-from-cart/:productid", middleware.UserAuthentication, controllers.RemoveFromCart)
 		//brand
 
-		//Payment
+		// Checkout
 		router.GET("/checkout", middleware.UserAuthentication, controllers.Checkout)
 		router.POST("/checkout", middleware.UserAuthentication, controllers.PostCheckout)
+
+		// Payment
+		router.GET("/checkout-cod", middleware.UserAuthentication, controllers.Cod)
+		router.GET("/checkout-razorpay", middleware.UserAuthentication, controllers.Razorpay)
+		router.POST("/checkout-razorpay-success", middleware.UserAuthentication, controllers.RazorpaySuccess)
+		router.GET("/checkout-success", middleware.UserAuthentication, controllers.Success)
 
 	}
 }

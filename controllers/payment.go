@@ -61,25 +61,23 @@ func PostCheckout(c *gin.Context) {
 		return
 	}
 
+	var address []models.Address
+	database.DB.Where("user_id=?", userid).Find(&address)
+	c.HTML(200, "payment.html", address)
+
 	paymentMethod := c.PostForm("payment")
 	cod := "cash-on-delivery"
 	razorpay := "razorpay"
 
 	if paymentMethod == cod {
-		Cod(c)
-		Success(c)
+		c.Redirect(303, "/user/checkout-cod")
 	} else if paymentMethod == razorpay {
-		Razorpay(c)
-		RazorpaySuccess(c)
-		Success(c)
+		c.Redirect(303, "/user/checkout-razorpay")
 	} else {
 		c.HTML(400, "payment.html", gin.H{"error": "Select any payment method"})
 		return
 	}
 
-	var address []models.Address
-	database.DB.Where("user_id=?", userid).Find(&address)
-	c.HTML(200, "payment.html", address)
 }
 
 //-----------------------------------------Razor pay-------------------------------//
@@ -126,8 +124,11 @@ func Razorpay(c *gin.Context) {
 	database.DB.Where("user_id=?", userid).Find(&address)
 	c.HTML(200, "payment.html", address)
 
+	c.Redirect(303, "/user/checkout-razorpay-success")
+
 }
 
+// -------------Razorpay Success------------------------//
 func RazorpaySuccess(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
@@ -257,7 +258,12 @@ func RazorpaySuccess(c *gin.Context) {
 	var addresss []models.Address
 	database.DB.Where("user_id=?", userid).Find(&addresss)
 	c.HTML(200, "payment.html", address)
+
+	c.Redirect(303, "/user/checkout-success")
+
 }
+
+//--------------------------------Success---------------------//
 
 func Success(c *gin.Context) {
 
@@ -389,5 +395,11 @@ func Cod(c *gin.Context) {
 
 	//giving success message
 	c.HTML(200, "payment.html", gin.H{"message": "successfully ordered your cart"})
+
+	var addresss []models.Address
+	database.DB.Where("user_id=?", userid).Find(&addresss)
+	c.HTML(200, "payment.html", address)
+
+	c.Redirect(303, "/user/checkout-success")
 
 }
