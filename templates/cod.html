@@ -198,11 +198,12 @@ span.price {
               </div>
           </li> -->
       
+          
           <div class="col-md-4 col-6">
             <label class="mb-2">Address</label>
-            <select class="form-select border border-secondary" style="height: 35px;" name="size" required >
-              <option id="selected" selected disabled value="">select</option>
-              {{range .}}
+            <select class="form-select border border-secondary" style="height: 35px;" name="address" required >
+              <!-- <option id="selected" selected disabled value="">select</option> -->
+
               <option>
                 {{.Address_ID}},
                 {{.Building_Name}},
@@ -211,9 +212,10 @@ span.price {
                 {{.Landmark}},
                 {{.Zip_code}},
               </option>
-              {{end}}
+   
             </select>
           </div>
+          
      
 
             <!-- <label for="city"><i class="fa fa-institution"></i> City</label>
@@ -271,6 +273,7 @@ span.price {
           <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
         </label>
         <input type="submit" value="Continue to checkout" class="btn">
+        <p style="color: crimson;" >{{.error}}</p>
       </form>
     </div>
 
