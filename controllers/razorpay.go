@@ -24,7 +24,7 @@ func RazorPay(c *gin.Context) {
 	var totalprice uint
 	err := database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
 	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
+		c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
 		return
 	}
 
@@ -37,11 +37,11 @@ func RazorPay(c *gin.Context) {
 	body, err := client.Order.Create(data, nil)
 	if err != nil {
 		fmt.Println("failed to get razor client : ", err)
-		c.HTML(400, "checkout.html", gin.H{"error": err})
+		c.HTML(400, "razorpay.html", gin.H{"error": err})
 		return
 	}
 	value := body["id"]
-	c.HTML(http.StatusOK, "checkout.html", gin.H{
+	c.HTML(http.StatusOK, "razorpay.html", gin.H{
 		"userid":     userid,
 		"totalprice": totalprice,
 		"paymentid":  value,
@@ -67,7 +67,7 @@ func RazorpaySuccess(c *gin.Context) {
 		AmountPaid:       totalamount,
 	}).Error
 	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"Error": err.Error()})
+		c.HTML(400, "razorpay.html", gin.H{"Error": err.Error()})
 		return
 	}
 
@@ -75,7 +75,7 @@ func RazorpaySuccess(c *gin.Context) {
 	var cartdata []models.Cart
 	err = database.DB.Where("user_id=?", userid).Find(&cartdata).Error
 	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "Please check your cart"})
+		c.HTML(400, "razorpay.html", gin.H{"error": "Please check your cart"})
 		return
 	}
 
@@ -83,7 +83,7 @@ func RazorpaySuccess(c *gin.Context) {
 	var totalprice uint
 	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
 	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
+		c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
 		return
 	}
 
@@ -92,7 +92,7 @@ func RazorpaySuccess(c *gin.Context) {
 	for _, v := range cartdata {
 		database.DB.First(&product, v.Product_ID)
 		if product.Stock-int(v.Quantity) < 0 {
-			c.HTML(400, "checkout.html", gin.H{
+			c.HTML(400, "razorpay.html", gin.H{
 				"error": "Please check quantity",
 			})
 			return
@@ -103,7 +103,7 @@ func RazorpaySuccess(c *gin.Context) {
 	err = database.DB.Model(&models.Contactdetails{}).Select("address_id").Where("user_id=?", userid).Scan(&adrid).Error
 	if err != nil {
 		fmt.Println("failed to fetch address id from checkout page")
-		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find address,choose different id"})
+		c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find address,choose different id"})
 		return
 	}
 
@@ -122,7 +122,7 @@ func RazorpaySuccess(c *gin.Context) {
 	var address models.Address
 	err = database.DB.Where("user_id=? AND address_id=?", userid, order.Address_ID).First(&address).Error
 	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find address,choose different id"})
+		c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find address,choose different id"})
 		return
 	}
 
@@ -135,7 +135,7 @@ func RazorpaySuccess(c *gin.Context) {
 	}).Error
 	if err != nil {
 		fmt.Println("failed to creat order")
-		c.HTML(400, "checkout.html", gin.H{"error": err.Error()})
+		c.HTML(400, "razorpay.html", gin.H{"error": err.Error()})
 		return
 	}
 
@@ -169,7 +169,7 @@ func RazorpaySuccess(c *gin.Context) {
 	}
 	if err != nil {
 		fmt.Println("failed to range cartdata")
-		c.HTML(400, "checkout.html", gin.H{"error": err.Error()})
+		c.HTML(400, "razorpay.html", gin.H{"error": err.Error()})
 		return
 	}
 
@@ -183,7 +183,7 @@ func RazorpaySuccess(c *gin.Context) {
 	//deleting the checked out cart
 	err = database.DB.Delete(&models.Cart{}, "user_id=?", userid).Error
 	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "failed to delete used cart" + err.Error()})
+		c.HTML(400, "razorpay.html", gin.H{"error": "failed to delete used cart" + err.Error()})
 		return
 	}
 	// //giving success message
@@ -191,27 +191,29 @@ func RazorpaySuccess(c *gin.Context) {
 	// 	"message": "successfully ordered your cart",
 	// })
 
-
 	var carts models.Cart
 	var addresses models.Address
 	var contactdetailss models.Contactdetails
+	var orders models.Order
 	// var orders models.Order
 
-	database.DB.Where("user_id=",userid).Last(&contactdetailss)
-	database.DB.Where("address_id=?",adrid).Last(&addresses)
+	database.DB.Where("user_id=", userid).Last(&contactdetailss)
+	database.DB.Where("address_id=?", adrid).Last(&addresses)
+	database.DB.Where("user_id=?", userid).Last(&orders)
 	database.DB.Find(&carts)
 
 	rzrpaydata := struct {
-		Carts      models.Cart
-		Addresses  models.Address
+		Carts          models.Cart
+		Addresses      models.Address
 		Contactdetails models.Contactdetails
+		Orders         models.Order
 	}{
-		Carts:      carts,
-		Addresses:  addresses,
+		Carts:          carts,
+		Addresses:      addresses,
 		Contactdetails: contactdetailss,
+		Orders:         orders,
 	}
 
-
-	c.HTML(200,"razorpay.html",rzrpaydata)
+	c.HTML(200, "razorpay.html", rzrpaydata)
 
 }
