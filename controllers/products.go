@@ -81,7 +81,7 @@ func PostAddproducts(c *gin.Context) {
 		Image:         file.Filename,
 	})
 	if result.Error != nil {
-		log.Println("Failed to add product")
+		log.Println("Failed to add product", err)
 		c.HTML(http.StatusBadRequest, "addProduct.html", gin.H{
 			"error": "Failed to add product",
 		})
@@ -158,7 +158,7 @@ func PostEditproduct(c *gin.Context) {
 		})
 		return
 	}
-	//chchking category
+	//checking category
 	var dtcategory models.Category
 	database.DB.Table("categories").Where("name=?", category_name).Scan(&dtcategory)
 	if dtcategory.Name != category_name {
@@ -169,7 +169,7 @@ func PostEditproduct(c *gin.Context) {
 		return
 	}
 
-	iD := c.Param("id")
+	iD, _ := strconv.Atoi(c.Param("id"))
 
 	result := database.DB.Model(&models.Product{}).Where("id=?", iD).Updates(map[string]interface{}{
 		"name":          name,
@@ -191,6 +191,41 @@ func PostEditproduct(c *gin.Context) {
 	database.DB.Table("products").Where("id=?", iD).First(&product)
 	c.HTML(http.StatusOK, "editproduct.html", product)
 	c.Redirect(http.StatusSeeOther, "/admin-products-list")
+}
+func Deleteproduct(c *gin.Context) {
+
+	type products struct {
+		Id            uint
+		Name          string `gorm:"not null"`
+		Description   string `gorm:"not null"`
+		Stock         int    `gorm:"not null"`
+		Price         int    `gorm:"not null"`
+		Category_Name string `gorm:"not null"`
+		Brand_Name    string `gorm:"not null"`
+		Image         string `gorm:"not null"`
+	}
+	var product []products
+	result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
+	if result.Error != nil {
+		c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
+			"error": "Failed to list product",
+		})
+		return
+	}
+	c.HTML(200, "adminProductlist.html", product)
+
+	idstr := c.Param("prdctid")
+	id, _ := strconv.Atoi(idstr)
+
+	res := database.DB.Where("id", id).Delete(&models.Product{})
+	if res.RowsAffected == 0 {
+		c.HTML(400, "adminProductlist.html", gin.H{
+			"error": "Failed to find product",
+		})
+		return
+	}
+	// c.HTML(http.StatusOK, "adminProductlist.html", product)
+	c.Redirect(303, "/admin-products-list")
 }
 func DtTables() interface{} {
 

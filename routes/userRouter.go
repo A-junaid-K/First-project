@@ -57,7 +57,9 @@ func UserRouter(r *gin.Engine) {
 
 		// Payment
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.Cod)
+		// router.GET("/payment-razorpay", middleware.UserAuthentication, controllers.RazorPay)
 		router.GET("/payment-razorpay", middleware.UserAuthentication, controllers.RazorPay)
+		router.GET("/payment-razorpay-success", middleware.UserAuthentication, controllers.RazorpaySuccess)
 		router.GET("/payment-success", middleware.UserAuthentication, controllers.Success)
 	}
 

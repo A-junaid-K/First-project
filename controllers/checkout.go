@@ -98,38 +98,38 @@ func PostCheckout(c *gin.Context) {
 // 		return
 // 	}
 
-// 	//Add total amount
-// 	var totalprice uint
-// 	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
-// 		return
-// 	}
+// //Add total amount
+// var totalprice uint
+// err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+// if err != nil {
+// 	c.HTML(400, "payment.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
+// 	return
+// }
 
-// 	client := razorpay.NewClient(os.Getenv("RAZOR_kEY"), os.Getenv("RAZOR_SECRET"))
-// 	data := map[string]interface{}{
-// 		"amount":   totalprice,
-// 		"currency": "INR",
-// 		"receipt":  "some_receipt_id",
-// 	}
-// 	body, err := client.Order.Create(data, nil)
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": err})
-// 		return
-// 	}
+// client := razorpay.NewClient(os.Getenv("RAZOR_kEY"), os.Getenv("RAZOR_SECRET"))
+// data := map[string]interface{}{
+// 	"amount":   totalprice,
+// 	"currency": "INR",
+// 	"receipt":  "some_receipt_id",
+// }
+// body, err := client.Order.Create(data, nil)
+// if err != nil {
+// 	c.HTML(400, "payment.html", gin.H{"error": err})
+// 	return
+// }
 
-// 	value := body["id"]
-// 	c.HTML(http.StatusOK, "payment.html", gin.H{
-// 		"userid":     userid,
-// 		"totalprice": totalprice,
-// 		"paymentid":  value,
-// 	})
+// value := body["id"]
+// c.HTML(http.StatusOK, "payment.html", gin.H{
+// 	"userid":     userid,
+// 	"totalprice": totalprice,
+// 	"paymentid":  value,
+// })
 
-// 	var address []models.Address
-// 	database.DB.Where("user_id=?", userid).Find(&address)
-// 	c.HTML(200, "payment.html", address)
+	// var address []models.Address
+	// database.DB.Where("user_id=?", userid).Find(&address)
+	// c.HTML(200, "payment.html", address)
 
-// 	c.Redirect(303, "/user/checkout-razorpay-success")
+	// c.Redirect(303, "/user/checkout-razorpay-success")
 
 // }
 
@@ -138,10 +138,10 @@ func PostCheckout(c *gin.Context) {
 // 	user, _ := c.Get("user")
 // 	userid := user.(models.User).User_id
 
-// 	orderid := c.Query("order_id")
-// 	paymentid := c.Query("payment_id")
-// 	signature := c.Query("signature")
-// 	totalamount := c.Query("total")
+	// orderid := c.Query("order_id")
+	// paymentid := c.Query("payment_id")
+	// signature := c.Query("signature")
+	// totalamount := c.Query("total")
 
 // 	err := database.DB.Create(&models.RazorPay{
 // 		User_id:          uint(userid),
@@ -166,21 +166,21 @@ func PostCheckout(c *gin.Context) {
 // 	//getting total price of cart
 // 	var totalprice uint
 // 	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
-// 		return
-// 	}
+	// if err != nil {
+	// 	c.HTML(400, "payment.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
+	// 	return
+	// }
 
 // 	//checking stock level
 // 	var product models.Product
 // 	for _, v := range cartdata {
 // 		database.DB.First(&product, v.Product_ID)
-// 		if product.Stock-int(v.Quantity) < 0 {
-// 			c.HTML(400, "payment.html", gin.H{
-// 				"error": "Please check quantity",
-// 			})
-// 			return
-// 		}
+		// if product.Stock-int(v.Quantity) < 0 {
+		// 	c.HTML(400, "payment.html", gin.H{
+		// 		"error": "Please check quantity",
+		// 	})
+		// 	return
+		// }
 // 	}
 
 // 	database.DB.Create(&models.Payment{
@@ -195,10 +195,10 @@ func PostCheckout(c *gin.Context) {
 // 	database.DB.Last(&payment)
 // 	var address models.Address
 // 	err = database.DB.Where("user_id=? AND address_id=?", userid, order.Address_ID).First(&address).Error
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": "Failed to find address,choose different id"})
-// 		return
-// 	}
+	// if err != nil {
+	// 	c.HTML(400, "payment.html", gin.H{"error": "Failed to find address,choose different id"})
+	// 	return
+	// }
 
 // 	err = database.DB.Create(&models.Order{
 // 		User_ID:     userid,
@@ -207,10 +207,10 @@ func PostCheckout(c *gin.Context) {
 // 		Payment_ID:  payment.Payment_ID,
 // 		Status:      "Processing",
 // 	}).Error
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": err.Error()})
-// 		return
-// 	}
+	// if err != nil {
+	// 	c.HTML(400, "payment.html", gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 // 	var cartbrand struct {
 // 		Brand_Name    string
@@ -240,10 +240,10 @@ func PostCheckout(c *gin.Context) {
 // 			break
 // 		}
 // 	}
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": err.Error()})
-// 		return
-// 	}
+	// if err != nil {
+	// 	c.HTML(400, "payment.html", gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 // 	//reducing the stock count in database
 // 	var products models.Product
@@ -253,10 +253,10 @@ func PostCheckout(c *gin.Context) {
 // 	}
 // 	//deleting the checked out cart
 // 	err = database.DB.Delete(&models.Cart{}, "user_id=?", userid).Error
-// 	if err != nil {
-// 		c.HTML(400, "payment.html", gin.H{"error": "failed to delete used cart" + err.Error()})
-// 		return
-// 	}
+	// if err != nil {
+	// 	c.HTML(400, "payment.html", gin.H{"error": "failed to delete used cart" + err.Error()})
+	// 	return
+	// }
 // 	//giving success message
 // 	c.HTML(200, "payment.html", gin.H{"message": "successfully ordered your cart"})
 

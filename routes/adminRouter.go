@@ -14,23 +14,24 @@ func AuthRoutes(r *gin.Engine) {
 	r.POST("/admin-login", controllers.PostAdminlogin)
 
 	// user
-	r.GET("/users-list", controllers.Listusers)
-	r.GET("/block/:user_id", controllers.Blockuser)
-	r.GET("/unblock/:user_id", controllers.Unblockuser)
+	r.GET("/users-list", middleware.AdminAuthentication, controllers.Listusers)
+	r.GET("/block/:user_id", middleware.AdminAuthentication, controllers.Blockuser)
+	r.GET("/unblock/:user_id", middleware.AdminAuthentication, controllers.Unblockuser)
 
 	// products
-	r.GET("/add-product", controllers.Addproducts)
-	r.POST("/add-product", controllers.PostAddproducts)
+	r.GET("/add-product", middleware.AdminAuthentication, controllers.Addproducts)
+	r.POST("/add-product", middleware.AdminAuthentication, controllers.PostAddproducts)
 	r.GET("/admin-products-list", middleware.AdminAuthentication, controllers.AdminListproducts)
-	r.GET("/edit-product/:id", controllers.Editproduct)
-	r.POST("/edit-product/:id", controllers.PostEditproduct)
+	r.GET("/edit-product/:id", middleware.AdminAuthentication, controllers.Editproduct)
+	r.POST("/edit-product/:id", middleware.AdminAuthentication, controllers.PostEditproduct)
+	r.GET("/delete-product/:prdctid", middleware.AdminAuthentication, controllers.Deleteproduct)
 
 	// Brand
-	r.POST("/admin-products-list-addbrand", controllers.AddBrand)
-	r.GET("/products-list", controllers.ListBrand)
+	r.POST("/admin-products-list-addbrand", middleware.AdminAuthentication, controllers.AddBrand)
+	r.GET("/products-list", middleware.AdminAuthentication, controllers.ListBrand)
 
 	// Add Category
-	r.POST("/admin-products-list-addcategory", controllers.AddCategory)
+	r.POST("/admin-products-list-addcategory", middleware.AdminAuthentication, controllers.AddCategory)
 
 	// Category Offers
 
@@ -39,11 +40,5 @@ func AuthRoutes(r *gin.Engine) {
 	r.POST("/addcoupon/:coupon_code", middleware.AdminAuthentication, controllers.AddCoupon)
 	// r.GET("/listcoupons", middleware.AdminAuthentication, controllers.ListCoupons)
 	// r.PUT("/cancelcoupon/:coupon_id", middleware.AdminAuthentication, controllers.CancelCoupon)
-	
-
-	// r.POST("/userslist", controllers.Postlistusers)
-	// r.Static("/assets", "./assets")
-	// r.StaticFS("/more_static", http.Dir("my_file_system"))
-	// r.StaticFile("/favicon.ico", "./resources/favicon.ico")
 
 }
