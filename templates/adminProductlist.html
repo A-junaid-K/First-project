@@ -124,17 +124,18 @@
                         aria-expanded="true"
                         aria-controls="panelsStayOpen-collapseOne"
                         >
-                  Related items
+                  Categories
                 </button>
               </h2>
+              {{range .Categories}}
               <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                 <div class="accordion-body">
                   <ul class="list-unstyled">
-                    <li><a href="#" class="text-dark">Shoes for men </a></li>
-                    <li><a href="#" class="text-dark">Accessories </a></li>
+                    <li><a href="#" class="text-dark" style="margin-left: 10px;" >{{.Name}}</a></li>
                   </ul>
                 </div>
               </div>
+              {{end}}
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingTwo">
@@ -147,6 +148,7 @@
                         aria-controls="panelsStayOpen-collapseTwo"
                         >
                   Brands
+                  {{range .Brands}}
                 </button>
               </h2>
               <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
@@ -156,13 +158,14 @@
                   
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked1" checked />
-                      <label class="form-check-label" for="flexCheckChecked1">Brand_Name</label>
+                      <label class="form-check-label" for="flexCheckChecked1" style="margin-left: 10px;" >{{.Brand_Name}}</label>
                       <!-- <span class="badge badge-secondary float-end">120</span> -->
                     </div>
                    
                   </div>
                 </div>
               </div>
+              {{end}}
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingThree">
@@ -174,7 +177,7 @@
                         aria-expanded="false"
                         aria-controls="panelsStayOpen-collapseFour"
                         >
-                  Size
+                  <!-- Size
                 </button>
               </h2>
               <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingThree">
@@ -188,7 +191,7 @@
                   <input type="checkbox" class="btn-check border justify-content-center" id="btn-check4" checked autocomplete="off" />
                   <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check4">XXL</label>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="accordion-item">
             </div>
@@ -198,7 +201,7 @@
       <!-- sidebar -->
       <!-- content -->
       <div class="col-lg-9">
-        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+        <!-- <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
           <strong class="d-block py-2">32 Items found </strong>
           <div class="ms-auto">
             <select class="form-select d-inline-block w-auto border pt-1">
@@ -216,7 +219,7 @@
               </a>
             </div>
           </div>
-        </header>
+        </header> -->
         
         <div class="adding-brand">
           <form action="/admin-products-list-addbrand" method="POST">   
@@ -233,7 +236,7 @@
           
 
         
-          {{range .}}
+          {{range .Products}}
         <div class="row justify-content-center mb-3">
           <div class="col-md-12">
             <div class="card shadow-0 border rounded-3">
@@ -241,7 +244,7 @@
                 <div class="row g-0">
                   <div class="col-xl-3 col-md-4 d-flex justify-content-center">
                     <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                      <a href="/user/product-details/{{.Id}}">
+                      <a href="/user/product-details/{{.ID}}">
                       <img src="/static/images/{{.Image}}" class="w-100" />
                     </a>
                       <a href="#!">
@@ -265,12 +268,12 @@
                     </div>
                     <h6 class="text-success">Free shipping</h6>
                     <div class="mt-4">
-                    <a href="/edit-product/{{.Id}}" >
+                    <a href="/edit-product/{{.ID}}" >
                       <button class="btn btn-primary shadow-0" type="button" >Edit</button>
                     </a>
                     </div>
                     <div class="mt-4">
-                      <a href="/delete-product/{{.Id}}" >
+                      <a href="/delete-product/{{.ID}}" >
                         <button class="btn btn-primary shadow-0" type="button" >Delete</button>
                       </a>
                       </div>
@@ -281,9 +284,7 @@
           </div>
         </div>
           {{end}}
-          
-      <p style="color: crimson;" > {{.error}} </p>
-      <p style="color: green;" > {{.message}} </p>
+         
         <hr />
       </div>
     </div>

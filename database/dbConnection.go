@@ -36,6 +36,6 @@ func SyncDatabase() {
 	DB.AutoMigrate(&models.Category_Offer{})
 	DB.AutoMigrate(&models.Payment{})
 	DB.AutoMigrate(&models.RazorPay{})
-	
+	DB.AutoMigrate(&models.Wishlist{})
 
 }

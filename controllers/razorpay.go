@@ -93,9 +93,6 @@ func RazorPay(c *gin.Context) {
 	// c.Redirect(http.StatusSeeOther, redirectToURL)
 
 }
-func GetRazorpaySuccess(c *gin.Context) {
-
-}
 func RazorpaySuccess(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id

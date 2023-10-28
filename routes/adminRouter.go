@@ -28,7 +28,7 @@ func AuthRoutes(r *gin.Engine) {
 
 	// Brand
 	r.POST("/admin-products-list-addbrand", middleware.AdminAuthentication, controllers.AddBrand)
-	r.GET("/products-list", middleware.AdminAuthentication, controllers.ListBrand)
+	// r.GET("/products-list", middleware.AdminAuthentication, controllers.ListBrand)
 
 	// Add Category
 	r.POST("/admin-products-list-addcategory", middleware.AdminAuthentication, controllers.AddCategory)

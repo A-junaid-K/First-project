@@ -27,6 +27,7 @@ type Address struct {
 	User_ID       uint   `gorm:"not null"`
 }
 type Contactdetails struct {
+	Contactdetails_id int `gorm:"primaryKey"`
 	Name           string `validate:"required, min=2,max=50"`
 	Email          string `gorm:"not null"`
 	Address_ID     uint   `gorm:"not null"`

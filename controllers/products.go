@@ -93,25 +93,27 @@ func PostAddproducts(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/user/products-list")
 }
 func AdminListproducts(c *gin.Context) {
-	type products struct {
-		Id            uint
-		Name          string `gorm:"not null"`
-		Description   string `gorm:"not null"`
-		Stock         int    `gorm:"not null"`
-		Price         int    `gorm:"not null"`
-		Category_Name string `gorm:"not null"`
-		Brand_Name    string `gorm:"not null"`
-		Image         string `gorm:"not null"`
-	}
-	var product []products
-	result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
-	if result.Error != nil {
-		c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
-			"error": "Failed to list product",
-		})
-		return
-	}
-	c.HTML(200, "adminProductlist.html", product)
+	// type products struct {
+	// 	Id            uint
+	// 	Name          string `gorm:"not null"`
+	// 	Description   string `gorm:"not null"`
+	// 	Stock         int    `gorm:"not null"`
+	// 	Price         int    `gorm:"not null"`
+	// 	Category_Name string `gorm:"not null"`
+	// 	Brand_Name    string `gorm:"not null"`
+	// 	Image         string `gorm:"not null"`
+	// }
+	// var product []products
+	// result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
+	// if result.Error != nil {
+	// 	c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
+	// 		"error": "Failed to list product",
+	// 	})
+	// 	return
+	// }
+	// c.HTML(200, "adminProductlist.html", product)
+	data := DtTables()
+	c.HTML(200, "adminProductlist.html", data)
 }
 func Listproducts(c *gin.Context) {
 	data := DtTables()
@@ -194,34 +196,33 @@ func PostEditproduct(c *gin.Context) {
 }
 func Deleteproduct(c *gin.Context) {
 
-	type products struct {
-		Id            uint
-		Name          string `gorm:"not null"`
-		Description   string `gorm:"not null"`
-		Stock         int    `gorm:"not null"`
-		Price         int    `gorm:"not null"`
-		Category_Name string `gorm:"not null"`
-		Brand_Name    string `gorm:"not null"`
-		Image         string `gorm:"not null"`
-	}
-	var product []products
-	result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
-	if result.Error != nil {
-		c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
-			"error": "Failed to list product",
-		})
-		return
-	}
-	c.HTML(200, "adminProductlist.html", product)
+	// type products struct {
+	// 	Id            uint
+	// 	Name          string `gorm:"not null"`
+	// 	Description   string `gorm:"not null"`
+	// 	Stock         int    `gorm:"not null"`
+	// 	Price         int    `gorm:"not null"`
+	// 	Category_Name string `gorm:"not null"`
+	// 	Brand_Name    string `gorm:"not null"`
+	// 	Image         string `gorm:"not null"`
+	// }
+	// var product []products
+	// result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
+	// if result.Error != nil {
+	// 	c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
+	// 		"error": "Failed to list product",
+	// 	})
+	// 	return
+	// }
+	// c.HTML(200, "adminProductlist.html", product)
 
 	idstr := c.Param("prdctid")
 	id, _ := strconv.Atoi(idstr)
 
 	res := database.DB.Where("id", id).Delete(&models.Product{})
 	if res.RowsAffected == 0 {
-		c.HTML(400, "adminProductlist.html", gin.H{
-			"error": "Failed to find product",
-		})
+		fmt.Println("Failed to find the product")
+		c.HTML(400, "adminProductlist.html", gin.H{"error": "Failed to find product"})
 		return
 	}
 	// c.HTML(http.StatusOK, "adminProductlist.html", product)

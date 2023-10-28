@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddtoCart(c *gin.Context) {
+func AddToWishlist(c *gin.Context) {
 	user, _ := c.Get("user")
 	userId := user.(models.User).User_id
 
@@ -19,17 +19,16 @@ func AddtoCart(c *gin.Context) {
 
 	err := database.DB.First(&product, product_id).Error
 	if err != nil {
-		fmt.Println(product_id)
 		fmt.Println("product not found ", err)
-		c.HTML(404, "cart2.html", gin.H{"error": "Product not found"})
+		c.HTML(404, "wishlist.html", gin.H{"error": "Product not found"})
 		return
 	}
 
 	//creating cart
-	var dtcart models.Cart
-	err = database.DB.Where("product_id=? AND user_id=?", product_id, userId).First(&dtcart).Error
+	var dtwishlist models.Cart
+	err = database.DB.Where("product_id=? AND user_id=?", product_id, userId).First(&dtwishlist).Error
 	if err != nil {
-		err = database.DB.Create(&models.Cart{
+		err = database.DB.Create(&models.Wishlist{
 			Product_ID:  product_id,
 			Name:        product.Name,
 			Description: product.Description,
@@ -45,34 +44,24 @@ func AddtoCart(c *gin.Context) {
 		}).Error
 	} else {
 		fmt.Println("already exist")
-		c.Redirect(303, "/user/cart")
+		c.Redirect(303, "/user/wishlist")
 		return
 	}
 	if err != nil {
-		fmt.Println("error @ 51")
-		c.HTML(400, "cart2.html", gin.H{
-			"error": "Failed to fetch cart database",
-		})
+		fmt.Println("Failed to fetch wishlist database")
+		c.HTML(400, "wishlist.html", gin.H{"error": "Failed to fetch wishlist database"})
 		return
 	}
 	fmt.Println("added to cart. \nError : ", err)
 
 	// c.HTML(200, "cart2.html", dtcart)
-	c.Redirect(303, "/user/cart")
+	c.Redirect(303, "/user/wishlist")
 }
-func ListCart(c *gin.Context) {
+func ListWishlist(c *gin.Context) {
 	user, _ := c.Get("user")
 	user_id := user.(models.User).User_id
-	var usercart []models.Cart
-	database.DB.Where("user_id=?", user_id).Find(&usercart)
+	var userwishlist []models.Wishlist
+	database.DB.Where("user_id=?", user_id).Find(&userwishlist)
 
-	c.HTML(200, "cart2.html", usercart)
-}
-func RemoveFromCart(c *gin.Context) {
-	productId, _ := strconv.Atoi(c.Param("productid"))
-	user, _ := c.Get("user")
-	user_id := user.(models.User).User_id
-	database.DB.Where("user_id=? AND product_id=?", user_id, productId).Delete(&models.Cart{})
-	fmt.Println("removed from cart")
-	c.Redirect(303, "/user/cart")
+	c.HTML(200, "wishlist.html", userwishlist)
 }
