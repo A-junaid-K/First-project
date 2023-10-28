@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- <meta http-equiv="refresh" content="5;url=/user/payment-razorpay-success"> -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -170,12 +171,11 @@ span.price {
 <body>
 <img src="/static/images/logo.png" alt="logo image">
 <!-- <h2>Responsive Checkout Form</h2> -->
-<p>Resize the browser window to see the effect. When the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other.</p>
+<!-- <p>Resize the browser window to see the effect. When the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other.</p> -->
 <div class="row">
   <div class="col-75">
     <div class="container">
-      <form action="/user/payment-razorpay-success" method="get" >
-        <!-- <form action="/user/payment-razorpay-success" method="get" > -->
+      <!-- <form action="/user/payment-razorpay" method="post" > -->
       
         <div class="row">
           <div class="col-50">
@@ -274,8 +274,8 @@ span.price {
       
       {{if .error}}
       <p style="color: crimson;" >Error: {{.error}}</p>
-       {{end}}
-      <input type="submit" value="Continue to checkout" class="btn">
+  {{end}}
+      <input id="rzp-button1" type="submit" value="Continue to checkout" class="btn">
     </div>
   </form>
 

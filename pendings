@@ -342,3 +342,34 @@ git tag
 // 	c.Redirect(303, "/user/checkout-success")
 
 // }
+
+
+//---------------------------------------------------------------------------------
+
+
+	// var adrid int
+	// err = database.DB.Model(&models.Contactdetails{}).Select("address_id").Where("user_id=?", userid).Scan(&adrid).Error
+	// if err != nil {
+	// 	fmt.Println("failed to fetch address id from checkout page")
+	// 	c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find address,choose different id"})
+	// 	return
+	// }
+
+	// var addresses models.Address
+	// var contactdetailss models.Contactdetails
+	// var orders models.Order
+	// // var orders models.Order
+
+	// database.DB.Where("user_id=?", userid).Last(&contactdetailss)
+	// database.DB.Where("address_id=?", adrid).Last(&addresses)
+	// database.DB.Where("user_id=?", userid).Last(&orders)
+
+	// rzrpaydata := struct {
+	// 	Addresses      models.Address
+	// 	Contactdetails models.Contactdetails
+	// 	Orders         models.Order
+	// }{
+	// 	Addresses:      addresses,
+	// 	Contactdetails: contactdetailss,
+	// 	Orders:         orders,
+	// }
