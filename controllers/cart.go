@@ -44,7 +44,7 @@ func AddtoCart(c *gin.Context) {
 			Image:         product.Image,
 		}).Error
 	} else {
-		fmt.Println("already exist")
+		fmt.Println("already exist in cart")
 		c.Redirect(303, "/user/cart")
 		return
 	}

@@ -205,7 +205,7 @@
       <!-- sidebar -->
       <!-- content -->
       <div class="col-lg-9">
-        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+        <!-- <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
           <strong class="d-block py-2">32 Items found </strong>
           <div class="ms-auto">
             <select class="form-select d-inline-block w-auto border pt-1">
@@ -223,7 +223,7 @@
               </a>
             </div>
           </div>
-        </header>
+        </header> -->
 
         {{range .Products}}
         
@@ -260,9 +260,12 @@
                     
                     <div class="mt-4">
                     <form action="/user/cart/{{.ID}}" method="GET" >
-                    <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
-                    </form> 
-                      <a href="/user/wishlist" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
+                   <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
+                  </form>
+                  <form action="/user/wishlist/{{.ID}}" method="GET" >  
+                   <button href="/user/wishlist" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></button>
+                    <!-- <button style="margin-bottom: 10px;" href="/user/wishlist" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to wishlist</button> -->
+                  </form> 
                     </div>
                   </div>
                 </div>

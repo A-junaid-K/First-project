@@ -55,6 +55,7 @@ func UserRouter(r *gin.Engine) {
 		//Wishlist
 		router.GET("/wishlist/:id", middleware.UserAuthentication, controllers.AddToWishlist)
 		router.GET("/wishlist", middleware.UserAuthentication, controllers.ListWishlist)
+		router.GET("/remove-from-wishlist/:productid", middleware.UserAuthentication, controllers.RemoveFromWishlist)
 
 		// Checkout
 		router.GET("/checkout", middleware.UserAuthentication, controllers.Checkout)

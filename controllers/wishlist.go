@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/first_project/database"
@@ -24,8 +25,8 @@ func AddToWishlist(c *gin.Context) {
 		return
 	}
 
-	//creating cart
-	var dtwishlist models.Cart
+	//creating wishlist
+	var dtwishlist models.Wishlist
 	err = database.DB.Where("product_id=? AND user_id=?", product_id, userId).First(&dtwishlist).Error
 	if err != nil {
 		err = database.DB.Create(&models.Wishlist{
@@ -43,7 +44,7 @@ func AddToWishlist(c *gin.Context) {
 			Image:         product.Image,
 		}).Error
 	} else {
-		fmt.Println("already exist")
+		log.Println("already exist in wishlist", err)
 		c.Redirect(303, "/user/wishlist")
 		return
 	}
@@ -64,4 +65,12 @@ func ListWishlist(c *gin.Context) {
 	database.DB.Where("user_id=?", user_id).Find(&userwishlist)
 
 	c.HTML(200, "wishlist.html", userwishlist)
+}
+func RemoveFromWishlist(c *gin.Context) {
+	productId, _ := strconv.Atoi(c.Param("productid"))
+	user, _ := c.Get("user")
+	user_id := user.(models.User).User_id
+	database.DB.Where("user_id=? AND product_id=?", user_id, productId).Delete(&models.Wishlist{})
+	fmt.Println("removed from wishlist")
+	c.Redirect(303, "/user/wishlist")
 }
