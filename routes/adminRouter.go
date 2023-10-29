@@ -41,4 +41,7 @@ func AuthRoutes(r *gin.Engine) {
 	// r.GET("/listcoupons", middleware.AdminAuthentication, controllers.ListCoupons)
 	// r.PUT("/cancelcoupon/:coupon_id", middleware.AdminAuthentication, controllers.CancelCoupon)
 
+	r.GET("/generate-sales-report", middleware.AdminAuthentication, controllers.Getsalesreport)
+	r.POST("/generate-sales-reports", middleware.AdminAuthentication, controllers.SalesReport)
+
 }

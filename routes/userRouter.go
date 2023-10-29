@@ -8,9 +8,7 @@ import (
 
 func UserRouter(r *gin.Engine) {
 	r.LoadHTMLGlob("templates/*.html")
-	// r.LoadHTMLGlob("nest-backend/*.html")
 	r.Static("/static", "./static")
-	// r.Static("/nest-backend/assets", "./assets")
 	r.GET("/", middleware.UserAuthentication, controllers.Home)
 	router := r.Group("/user")
 	{
@@ -63,7 +61,6 @@ func UserRouter(r *gin.Engine) {
 
 		// Payment
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.Cod)
-		// router.GET("/payment-razorpay", middleware.UserAuthentication, controllers.RazorPay)
 		router.GET("/payment-razorpay", middleware.UserAuthentication, controllers.RazorPay)
 		router.GET("/payment-razorpay-success", middleware.UserAuthentication, controllers.RazorpaySuccess)
 		router.GET("/payment-success", middleware.UserAuthentication, controllers.Success)
