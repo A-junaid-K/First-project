@@ -1,342 +1,252 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Material Design for Bootstrap</title>
-     Font Awesome
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
-    Google Fonts Roboto
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
-    MDB 
-    <link rel="stylesheet" href="css/mdb.min.css" />
-    < Custom styles 
-    <link rel="stylesheet" href="static/css/productList.css" /> -->
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>MERREL admin-product-list</title>
-    <!-- Add Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
-    <!-- MDB -->
-    <!-- <link rel="stylesheet" href="css/mdb.min.css" /> -->
-    <!-- Custom styles -->
-    <link rel="stylesheet" href="/static/css/productList.css" />
-</head>
-<body>
-    <!--Main Navigation-->
-<header>
-  <!-- Jumbotron -->
-  <div class="p-3 text-center bg-white border-bottom">
-    <div class="container">
-      <div class="row gy-3">
-        <!-- Left elements -->
-        <div class="col-lg-2 col-sm-4 col-4">
-          <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
-            <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
-          </a>
-        </div>
-        <!-- Left elements -->
+    <head>
+        <meta charset="utf-8" />
+        <title>Admin Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/static/images/icon.png" />
+        <!-- Template CSS -->
+        <link href="/static/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    </head>
 
-        <!-- Center elements -->
-        <div class="order-lg-last col-lg-5 col-sm-8 col-8">
-          <div class="d-flex float-end">
-            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Sign in</p> </a>
-            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
-            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
-          </div>
-        </div>
-        <!-- Center elements -->
-
-        <!-- Right elements -->
-        <div class="col-lg-5 col-md-12 col-12">
-          <div class="input-group float-center">
-            <div class="form-outline">
-              <input type="search" id="form1" class="form-control" />
-              <label class="form-label" for="form1">Search</label>
-            </div>
-            <button type="button" class="btn btn-primary shadow-0">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
-        <!-- Right elements -->
-      </div>
-    </div>
-  </div>
-  <!-- Jumbotron -->
-
-  <!-- Heading -->
-  <div class="bg-primary mb-4">
-    <div class="container py-4">
-      <!-- Breadcrumb -->
-      <nav class="d-flex mb-2">
-        <h6 class="mb-0">
-          <a href="/" class="text-white-50">Home</a>
-          <span class="text-white-50 mx-2"> > </span>
-          <a href="" class="text-white-50">Library</a>
-          <span class="text-white-50 mx-2"> > </span>
-          <a href="" class="text-white"><u>Data</u></a>
-        </h6>
-      </nav>
-      <!-- Breadcrumb -->
-    </div>
-  </div>
-  <!-- Heading -->
-</header>
-
-<!-- sidebar + content -->
-<section class="">
-  <div class="container">
-    <div class="row">
-      <!-- sidebar -->
-      <div class="col-lg-3">
-        <!-- Toggle button -->
-        <button
-                class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                >
-          <span>Show filter</span>
-        </button>
-        <!-- Collapsible wrapper -->
-        <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
-          <div class="accordion" id="accordionPanelsStayOpenExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button
-                        class="accordion-button text-dark bg-light"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#panelsStayOpen-collapseOne"
-                        aria-expanded="true"
-                        aria-controls="panelsStayOpen-collapseOne"
-                        >
-                  Categories
-                </button>
-              </h2>
-              {{range .Categories}}
-              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
-                <div class="accordion-body">
-                  <ul class="list-unstyled">
-                    <li><a href="#" class="text-dark" style="margin-left: 10px;" >{{.Name}}</a></li>
-                  </ul>
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="/static/images/logo.png" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
                 </div>
-              </div>
-              {{end}}
             </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button
-                        class="accordion-button text-dark bg-light"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#panelsStayOpen-collapseTwo"
-                        aria-expanded="true"
-                        aria-controls="panelsStayOpen-collapseTwo"
-                        >
-                  Brands
-                  {{range .Brands}}
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
-                <div class="accordion-body">
-                  <div>
-                    <!-- Checked checkbox -->
-                  
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked1" checked />
-                      <label class="form-check-label" for="flexCheckChecked1" style="margin-left: 10px;" >{{.Brand_Name}}</label>
-                      <!-- <span class="badge badge-secondary float-end">120</span> -->
-                    </div>
-                   
-                  </div>
-                </div>
-              </div>
-              {{end}}
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button
-                        class="accordion-button text-dark bg-light"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#panelsStayOpen-collapseFour"
-                        aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseFour"
-                        >
-                  <!-- Size
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingThree">
-                <div class="accordion-body">
-                  <input type="checkbox" class="btn-check border justify-content-center" id="btn-check1" checked autocomplete="off" />
-                  <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check1">XS</label>
-                  <input type="checkbox" class="btn-check border justify-content-center" id="btn-check2" checked autocomplete="off" />
-                  <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check2">SM</label>
-                  <input type="checkbox" class="btn-check border justify-content-center" id="btn-check3" checked autocomplete="off" />
-                  <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check3">LG</label>
-                  <input type="checkbox" class="btn-check border justify-content-center" id="btn-check4" checked autocomplete="off" />
-                  <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check4">XXL</label>
-                </div>
-              </div> -->
-            </div>
-            <div class="accordion-item">
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- sidebar -->
-      <!-- content -->
-      <div class="col-lg-9">
-        <!-- <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-          <strong class="d-block py-2">32 Items found </strong>
-          <div class="ms-auto">
-            <select class="form-select d-inline-block w-auto border pt-1">
-              <option value="0">Best match</option>
-              <option value="1">Recommended</option>
-              <option value="2">High rated</option>
-              <option value="3">Randomly</option>
-            </select>
-            <div class="btn-group shadow-0 border">
-              <a href="#" class="btn btn-light" title="List view">
-                <i class="fa fa-bars fa-lg"></i>
-              </a>
-              <a href="#" class="btn btn-light active" title="Grid view">
-                <i class="fa fa-th fa-lg"></i>
-              </a>
-            </div>
-          </div>
-        </header> -->
-        
-        <div class="adding-brand">
-          <form action="/admin-products-list-addbrand" method="POST">   
-          <label for="brand-name" >Add Brand:</label>
-          <input type="text" id="brand-name" name="brand_name" placeholder="Brand name" required>
-        </form>
-      </div>
-      <div class="adding-category">
-        <form action="/admin-products-list-addcategory" method="POST">   
-        <label for="category-name" >Add Category:</label>
-        <input type="text" id="category-name" name="category_name" placeholder="Category name" required>
-      </form>
-    </div>
-          
-
-        
-          {{range .Products}}
-        <div class="row justify-content-center mb-3">
-          <div class="col-md-12">
-            <div class="card shadow-0 border rounded-3">
-              <div class="card-body">
-                <div class="row g-0">
-                  <div class="col-xl-3 col-md-4 d-flex justify-content-center">
-                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                      <a href="/user/product-details/{{.ID}}">
-                      <img src="/static/images/{{.Image}}" class="w-100" />
-                    </a>
-                      <a href="#!">
-                        <div class="hover-overlay">
-                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="index.html">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="#">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin-products-list">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin-category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="page-orders-1.html">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item has-submenu active">
+                        <a class="menu-link" href="#">
+                            <i class="icon material-icons md-store"></i>
+                            <span class="text">Sellers</span>
+                        </a>
+                        <div class="submenu">
+                            <a href="page-sellers-cards.html">Sellers cards</a>
+                            <a href="page-sellers-list.html" class="active">Sellers list</a>
+                            <a href="page-seller-detail.html">Seller profile</a>
                         </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-xl-6 col-md-5 col-sm-7">
-                    <h5 style="font-weight: bolder;" >{{.Brand_Name}}</h5>
-                    <h5 style="font-weight: 400;">{{.Name}}</h5>
-                    <br>
-                    <br>
-                    <p class="text mb-4 mb-md-0">{{.Description}}</p>
-                  </div>
-                  <div class="col-xl-3 col-md-3 col-sm-5">
-                    <div class="d-flex flex-row align-items-center mb-1">
-                      <h4 class="mb-1 me-1">₹{{.Price}}</h4>
-                      <!-- <span class="text-danger"><s>$49.99</s></span> -->
-                    </div>
-                    <h6 class="text-success">Free shipping</h6>
-                    <div class="mt-4">
-                    <a href="/edit-product/{{.ID}}" >
-                      <button class="btn btn-primary shadow-0" type="button" >Edit</button>
-                    </a>
-                    </div>
-                    <div class="mt-4">
-                      <a href="/delete-product/{{.ID}}" >
-                        <button class="btn btn-primary shadow-0" type="button" >Delete</button>
-                      </a>
-                      </div>
-                  </div>
+                    </li> -->
+                    <li class="menu-item">
+                        <a class="menu-link" href="/add-product">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text">Add product</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i> <span class="text">Coupen</span> </a>
+                    </li>
+                </ul>
+                <hr />
+                <br />
+                <br />
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                        </div>
+                        <datalist id="search_terms">
+                            <option value="Products"></option>
+                            <option value="New orders"></option>
+                            <option value="Apple iphone"></option>
+                            <option value="Ahmed Hassan"></option>
+                        </datalist>
+                    </form>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-          {{end}}
-         
-        <hr />
-      </div>
-    </div>
-  </div>
-</section>
-<!-- Footer -->
-<footer class="text-center text-lg-start text-muted bg-primary mt-3">
-  <!-- Section: Links  -->
-  <section class="">
-    <div class="container text-center text-md-start pt-4 pb-4">
-      <!-- Grid row -->
-      <div class="row mt-3">
-        <!-- Grid column -->
-        <div class="col-6 col-sm-4 col-lg-2">
-          <!-- Links -->
-          <h6 class="text-uppercase text-white fw-bold mb-2">
-            Information
-          </h6>
-          <ul class="list-unstyled mb-4">
-            <li><a class="text-white-50" href="#">Help center</a></li>
-            <li><a class="text-white-50" href="#">Money refund</a></li>
-            <li><a class="text-white-50" href="#">Shipping info</a></li>
-            <li><a class="text-white-50" href="#">Refunds</a></li>
-          </ul>
-        </div>
-        <!-- Grid column -->
-      </div>
-      <!-- Grid row -->
-    </div>
-  </section>
-  <!-- Section: Links  -->
-
-  <div class="">
-    <div class="container">
-      <div class="d-flex justify-content-between py-4 border-top">
-      </div>
-    </div>
-  </div>
-</footer>
-<!-- Footer -->
-    <!-- MDB -->
-    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
-    <!-- Custom scripts -->
-    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
-
-    <!-- gpt -->
-        <!-- Bootstrap JS (Popper.js and Bootstrap JavaScript) -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-            <!-- Your custom scripts -->
-    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
-</body>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon" href="#">
+                                <i class="material-icons md-notifications animation-shake"></i>
+                                <span class="badge rounded-pill">3</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/static/images/people/avatar-2.png" alt="User" /></a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <h2 class="content-title">Products list</h2>
+                    <div>
+                        <a href="/add-product" class="btn btn-primary"><i class="material-icons md-plus"></i> Add product</a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row gx-3">
+                            <div class="col-lg-4 col-md-6 me-auto">
+                                <input type="text" placeholder="Search..." class="form-control" />
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Status</option>
+                                    <option>Active</option>
+                                    <option>Disabled</option>
+                                    <option>Show all</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Show 20</option>
+                                    <option>Show 30</option>
+                                    <option>Show 40</option>
+                                </select>
+                            </div>
+                        </div>
+                    </header>
+                    <!-- card-header end// -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Brand</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Stock</th>
+                                        <th>Offer</th>
+                                        <th class="text-end" >Action</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{range .Products}}
+                                    <tr>
+                                        <td width="20%">
+                                            <a href="#" class="itemside">
+                                                <!-- <div class="left">
+                                                    <img src="static/images/people/avatar-1.png" class="img-sm img-avatar" alt="Userpic" />
+                                                </div> -->
+                                                <div class="info pl-3">
+                                                    <h6 class="mb-0 title"><img style="max-width: 130px;" src="/static/images/{{.Image}}" class="w-100" /></h6>
+                                                    <small style="margin: 40px;" >{{.Name}}</small>
+                                                
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>₹{{.Price}}</td>
+                                        <td style="font-weight: bolder;font-size: 17px;">{{.Brand_Name}}</td>
+                                        <td>{{.Category_Name}}</td>
+                                        <td>{{.Description}}</td>
+                                        <td><span class="badge rounded-pill alert-success">{{.Stock}}</span></td>
+                                        <td>.Offer</td>
+                                        <td>
+                                        <button class=" btn btn-sm btn-outline-primary rounded
+                                            font-sm" onclick="show12Modal('651edb0bb934634368aeaebd')">
+                                                Apply offer
+                                        </button>
+                                    </td>
+                                        <td class="text">
+                                            <a href="/edit-product/{{.ID}}"class="btn btn-sm btn-brand rounded font-sm mt-15" >Edit</a>
+                                        </td>
+                                        <td>
+                                            <a href="/delete-product/{{.ID}}" class="btn btn-brand btn-brand rounded font-sm mt-15" >Remove</a>
+                                        </td>
+                                    </tr>
+                                    {{end}}
+                                    <p style="color: crimson;" >{{.error}}</p>
+                                    
+                                    
+                                </tbody>
+                            </table>
+                            <!-- table-responsive.// -->
+                        </div>
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+                <!-- card end// -->
+            </section>
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="/static/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/static/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/static/js/vendors/select2.min.js"></script>
+        <script src="/static/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/static/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="/static/js/main.js?v=1.1" type="text/javascript"></script>
+    </body>
 </html>
-

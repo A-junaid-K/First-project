@@ -87,31 +87,9 @@ func PostAddproducts(c *gin.Context) {
 		})
 		return
 	}
-	c.HTML(http.StatusOK, "addProduct.html", gin.H{
-		"message": "Successfully add product",
-	})
-	c.Redirect(http.StatusSeeOther, "/user/products-list")
+	c.Redirect(http.StatusSeeOther, "/add-product")
 }
 func AdminListproducts(c *gin.Context) {
-	// type products struct {
-	// 	Id            uint
-	// 	Name          string `gorm:"not null"`
-	// 	Description   string `gorm:"not null"`
-	// 	Stock         int    `gorm:"not null"`
-	// 	Price         int    `gorm:"not null"`
-	// 	Category_Name string `gorm:"not null"`
-	// 	Brand_Name    string `gorm:"not null"`
-	// 	Image         string `gorm:"not null"`
-	// }
-	// var product []products
-	// result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
-	// if result.Error != nil {
-	// 	c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
-	// 		"error": "Failed to list product",
-	// 	})
-	// 	return
-	// }
-	// c.HTML(200, "adminProductlist.html", product)
 	data := DtTables()
 	c.HTML(200, "adminProductlist.html", data)
 }
@@ -132,7 +110,10 @@ func ProductDetails(c *gin.Context) {
 }
 
 func Editproduct(c *gin.Context) {
-	c.HTML(200, "editproduct.html", nil)
+	iD, _ := strconv.Atoi(c.Param("id"))
+	var editproduct models.Product
+	database.DB.Where("id=?", iD).First(&editproduct)
+	c.HTML(200, "editproduct.html", editproduct)
 }
 func PostEditproduct(c *gin.Context) {
 	var err error

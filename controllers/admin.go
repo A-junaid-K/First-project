@@ -90,9 +90,6 @@ func Blockuser(c *gin.Context) {
 		})
 		return
 	}
-	// c.HTML(http.StatusOK, "users-list.html", gin.H{
-	// 	"message": "Successfully blocked" + user.Name,
-	// })
 	c.Redirect(http.StatusSeeOther, "/users-list")
 }
 func Unblockuser(c *gin.Context) {

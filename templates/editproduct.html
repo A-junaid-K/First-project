@@ -35,9 +35,10 @@
 </head>
 <body>
     <h1>Edit Product</h1>
-    {{range .}}
+   
     <div class="container">
-        <form action="/edit-product/{{.Id}}" method="post" enctype="multipart/form-data">
+        <form action="/edit-product/{{.ID}}" method="post" enctype="multipart/form-data">
+            {{range .}} 
             <label for="productName">Name:</label>
             <input type="text" id="productName" name="productName" placeholder="{{.Name}}" required>
 
@@ -78,8 +79,9 @@
             <input type="submit" value="Edit Product">
             <p style="color: crimson;" >{{.error}}</p>
             <p style="color: #4CAF50;" >{{.message}}</p>
+    {{end}}
         </form>
     </div>
-    {{end}}
+   
 </body>
 </html>

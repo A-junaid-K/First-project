@@ -8,8 +8,6 @@ import (
 
 func AuthRoutes(r *gin.Engine) {
 
-	// router := r.Group("/admin")
-	// {
 	r.GET("/admin-login", controllers.Adminlogin)
 	r.POST("/admin-login", controllers.PostAdminlogin)
 
@@ -28,18 +26,15 @@ func AuthRoutes(r *gin.Engine) {
 
 	// Brand
 	r.POST("/admin-products-list-addbrand", middleware.AdminAuthentication, controllers.AddBrand)
-	// r.GET("/products-list", middleware.AdminAuthentication, controllers.ListBrand)
 
 	// Add Category
-	r.POST("/admin-products-list-addcategory", middleware.AdminAuthentication, controllers.AddCategory)
+	r.POST("/admin-addcategory", middleware.AdminAuthentication, controllers.AddCategory)
+	r.GET("/admin-category", middleware.AdminAuthentication, controllers.DisplayCategory)
+	r.GET("/admin-listcategory/:category_id", middleware.AdminAuthentication, controllers.UnlistCategory)
+	r.GET("/admin-unlistcategory/:category_id", middleware.AdminAuthentication, controllers.ListCategory)
 
-	// Category Offers
-
-	// Coupen
 	//add coupoun
 	r.POST("/addcoupon/:coupon_code", middleware.AdminAuthentication, controllers.AddCoupon)
-	// r.GET("/listcoupons", middleware.AdminAuthentication, controllers.ListCoupons)
-	// r.PUT("/cancelcoupon/:coupon_id", middleware.AdminAuthentication, controllers.CancelCoupon)
 
 	r.GET("/generate-sales-report", middleware.AdminAuthentication, controllers.Getsalesreport)
 	r.POST("/generate-sales-reports", middleware.AdminAuthentication, controllers.SalesReport)
