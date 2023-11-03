@@ -38,18 +38,18 @@
    
     <div class="container">
         <form action="/edit-product/{{.ID}}" method="post" enctype="multipart/form-data">
-            {{range .}} 
+
             <label for="productName">Name:</label>
-            <input type="text" id="productName" name="productName" placeholder="{{.Name}}" required>
+            <input type="text" id="productName" name="productName" value="{{.Name}}" >
 
             <label for="productDescription">Description:</label>
-            <textarea id="productDescription" name="productDescription" placeholder="{{.Description}}" required></textarea>
+            <textarea id="productDescription" name="productDescription" >{{.Description}}</textarea> 
 
             <label for="productStock">Stock:</label>
-            <input type="number" id="productStock" name="productStock" step="01" required>
+            <input type="number" id="productStock" name="productStock" step="01" value="{{.Stock}}">
 
             <label for="productPrice">Price:</label>
-            <input type="number" id="productPrice" name="productPrice" step="01" required>
+            <input type="number" id="productPrice" name="productPrice" step="01" value="{{.Price}}" >
        
             <!-- <label for="selectBox">Select category:</label>
                 <select id="selectBox" name="categoryName" style="margin-bottom: 20px;" >
@@ -60,7 +60,7 @@
                 </select> -->
  
                 <label for="categoryName">Edit category:</label>
-                <input type="text" id="catewgoryName" name="categoryName" required>
+                <input type="text" id="catewgoryName" name="categoryName" value="{{.Category_Name}}" >
 
             <!-- <label for="selectBox">Select brand:</label>
                 <select id="selectBox" name="catagoryName" style="margin-bottom: 20px;" >
@@ -71,15 +71,20 @@
                 </select> -->
          
                 <label for="brandName">Edit brand:</label>
-                <input type="text" id="brandName" name="brandName" required>
+                <input type="text" id="brandName" name="brandName" value="{{.Brand_Name}}" >
 
             <label for="productImage">Edit Image:</label>
-            <input type="file" id="productImage" name="productImage" accept="image/*" required>
+            <input type="file" id="productImage" name="productImage" accept="image/*" >
 
             <input type="submit" value="Edit Product">
-            <p style="color: crimson;" >{{.error}}</p>
+            {{if .error}}
+            <p style="color: crimson;" >Error: {{.error}}</p>
+             {{end}}
+            {{if .message}}
             <p style="color: #4CAF50;" >{{.message}}</p>
-    {{end}}
+             {{end}}
+           
+
         </form>
     </div>
    

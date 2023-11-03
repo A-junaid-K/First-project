@@ -214,8 +214,10 @@
                                         </td>
                                     </tr>
                                     {{end}}
-                                    <p style="color: crimson;" >{{.error}}</p>
                                     
+                                    {{if .error}}
+                                    <p style="color: crimson;" >Error: {{.error}}</p>
+                                     {{end}}
                                     
                                 </tbody>
                             </table>

@@ -11,6 +11,7 @@ import (
 	"github.com/first_project/database"
 	"github.com/first_project/models"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func Addproducts(c *gin.Context) {
@@ -128,18 +129,21 @@ func PostEditproduct(c *gin.Context) {
 	//Get the image file
 	file, err := c.FormFile("productImage")
 	if err != nil {
-		c.HTML(http.StatusBadRequest, "editproduct.html", gin.H{
-			"error": "Failed to upload image",
-		})
-		return
+		// c.HTML(http.StatusBadRequest, "editproduct.html", gin.H{
+		// 	"error": "Failed to upload image",
+		// })
+		// return
+		file = nil
 	}
-	//Save the image file
-	err = c.SaveUploadedFile(file, "./static/images/"+file.Filename)
-	if err != nil {
-		c.HTML(http.StatusBadRequest, "editproduct.html", gin.H{
-			"error": "Failed to save the edited image",
-		})
-		return
+	if file != nil {
+		//Save the image file
+		err = c.SaveUploadedFile(file, "./static/images/"+file.Filename)
+		if err != nil {
+			c.HTML(http.StatusBadRequest, "editproduct.html", gin.H{
+				"error": "Failed to save the edited image",
+			})
+			return
+		}
 	}
 	//checking category
 	var dtcategory models.Category
@@ -153,16 +157,27 @@ func PostEditproduct(c *gin.Context) {
 	}
 
 	iD, _ := strconv.Atoi(c.Param("id"))
-
-	result := database.DB.Model(&models.Product{}).Where("id=?", iD).Updates(map[string]interface{}{
-		"name":          name,
-		"description":   description,
-		"stock":         stock,
-		"price":         price,
-		"category_name": category_name,
-		"brand_name":    brand_name,
-		"image":         file.Filename,
-	})
+	var result *gorm.DB
+	if file != nil {
+		result = database.DB.Model(&models.Product{}).Where("id=?", iD).Updates(map[string]interface{}{
+			"name":          name,
+			"description":   description,
+			"stock":         stock,
+			"price":         price,
+			"category_name": category_name,
+			"brand_name":    brand_name,
+			"image":         file.Filename,
+		})
+	} else {
+		result = database.DB.Model(&models.Product{}).Where("id=?", iD).Updates(map[string]interface{}{
+			"name":          name,
+			"description":   description,
+			"stock":         stock,
+			"price":         price,
+			"category_name": category_name,
+			"brand_name":    brand_name,
+		})
+	}
 	if result.Error != nil {
 		log.Println("Failed to edit product")
 		c.HTML(http.StatusBadRequest, "editproduct.html", gin.H{
@@ -170,9 +185,6 @@ func PostEditproduct(c *gin.Context) {
 		})
 		return
 	}
-	var product models.Product
-	database.DB.Table("products").Where("id=?", iD).First(&product)
-	c.HTML(http.StatusOK, "editproduct.html", product)
 	c.Redirect(http.StatusSeeOther, "/admin-products-list")
 }
 func Deleteproduct(c *gin.Context) {
