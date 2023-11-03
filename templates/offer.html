@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Merrel Admin</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/icon.png" />
+    <!-- Template CSS -->
+    <link href="/static/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    <style>
+        /* Add custom CSS styles to control layout */
+        .navbar-aside {
+            width: 280px; /* Adjust the width as needed */
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background-color: #fff;
+        }
+
+        /* Adjust the margin to make space for the sidebar */
+        .main-content {
+            margin-left: 280px; /* Same as the sidebar width */
+            padding: 20px; /* Add padding to separate from the sidebar */
+        }
+    </style>
+</head>
+<body>
+<div class="screen-overlay"></div>
+
+<!-- Aside (Navbar) -->
+<aside class="navbar-aside" id="offcanvas_aside">
+          <!-- Aside (Navbar) -->
+          <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/" class="brand-wrap">
+                    <img src="/static/images/logo.png" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <!-- Menu items here -->
+                    <ul class="menu-aside">
+                        <li class="menu-item">
+                            <a class="menu-link" href="index.html">
+                                <i class="icon material-icons md-home"></i>
+                                <span class="text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/users-list">
+                                <i class="icon material-icons md-person"></i>
+                                <span class="text">Users</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/admin-products-list">
+                                <i class="icon material-icons md-shopping_bag"></i>
+                                <span class="text">Products</span>
+                            </a>
+                        </li>
+                        <li class="menu-item ">
+                            <a class="menu-link" href="/admin-category">
+                                <i class="icon material-icons md-category"></i>
+                                <span class="text">Categories</span>
+                            </a>
+                        </li>
+                        <li class="menu-item ">
+                            <a class="menu-link" href="/admin-brands">
+                                <i class="icon material-icons md-category"></i>
+                                <span class="text">Brands</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="page-orders-1.html">
+                                <i class="icon material-icons md-shopping_cart"></i>
+                                <span class="text">Orders</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/add-product">
+                                <i class="icon material-icons md-add_box"></i>
+                                <span class="text">Add product</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i> <span class="text">Coupen</span> </a>
+                        </li>
+                </ul>
+                <hr />
+                <br />
+                <br />
+            </nav>
+        </aside>
+    <!-- Sidebar content here -->
+</aside>
+
+<!-- Main content -->
+<div class="main-content">
+    <header class="main-header navbar">
+        <!-- Header content here -->
+    </header>
+
+        <div class="card-body">
+            <h4 class="card-title">Add Offer</h4>
+            <div>
+                <p></p>
+            </div>
+
+            <div id="errorContainer" class="alert alert-danger" style="display: none;"></div>
+
+            <!-- <form id="offer-form" class="forms-sample" action="/admin/addOffer" method="POST">
+                <div class="form-group mb-4">
+                    <label for="offer-name" class="form-label">Offer Name</label>
+                    <input type="text" class="form-control" id="offer-name" name="name" placeholder="Enter offer name" required="">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="starting-date">Starting Date</label>
+                    <input type="date" class="form-control" id="starting-date" name="startingDate" required="" min="2023-11-03">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="expiry-date">Expiry Date</label>
+                    <input type="date" class="form-control" id="expiry-date" name="expiryDate" required="" min="2023-11-03">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="percentage" class="form-label">Percentage</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="percentage" name="percentage" placeholder="Enter percentage" required="">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a href="/admin/offers" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form> -->
+            <form id="offer-form" class="forms-sample" action="/admin/addOffer" method="POST">
+
+                  <div class="form-group mb-4">
+                    <label for="offer-name" class="form-label">Offer Name</label>
+                    <input type="text" class="form-control" id="offer-name" name="name" placeholder="Enter offer name" required="">
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="form-label" for="starting-date">Starting Date</label>
+                    <input type="date" class="form-control" id="starting-date" name="startingDate" required="" min="2023-11-03">
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="form-label" for="expiry-date">Expiry Date</label>
+                    <input type="date" class="form-control" id="expiry-date" name="expiryDate" required="" min="2023-11-03">
+                  </div>
+
+
+                  <div class="form-group mb-4">
+                    <label for="percentage" class="form-label">Percentage</label>
+                    <div class="input-group">
+                      <input type="number" class="form-control" id="percentage" name="percentage" placeholder="Enter percentage" required="">
+                      <div class="input-group-append">
+                        <span class="input-group-text">%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a href="/admin/offers" class="btn btn-secondary">Cancel</a>
+                  </div>
+
+                </form>
+        </div>
+   
+</body>
+</html>
