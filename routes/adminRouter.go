@@ -25,11 +25,12 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/delete-product/:prdctid", middleware.AdminAuthentication, controllers.Deleteproduct)
 
 	// Brand
-	r.POST("/admin-products-list-addbrand", middleware.AdminAuthentication, controllers.AddBrand)
+	r.GET("/admin-brands", middleware.AdminAuthentication, controllers.DisplayBrands)
+	r.POST("/admin-addbrand", middleware.AdminAuthentication, controllers.AddBrand)
 
 	// Add Category
-	r.POST("/admin-addcategory", middleware.AdminAuthentication, controllers.AddCategory)
 	r.GET("/admin-category", middleware.AdminAuthentication, controllers.DisplayCategory)
+	r.POST("/admin-addcategory", middleware.AdminAuthentication, controllers.AddCategory)
 	r.GET("/admin-listcategory/:category_id", middleware.AdminAuthentication, controllers.UnlistCategory)
 	r.GET("/admin-unlistcategory/:category_id", middleware.AdminAuthentication, controllers.ListCategory)
 

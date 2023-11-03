@@ -88,7 +88,7 @@ func PostAddproducts(c *gin.Context) {
 		})
 		return
 	}
-	c.Redirect(http.StatusSeeOther, "/add-product")
+	c.Redirect(http.StatusSeeOther, "/admin-products-list")
 }
 func AdminListproducts(c *gin.Context) {
 	data := DtTables()

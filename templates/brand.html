@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li class="menu-item ">
-                            <a class="menu-link" href="/admin-category">
+                            <a class="menu-link" href="/admin/category">
                                 <i class="icon material-icons md-category"></i>
                                 <span class="text">Categories</span>
                             </a>
@@ -152,8 +152,8 @@
                 <section class="content-main">
                     <div class="content-header">
                         <div>
-                            <h2 class="content-title card-title">Categories</h2>
-                            <p>Add, edit, or delete a category</p>
+                            <h2 class="content-title card-title">Brands</h2>
+                            <p>Add, edit, or delete a brand</p>
                         </div>
                         <div>
                             <input type="text" placeholder="Search Categories" class="form-control bg-white" id="searchInput" />
@@ -165,12 +165,12 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <!-- Add Category Form -->
-                                    <form action="/admin-addcategory" method="post">
+                                    <form action="/admin-addbrand" method="post">
                                         <div class="mb-4">
-                                            <label for="category_name" class="form-label">Category Name</label>
-                                            <input type="text" placeholder="name" class="form-control" id="category_name" name="category_name" required />
+                                            <label for="category_name" class="form-label">Brand Name</label>
+                                            <input type="text" placeholder="name" class="form-control" id="category_name" name="Brand_name" required />
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Create category</button>
+                                        <button type="submit" class="btn btn-primary">Create Brand</button>
                                         <!-- Add more form elements as needed -->
                                     </form>
                                 </div>
@@ -191,11 +191,11 @@
         
                                             <tbody>
                                                 <!-- Populate the table rows with category data -->
-                                                {{range .Categories}}
+                                                {{range .Brands}}
                                                 <tr>
                                                     
-                                                <td>{{.Category_id}}</td>
-                                                <td><b>{{.Name}}</b></td>
+                                                <td>{{.Brand_id}}</td>
+                                                <td><b>{{.Brand_Name}}</b></td>
                                                     
                                                 <td>
                                                   

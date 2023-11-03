@@ -50,9 +50,9 @@
         <!-- Center elements -->
         <div class="order-lg-last col-lg-5 col-sm-8 col-8">
           <div class="d-flex float-end">
-            <a href="/user/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Log in</p> </a>
-            <a href="/user/wishlist" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
-            <a href="/user/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
+            <a href="/user/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center btn-light " target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Log in</p> </a>
+            <a href="/user/wishlist" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center btn-light  " target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
+            <a href="/user/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center btn-light " target="_blank" >  <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
           </div>
         </div>
         <!-- Center elements -->
@@ -64,7 +64,7 @@
               <input type="search" id="form1" class="form-control" />
               <label class="form-label" for="form1">Search</label>
             </div>
-            <button type="button" class="btn btn-primary shadow-0">
+            <button type="button" class="btn btn-brand mb-0 shadow-0">
               <i class="fas fa-search"></i>
             </button>
           </div>
@@ -76,7 +76,7 @@
   <!-- Jumbotron -->
 
   <!-- Heading -->
-  <div class="bg-primary mb-4">
+  <div class="mb-4" style="background-color: #000000c8;" >
     <div class="container py-4">
       <!-- Breadcrumb -->
       <nav class="d-flex mb-2">
@@ -125,14 +125,23 @@
                         >
                   Category
                 </button> -->
-                <h4 class="btn-outline-secondary" style=>Categories</h4>
+                <h4 class="btn-outline-secondary;" style="margin-left: 60px;" >Categories</h4>
               </h2>
+              <a href="/user/products-list" class="text-dark" style="margin-left: 60px;font-weight: bold;">All Category</a>
+              <br>
+              <br>
               {{range .Categories}}
               <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                 <div class="accordion-body">
+                  
                   <ul class="list-unstyled">
-                    <li><a href="#" class="text-dark" style="margin-left: 10px;" >{{.Name}} </a></li>
-                    <!-- <li><a href="#" class="text-dark">{{.Category_id}} </a></li> -->
+                    
+                    <li>
+                      <form action="/user/products-list/{{.Category_id}}" method="get" ></form>
+             
+                      <a href="/user/products-list/category?category_name={{.Name}}" class="text-dark" style="margin-left: 70px;">{{.Name}}</a>
+                    </form>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -140,7 +149,7 @@
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingTwo">
-                <button
+                <!-- <button
                         class="accordion-button text-dark bg-light"
                         type="button"
                         data-mdb-toggle="collapse"
@@ -149,18 +158,23 @@
                         aria-controls="panelsStayOpen-collapseTwo"
                         >
                   Brands
-                </button>
+                </button> -->
+                <h4 class="btn-outline-secondary;" style="margin-left: 60px;" >Brands</h4>
               </h2>
-          
+              <a href="/user/products-list" class="text-dark" style="margin-left: 60px;font-weight: bold;">All Brands</a>
+              <br><br>
               <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
                 <div class="accordion-body">
                   <div>
                     {{range .Brands}}
                     <!-- Checked checkbox -->
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked1" checked />
-                      <label class="form-check-label" for="flexCheckChecked1" style="margin-left: 10px;" >{{.Brand_Name}}</label>
+                      <!-- <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked1" checked />
+                      <label class="form-check-label" for="flexCheckChecked1" style="margin-left: 70px;" >{{.Brand_Name}}</label> -->
                       <!-- <span class="badge badge-secondary float-end">120</span> -->
+                      <ul class="list-unstyled">
+                        <li><a href="/user/products-list/brand?brand_name={{.Brand_Name}}" class="text-dark" style="margin-left: 40px;" >{{.Brand_Name}} </a></li>
+                      </ul>
                     </div>
                     {{end}}
                     <!-- Checked checkbox -->
@@ -262,7 +276,7 @@
                     
                     <div class="mt-4">
                     <form action="/user/cart/{{.ID}}" method="GET" >
-                   <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
+                   <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
                   </form>
                   <form action="/user/wishlist/{{.ID}}" method="GET" >  
                    <button href="/user/wishlist" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></button>
@@ -276,6 +290,9 @@
           </div>
         </div>
           {{end}}
+          {{if .error}}
+          <h4 style="color: crimson;" >Error: {{.error}}</h4>
+           {{end}}
      <!--//error here-->
         <hr />
       </div>

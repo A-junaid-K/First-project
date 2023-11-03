@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -73,44 +74,47 @@ func ListCategory(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/category")
 }
 func FilterCategory(c *gin.Context) {
-	// id,_ := strconv.Atoi(c.Param("category_id"))
-	catagory := c.Query("catagory_name")
-
-	var categorydb models.Category
-	err := database.DB.Where("catagory_name=?", catagory).First(&categorydb).Error
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "This catagory not exist",
+	filtered_category := c.Query("category_name")
+	var filterproduct []models.Product
+	database.DB.Table("products").Where("category_name=?", filtered_category).Find(&filterproduct)
+	if filterproduct == nil {
+		log.Println("error : No products in this catagory")
+		c.HTML(400, "productsList2.html", gin.H{
+			"error": "No products in this catagory",
 		})
 		return
 	}
-	type product struct {
-		ID            uint
-		Product_Name  string
-		Price         uint
-		Brand_Name    string
-		Catagory_Name string
-		Stock         uint
-	}
-	var products []product
-	err = database.DB.Table("products").Select("products.id,products.product_name,products.price,brands.brand_name,catagories.catagory_name,products.stock").
-		Joins("INNER JOIN brands ON brands.brand_id=products.brand_id").Joins("INNER JOIN catagories ON catagories.catagory_id=products.catagory_id").
-		Where("products.catagory_id=?", categorydb.Category_id).Scan(&products).Error
 
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "database error",
-		})
-		return
+	fmt.Println(filterproduct)
+
+	var categories []models.Category
+	var brands []models.Brand
+
+	database.DB.Find(&categories)
+	database.DB.Find(&brands)
+
+	data := struct {
+		Products   []models.Product
+		Categories []models.Category
+		Brands     []models.Brand
+	}{
+		Products:   filterproduct,
+		Categories: categories,
+		Brands:     brands,
 	}
-	c.JSON(200, gin.H{
-		"products": products,
-	})
+
+	c.HTML(200, "productsList2.html", data)
 }
 
 // -----------------------------------Brand------------------------------//
+func DisplayBrands(c *gin.Context) {
+	brands := DtTables()
+
+	c.HTML(200, "brand.html", brands)
+}
 func AddBrand(c *gin.Context) {
-	brandName := c.Request.FormValue("brand_name")
+	brandName := c.Request.FormValue("Brand_name")
+	log.Println("brand name : ", brandName)
 	var dtbrand models.Brand
 	database.DB.Where("brand_name=?", brandName).First(&dtbrand)
 	if brandName == dtbrand.Brand_Name {
@@ -125,5 +129,37 @@ func AddBrand(c *gin.Context) {
 		log.Println("Failed to add brand")
 		return
 	}
-	c.Redirect(303, "/admin-products-list")
+	c.Redirect(303, "/admin-brand")
+}
+func FilterBrand(c *gin.Context) {
+	filtered_brand := c.Query("brand_name")
+	var filterproduct []models.Product
+	database.DB.Table("products").Where("brand_name=?", filtered_brand).Find(&filterproduct)
+	if filterproduct == nil {
+		log.Println("error : No products in this brand")
+		c.HTML(400, "productsList2.html", gin.H{
+			"error": "No products in this brand",
+		})
+		return
+	}
+
+	fmt.Println(filterproduct)
+
+	var categories []models.Category
+	var brands []models.Brand
+
+	database.DB.Find(&categories)
+	database.DB.Find(&brands)
+
+	data := struct {
+		Products   []models.Product
+		Categories []models.Category
+		Brands     []models.Brand
+	}{
+		Products:   filterproduct,
+		Categories: categories,
+		Brands:     brands,
+	}
+
+	c.HTML(200, "productsList2.html", data)
 }

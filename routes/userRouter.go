@@ -40,10 +40,14 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/edit-profile", middleware.UserAuthentication, controllers.Editprofile)
 		router.POST("/edit-profile", middleware.UserAuthentication, controllers.PostEditprofile)
 
-		//Product //category //brand
+		//Product
 		router.GET("/products-list", controllers.Listproducts)
 		router.GET("/product-details/:id", controllers.ProductDetails)
 		router.POST("/product-details", controllers.ProductDetails)
+
+		//Filter
+		router.GET("/products-list/category", middleware.UserAuthentication, controllers.FilterCategory)
+		router.GET("/products-list/brand", middleware.UserAuthentication, controllers.FilterBrand)
 
 		//Cart
 		router.GET("/cart/:id", middleware.UserAuthentication, controllers.AddtoCart)
