@@ -24,8 +24,6 @@ func hashPassword(password string) (string, error) {
 	return string(byte), nil
 }
 
-// var modelsuser *models.User
-
 func Verifypassword(dbpassword, password string) bool {
 	if err := bcrypt.CompareHashAndPassword([]byte(dbpassword), []byte(password)); err != nil {
 		log.Println("failed to compare password ", err)

@@ -3,12 +3,14 @@ package models
 import "time"
 
 type Category_Offer struct {
-	ID          uint `gorm:"primaryKey;unique"`
-	Category_Id uint `gorm:"not null"`
-	Offer       bool `gorm:"not null"`
-	Percentage  uint
+	ID            uint   `gorm:"primaryKey;unique"`
+	Offer_Name    string `gorm:"not null"`
+	Category_Name string `gorm:"not null"`
+	Offer         bool   `gorm:"not null"`
+	Percentage    uint
+	Starting_Time uint `gorm:"not null"`
+	Expiry_date   uint `gorm:"not null"`
 }
-
 type Coupon struct {
 	CouponId      int       `gorm:"primaryKey;unique"`
 	Coupon_Code   string    `gorm:"not null"`

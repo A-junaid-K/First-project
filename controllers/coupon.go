@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"log"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -47,4 +49,38 @@ func AddCoupon(c *gin.Context) {
 		})
 		return
 	}
+}
+func CategoryOffer(c *gin.Context) {
+	var dtcategory models.Category
+	database.DB.Table("Categories").Find(&dtcategory)
+	c.HTML(200, "offer.html", dtcategory)
+}
+func PostOffer(c *gin.Context) {
+	offer_name := c.Request.FormValue("coffer_name")
+	// starting_date := c.Request.FormValue("starting_date")
+	// expiry_date := c.Request.FormValue("expiry_date")
+	// percentage := c.Request.FormValue("percentage")
+
+	var dtoffer models.Category_Offer
+	database.DB.Where("offer_name=?", offer_name).First(&dtoffer)
+
+	if offer_name == dtoffer.Offer_Name {
+		c.HTML(http.StatusBadRequest, "offer.html", gin.H{
+			"error": "This offer already exist",
+		})
+		return
+	}
+
+	// Adding offer
+	result := database.DB.Create(&models.Category_Offer{
+		Offer_Name: offer_name,
+	})
+	if result.Error != nil {
+		log.Println("Failed to add product")
+		c.HTML(http.StatusBadRequest, "addProduct.html", gin.H{
+			"error": "Failed to add product",
+		})
+		return
+	}
+	c.Redirect(http.StatusSeeOther, "/admin-products-list")
 }
