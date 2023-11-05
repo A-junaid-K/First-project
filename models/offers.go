@@ -8,9 +8,10 @@ type Category_Offer struct {
 	Category_Name string `gorm:"not null"`
 	Offer         bool   `gorm:"not null"`
 	Percentage    uint
-	Starting_Time uint `gorm:"not null"`
-	Expiry_date   uint `gorm:"not null"`
+	Starting_Time time.Time `gorm:"not null"`
+	Expiry_date   time.Time `gorm:"not null"`
 }
+
 type Coupon struct {
 	CouponId      int       `gorm:"primaryKey;unique"`
 	Coupon_Code   string    `gorm:"not null"`

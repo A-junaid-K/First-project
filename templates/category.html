@@ -86,9 +86,9 @@
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a class="menu-link" href="/add-product">
-                                <i class="icon material-icons md-add_box"></i>
-                                <span class="text">Add product</span>
+                            <a class="menu-link" href="/admin-offer">
+                                <i class="icon material-icons md-local_offer "></i>
+                                <span class="text">Offer</span>
                             </a>
                         </li>
                         <li class="menu-item">
@@ -196,13 +196,14 @@
                                                     
                                                 <td>{{.Category_id}}</td>
                                                 <td><b>{{.Name}}</b></td>
-                                                    
-                                                <td>
-                                                  
-                                                    No Offers
-                                                   
-                                                </td>
-                                                
+                                              
+                                     
+                                             
+                                                <td> {{.Offer_Name}}|{{.Percentage}}%off</td>
+                                               
+                                          
+                                                    <td>No offers</td>
+                                          
 
                                                         <!-- Action buttons -->
                                                         <th></th>
@@ -216,8 +217,9 @@
                                                         <button id="categId1" class="btn btn-sm btn-danger rounded font-sm mt-15 ms-2">List</button>
                                                     </td> -->
                                                 </tr>
-                                                <!-- Add more table rows for other categories -->
                                                 {{end}}
+                                                <!-- Add more table rows for other categories -->
+                                                
                                             </tbody>
                                         </table>
                                     </div>

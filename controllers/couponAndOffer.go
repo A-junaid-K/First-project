@@ -50,21 +50,36 @@ func AddCoupon(c *gin.Context) {
 		return
 	}
 }
-func CategoryOffer(c *gin.Context) {
-	var dtcategory models.Category
-	database.DB.Table("Categories").Find(&dtcategory)
+func Offer(c *gin.Context) {
+	dtcategory := DtTables()
 	c.HTML(200, "offer.html", dtcategory)
 }
-func PostOffer(c *gin.Context) {
-	offer_name := c.Request.FormValue("coffer_name")
-	// starting_date := c.Request.FormValue("starting_date")
-	// expiry_date := c.Request.FormValue("expiry_date")
-	// percentage := c.Request.FormValue("percentage")
+func PostAddOffer(c *gin.Context) {
+	layout := "02/01/2006"
+	offer_name := c.Request.FormValue("offer_name")
+	starting_date, _ := time.Parse(layout, c.PostForm("startingDate"))
+	expiry_date, _ := time.Parse(layout, c.PostForm("expiryDate"))
+	percentage, err := strconv.Atoi(c.Request.FormValue("percentage"))
+
+	log.Println("offer name : ", offer_name)
+
+	if err != nil {
+		log.Println("failed form value : ", err)
+	}
+
+	// recieving the chosen category
+	category := c.PostForm("chosencategory")
 
 	var dtoffer models.Category_Offer
-	database.DB.Where("offer_name=?", offer_name).First(&dtoffer)
+	err = database.DB.Where("offer_name=?", offer_name).First(&dtoffer).Error
 
+	if err != nil {
+		log.Println("database err  : ", err)
+	}
+
+	log.Println("dtoffer : ", dtoffer)
 	if offer_name == dtoffer.Offer_Name {
+		log.Println("This offer already exist : ")
 		c.HTML(http.StatusBadRequest, "offer.html", gin.H{
 			"error": "This offer already exist",
 		})
@@ -73,14 +88,20 @@ func PostOffer(c *gin.Context) {
 
 	// Adding offer
 	result := database.DB.Create(&models.Category_Offer{
-		Offer_Name: offer_name,
+		Offer_Name:    offer_name,
+		Category_Name: category,
+		Starting_Time: starting_date,
+		Expiry_date:   expiry_date,
+		Percentage:    uint(percentage),
+		Offer:         true,
 	})
+
 	if result.Error != nil {
-		log.Println("Failed to add product")
-		c.HTML(http.StatusBadRequest, "addProduct.html", gin.H{
-			"error": "Failed to add product",
+		log.Println("Failed to add offer : ", result.Error)
+		c.HTML(http.StatusBadRequest, "offer.html", gin.H{
+			"error": "Failed to add offer",
 		})
 		return
 	}
-	c.Redirect(http.StatusSeeOther, "/admin-products-list")
+	c.Redirect(http.StatusSeeOther, "/admin-offer")
 }

@@ -82,15 +82,15 @@
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a class="menu-link" href="page-orders-1.html">
+                            <a class="menu-link" href="/admin-offer">
                                 <i class="icon material-icons md-shopping_cart"></i>
                                 <span class="text">Orders</span>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a class="menu-link" href="/add-product">
-                                <i class="icon material-icons md-add_box"></i>
-                                <span class="text">Add product</span>
+                            <a class="menu-link" href="/admin-offer">
+                                <i class="icon material-icons md-local_offer "></i>
+                                <span class="text">Offer</span>
                             </a>
                         </li>
                         <li class="menu-item">
@@ -118,11 +118,11 @@
             </div>
 
             <div id="errorContainer" class="alert alert-danger" style="display: none;"></div>
-            <form id="offer-form" class="forms-sample" action="/admin/addOffer" method="POST">
+            <form id="offer-form" class="forms-sample" action="/admin/add-offer" method="POST">
 
                   <div class="form-group mb-4">
                     <label for="offer-name" class="form-label">Offer Name</label>
-                    <input type="text" class="form-control" id="offer-name" name="name" placeholder="Enter offer name" required="">
+                    <input type="text" class="form-control" id="offer-name" name="offer_name" placeholder="Enter offer name" required="">
                   </div>
 
 
@@ -130,7 +130,7 @@
                     <label class="mb-2">Category</label>
                     <select class="form-select border border-secondary" style="height: 35px;margin-bottom: 20px" name="chosencategory" required >
                       <option id="selected" selected disabled value="">select</option>
-                      {{range .}}
+                      {{range .Categories}}
                       <option>
                         {{.Name}}
                       </option>
@@ -141,12 +141,12 @@
 
                   <div class="form-group mb-4">
                     <label class="form-label" for="starting-date">Starting Date</label>
-                    <input type="date" class="form-control" id="starting-date" name="startingDate" required="" min="2023-11-03">
+                    <input type="date" class="form-control" id="starting_date" name="startingDate" required="" min="2023-11-03">
                   </div>
 
                   <div class="form-group mb-4">
                     <label class="form-label" for="expiry-date">Expiry Date</label>
-                    <input type="date" class="form-control" id="expiry-date" name="expiryDate" required="" min="2023-11-03">
+                    <input type="date" class="form-control" id="expiry_date" name="expiryDate" required="" min="2023-11-03">
                   </div>
 
 
@@ -162,10 +162,13 @@
 
                   <div class="mt-4">
                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <a href="/admin/offers" class="btn btn-secondary">Cancel</a>
+                    <a href="/admin-offer" class="btn btn-secondary">Cancel</a>
                   </div>
 
                 </form>
+                {{if .error}}
+                <p style="color: crimson;" >Error: {{.error}}</p>
+                {{end}}
         </div>
    
 </body>

@@ -75,8 +75,8 @@ func PostAddproducts(c *gin.Context) {
 	result := database.DB.Create(&models.Product{
 		Name:          name,
 		Description:   description,
-		Stock:         stock,
-		Price:         price,
+		Stock:         uint(stock),
+		Price:         uint(price),
 		Category_Name: category_name,
 		Brand_Name:    brand_name,
 		Image:         file.Filename,
@@ -229,6 +229,7 @@ func DtTables() interface{} {
 	var addresses []models.Address
 	var users []models.User
 	var brands []models.Brand
+	// var offers []models.Category_Offer
 
 	database.DB.Find(&products)
 	database.DB.Find(&categories)
@@ -236,6 +237,7 @@ func DtTables() interface{} {
 	database.DB.Find(&addresses)
 	database.DB.Find(&users)
 	database.DB.Find(&brands)
+	// database.DB.Find(&offers)
 
 	data := struct {
 		Products   []models.Product
@@ -244,6 +246,7 @@ func DtTables() interface{} {
 		Addresses  []models.Address
 		Users      []models.User
 		Brands     []models.Brand
+		// Offers     []models.Category_Offer
 	}{
 		Products:   products,
 		Categories: categories,
@@ -251,6 +254,7 @@ func DtTables() interface{} {
 		Addresses:  addresses,
 		Users:      users,
 		Brands:     brands,
+		// Offers:     offers,
 	}
 
 	return data

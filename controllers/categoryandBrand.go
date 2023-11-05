@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -85,8 +84,6 @@ func FilterCategory(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(filterproduct)
-
 	var categories []models.Category
 	var brands []models.Brand
 
@@ -142,8 +139,6 @@ func FilterBrand(c *gin.Context) {
 		})
 		return
 	}
-
-	fmt.Println(filterproduct)
 
 	var categories []models.Category
 	var brands []models.Brand

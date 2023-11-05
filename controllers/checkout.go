@@ -47,7 +47,6 @@ func PostCheckout(c *gin.Context) {
 
 	// recieving the address
 	adrid, _ := strconv.Atoi(c.PostForm("userchosenaddress"))
-	fmt.Println("address getting from checkout : ", adrid)
 	var postadr models.Address
 	err = database.DB.Where("address_id=?", adrid).First(&postadr).Error
 	if err != nil {
