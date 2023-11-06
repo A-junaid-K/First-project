@@ -61,8 +61,6 @@ func PostAddOffer(c *gin.Context) {
 	expiry_date, _ := time.Parse(layout, c.PostForm("expiryDate"))
 	percentage, err := strconv.Atoi(c.Request.FormValue("percentage"))
 
-	log.Println("offer name : ", offer_name)
-
 	if err != nil {
 		log.Println("failed form value : ", err)
 	}
@@ -95,6 +93,17 @@ func PostAddOffer(c *gin.Context) {
 		Percentage:    uint(percentage),
 		Offer:         true,
 	})
+	database.DB.Table("products").Where("category_name=?", category).Updates(map[string]interface{}{
+		"offer_name": offer_name,
+		"percentage": percentage,
+	})
+	err = database.DB.Table("categories").Where("name=?", category).Updates(map[string]interface{}{
+		"offer_name": offer_name,
+		"percentage": percentage,
+	}).Error
+	if err != nil {
+		log.Println("errrrrrr : ", err)
+	}
 
 	if result.Error != nil {
 		log.Println("Failed to add offer : ", result.Error)
@@ -104,4 +113,7 @@ func PostAddOffer(c *gin.Context) {
 		return
 	}
 	c.Redirect(http.StatusSeeOther, "/admin-offer")
+}
+func RemoveOffer(c *gin.Context) {
+	
 }

@@ -107,6 +107,13 @@ func ProductDetails(c *gin.Context) {
 
 	var products models.Product
 	database.DB.Table("products").Where("id=?", productiD).First(&products)
+
+	//checking the offer
+	if products.Offer_Name != "" {
+		offerprice := products.Price * products.Percentage / 100
+		products.Price = products.Price - offerprice
+	}
+
 	c.HTML(http.StatusOK, "productDetails2.html", products)
 }
 
@@ -188,27 +195,6 @@ func PostEditproduct(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/admin-products-list")
 }
 func Deleteproduct(c *gin.Context) {
-
-	// type products struct {
-	// 	Id            uint
-	// 	Name          string `gorm:"not null"`
-	// 	Description   string `gorm:"not null"`
-	// 	Stock         int    `gorm:"not null"`
-	// 	Price         int    `gorm:"not null"`
-	// 	Category_Name string `gorm:"not null"`
-	// 	Brand_Name    string `gorm:"not null"`
-	// 	Image         string `gorm:"not null"`
-	// }
-	// var product []products
-	// result := database.DB.Table("products").Select("id,name,description,stock,price,category_name,brand_name,image").Scan(&product)
-	// if result.Error != nil {
-	// 	c.HTML(http.StatusBadRequest, "productsList2.html", gin.H{
-	// 		"error": "Failed to list product",
-	// 	})
-	// 	return
-	// }
-	// c.HTML(200, "adminProductlist.html", product)
-
 	idstr := c.Param("prdctid")
 	id, _ := strconv.Atoi(idstr)
 

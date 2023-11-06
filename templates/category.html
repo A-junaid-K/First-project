@@ -196,21 +196,21 @@
                                                     
                                                 <td>{{.Category_id}}</td>
                                                 <td><b>{{.Name}}</b></td>
-                                              
-                                     
-                                             
-                                                <td> {{.Offer_Name}}|{{.Percentage}}%off</td>
-                                               
-                                          
-                                                    <td>No offers</td>
-                                          
+                                              <td>
+                                                {{if .Offer_Name}}
+                                                {{.Offer_Name}}|{{.Percentage}}% off
+                                            {{else}}
+                                                No offers
+                                            {{end}}
+                                        </td>
 
                                                         <!-- Action buttons -->
-                                                        <th></th>
                                                     <td  >
+                                                {{if .Offer_Name}}
                                                         <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
                                                             Remove offer
                                                         </button>
+                                                {{end}}
                                                     </td>
                                                     <!-- <td class="text-end">
                                                         <a href="/admin/editCategory?id=1" class="btn btn-sm btn-success rounded font-sm text-white mt-15">Edit</a>

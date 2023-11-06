@@ -139,8 +139,14 @@
                     <li>
                       <form action="/user/products-list/{{.Category_id}}" method="get" ></form>
              
-                      <a href="/user/products-list/category?category_name={{.Name}}" class="text-dark" style="margin-left: 70px;">{{.Name}}</a>
-                    </form>
+                          <a href="/user/products-list/category?category_name={{.Name}}" class="text-dark" style="margin-left: 70px;">
+                            {{.Name}}
+                            {{if .Offer_Name}}
+                            <span class="text-success" >{{.Percentage}}%off</span>
+                            {{end}}
+                          </a>
+                           
+                      </form>
                     </li>
                   </ul>
                 </div>
@@ -273,8 +279,9 @@
                       <!-- <span class="text-danger"><s>$49.99</s></span> -->
                     </div>
                     <!-- <h6 class="text-muted">Free shipping</h6> -->
-                    <h6 class="text-success">Casual sale  45%off</h6>
-                    
+                    {{if .Offer_Name}}
+                    <h6 class="text-success">{{.Offer_Name}} | {{.Percentage}}%off</h6>
+                    {{end}}
                     <div class="mt-4">
                     <form action="/user/cart/{{.ID}}" method="GET" >
                    <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>

@@ -194,12 +194,18 @@
                                         <td>{{.Category_Name}}</td>
                                         <td>{{.Description}}</td>
                                         <td><span class="badge rounded-pill alert-success">{{.Stock}}</span></td>
-                                        <td>.Offer</td>
                                         <td>
-                                        <button class=" btn btn-sm btn-outline-primary rounded
-                                            font-sm" onclick="show12Modal('651edb0bb934634368aeaebd')">
-                                                Apply offer
-                                        </button>
+                                            {{if .Offer_Name}}
+                                                {{.Offer_Name}}|{{.Percentage}}% off
+                                            {{else}}
+                                                No offers
+                                            {{end}}
+                                            
+                                        </td>
+                                        <td>
+                                            <!-- <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
+                                                Remove offer
+                                            </button> -->
                                     </td>
                                         <td class="text">
                                             <a href="/edit-product/{{.ID}}"class="btn btn-sm btn-brand rounded font-sm mt-15" >Edit</a>

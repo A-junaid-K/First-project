@@ -12,6 +12,8 @@ type Product struct {
 	Category_Name string `gorm:"not null"`
 	Brand_Name    string `gorm:"not null"`
 	Image         string `gorm:"not null"`
+	Offer_Name    string
+	Percentage    uint
 }
 type Brand struct {
 	Brand_id   uint   `gorm:"primaryKey;unique"`
@@ -24,9 +26,3 @@ type Category struct {
 	Offer_Name  string
 	Percentage  uint
 }
-
-// type Image struct {
-// 	Id         uint   `gorm:"primaryKey;unique"`
-// 	Product_id uint   `gorm:"not null"`
-// 	Image      string `gorm:"not null"`
-// }
