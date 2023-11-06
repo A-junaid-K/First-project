@@ -35,7 +35,8 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/admin-unlistcategory/:category_id", middleware.AdminAuthentication, controllers.ListCategory)
 
 	//add coupoun
-	r.POST("/addcoupon/:coupon_code", middleware.AdminAuthentication, controllers.AddCoupon)
+	r.GET("/admin-coupon", middleware.AdminAuthentication, controllers.Coupon)
+	r.POST("/addcoupon/:coupon_code", middleware.AdminAuthentication, controllers.PostAddCoupon)
 
 	//offer
 	r.GET("/admin-offer", middleware.AdminAuthentication, controllers.Offer)

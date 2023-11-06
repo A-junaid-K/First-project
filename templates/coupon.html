@@ -152,8 +152,8 @@
                 <section class="content-main">
                     <div class="content-header">
                         <div>
-                            <h2 class="content-title card-title">Brands</h2>
-                            <p>Add, edit, or delete a brand</p>
+                            <h2 class="content-title card-title">Coupon</h2>
+                            <p>Add, delete a coupon</p>
                         </div>
                         <div>
                             <input type="text" placeholder="Search Categories" class="form-control bg-white" id="searchInput" />
@@ -165,12 +165,38 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <!-- Add Category Form -->
-                                    <form action="/admin-addbrand" method="post">
+                                    <form action="/admin-addcategory" method="post">
                                         <div class="mb-4">
-                                            <label for="category_name" class="form-label">Brand Name</label>
-                                            <input type="text" placeholder="name" class="form-control" id="category_name" name="Brand_name" required />
+                                            <label for="category_name" class="form-label">Coupon Code</label>
+                                            <input type="text" placeholder="name" class="form-control" id="category_name" name="category_name" required />
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Create Brand</button>
+
+                                        <div class="col-md-4 col-6">
+                                            <label class="mb-2">Coupon Type</label>
+                                            <select class="form-select border border-secondary" style="height: 35px;margin-bottom: 20px" name="type" required >
+                                              <option id="selected" selected disabled value="">select</option>
+                                              <option>Percentage</option>
+                                              <option>Fixed price</option>
+                                            </select>
+                                          </div>
+
+                                          <div class="form-group mb-4">
+                                            <label class="form-label" for="expiry-date">Expiry Date</label>
+                                            <input type="date" class="form-control" id="expiry_date" name="expiryDate" required="" min="2023-11-07">
+                                          </div>
+
+                                          <div class="form-group mb-4">
+                                            <label for="percentage" class="form-label">Discount</label>
+                                            <div class="input-group">
+                                              <input type="number" class="form-control" id="number" name="discount" placeholder="Enter Discount value" required="">
+                                              <div class="input-group-append">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        
+                                       
+
+                                        <button type="submit" class="btn btn-primary">Create Coupon</button>
                                         <!-- Add more form elements as needed -->
                                     </form>
                                 </div>
@@ -181,9 +207,8 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 5%">ID</th>
-                                                    <th style="width: 10%">Name</th>
-                                                    <th>Offers</th>
-                                                    <th></th>
+                                                    <th style="width: 10%">Coupon Code</th>
+                                                    <th>Discount</th>
                                                     <th>Action</th>
                                                     <th></th>
                                                 </tr>
@@ -191,32 +216,21 @@
         
                                             <tbody>
                                                 <!-- Populate the table rows with category data -->
-                                                {{range .Brands}}
+                                                {{range .Categories}}
                                                 <tr>
                                                     
-                                                <td>{{.Brand_id}}</td>
-                                                <td><b>{{.Brand_Name}}</b></td>
-                                                    
-                                                <td>
-                                                  
-                                                    No Offers
-                                                   
-                                                </td>
-                                                
+                                                <td>{{.CouponId}}</td>
+                                                <td><b>{{.Coupon_Code}}</b></td>
+                                                <td>{{.Discount}}</td>
 
                                                         <!-- Action buttons -->
-                                                        <th></th>
                                                     <td  >
+                                                        <a href="/admin/remove-coupon?coupon_id={{.CouponId}}" >
                                                         <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
-                                                            Remove offer
-                                                        </button>
+                                                            Remove Coupon
+                                                        </button></a>
                                                     </td>
-                                                    <!-- <td class="text-end">
-                                                        <a href="/admin/editCategory?id=1" class="btn btn-sm btn-success rounded font-sm text-white mt-15">Edit</a>
-                                                        <button id="categId1" class="btn btn-sm btn-danger rounded font-sm mt-15 ms-2">List</button>
-                                                    </td> -->
                                                 </tr>
-                                                <!-- Add more table rows for other categories -->
                                                 {{end}}
                                             </tbody>
                                         </table>

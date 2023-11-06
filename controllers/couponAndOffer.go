@@ -11,44 +11,47 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddCoupon(c *gin.Context) {
-	couponCode, _ := strconv.Atoi(c.Param("coupon_code"))
-	var dtcoupon models.Coupon
-	database.DB.Where("coupon_code=?", couponCode).First(&dtcoupon)
-	if couponCode == dtcoupon.CouponId {
-		c.HTML(400, "payment", gin.H{
-			"error": "This coupon code already exist",
+func Coupon(c *gin.Context) {
+	c.HTML(200, "offer.html", nil)
+}
+func PostAddCoupon(c *gin.Context) {
+	layout := "2006-02-01"
+
+	coupon_code := c.Request.FormValue("couponcode")
+	coupon_type := c.PostForm("type")
+	raw_expiry_date := c.PostForm("expiryDate")
+	expiry_date, _ := time.Parse(layout, raw_expiry_date)
+	discount, _ := strconv.Atoi(c.Request.FormValue("discount"))
+
+	var coupon1 models.Coupon
+	database.DB.Where("coupon_code=?", coupon_code).First(&coupon1)
+
+	if coupon_code == coupon1.Coupon_Code {
+		c.JSON(400, gin.H{
+			"error": "This coupon code already exist in database",
 		})
 		return
 	}
 
-	if len(dtcoupon.Coupon_Code) < 5 || len(dtcoupon.Coupon_Code) > 10 {
-		c.HTML(400, "payment.html", gin.H{
+	if len(coupon_code) < 5 || len(coupon_code) > 10 {
+		c.JSON(400, gin.H{
 			"error": "Coupon code must be lenght between 5 to 10",
 		})
 		return
 	}
 
-	if dtcoupon.Type == "fixed" || dtcoupon.Type == "percentage" {
-		database.DB.Create(&models.Coupon{
-			Coupon_Code:   dtcoupon.Coupon_Code,
-			Starting_Time: time.Now(),
-			// Ending_Time:   time.Now().Add(time.Hour * 24 * time.Duration(dtcoupon.Days)),
-			Value:        dtcoupon.Value,
-			Type:         dtcoupon.Type,
-			Max_Discount: dtcoupon.Max_Discount,
-			Min_Discount: dtcoupon.Min_Discount,
-		})
-		c.HTML(200, "payment.html", gin.H{
-			"success": "successfully created coupon",
-		})
-
-	} else {
-		c.HTML(400, "payment.html", gin.H{
-			"error": "This type not applicable",
-		})
-		return
-	}
+	database.DB.Create(&models.Coupon{
+		Coupon_Code:   coupon_code,
+		Starting_Time: time.Now(),
+		Ending_Time:   time.Now().Add(time.Hour * 24 * time.Duration(expiry_date.Day())),
+		Type:          coupon_type,
+		Value:         uint(discount),
+		// Max_Discount:  coupon.Max_Discount,
+		// Min_Discount:  coupon.Min_Discount,
+	})
+	c.JSON(200, gin.H{
+		"success": "successfully created coupon",
+	})
 }
 func Offer(c *gin.Context) {
 	dtcategory := DtTables()
