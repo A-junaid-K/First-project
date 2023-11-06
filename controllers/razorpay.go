@@ -101,16 +101,16 @@ func RazorpaySuccess(c *gin.Context) {
 		log.Println("error: Failed to find total price, message: cart is empty : ", err)
 		return
 	}
-
-	//checking stock level
 	var product models.Product
-	for _, v := range cartdata {
-		database.DB.First(&product, v.Product_ID)
-		if product.Stock-v.Quantity < 0 {
-			log.Println("error: Please check quantity : ", err)
-			return
-		}
-	}
+
+	// //checking stock level
+	// for _, v := range cartdata {
+	// 	database.DB.First(&product, v.Product_ID)
+	// 	if product.Stock-v.Quantity < 0 {
+	// 		log.Println("error: Please check quantity : ", err)
+	// 		return
+	// 	}
+	// }
 
 	var adrid int
 	err = database.DB.Model(&models.Contactdetails{}).Select("address_id").Where("user_id=?", userid).Scan(&adrid).Error

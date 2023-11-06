@@ -207,9 +207,10 @@
                                                         <!-- Action buttons -->
                                                     <td  >
                                                 {{if .Offer_Name}}
+                                                        <a href="/admin/remove-offer?offer_name={{.Offer_Name}}" >
                                                         <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
                                                             Remove offer
-                                                        </button>
+                                                        </button></a>
                                                 {{end}}
                                                     </td>
                                                     <!-- <td class="text-end">

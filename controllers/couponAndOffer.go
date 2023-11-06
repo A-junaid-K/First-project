@@ -55,11 +55,20 @@ func Offer(c *gin.Context) {
 	c.HTML(200, "offer.html", dtcategory)
 }
 func PostAddOffer(c *gin.Context) {
-	layout := "02/01/2006"
+	layout := "2006-02-01"
 	offer_name := c.Request.FormValue("offer_name")
-	starting_date, _ := time.Parse(layout, c.PostForm("startingDate"))
-	expiry_date, _ := time.Parse(layout, c.PostForm("expiryDate"))
+
+	raw_starting_date := c.PostForm("startingDate")
+	starting_date, err := time.Parse(layout, raw_starting_date)
+	if err != nil {
+		log.Println("faild to get starting date : ", err)
+	}
+	raw_expiry_date := c.PostForm("expiryDate")
+	expiry_date, _ := time.Parse(layout, raw_expiry_date)
+
 	percentage, err := strconv.Atoi(c.Request.FormValue("percentage"))
+
+	log.Println("starting time : ", starting_date, "\n ending time : ", expiry_date)
 
 	if err != nil {
 		log.Println("failed form value : ", err)
@@ -115,5 +124,34 @@ func PostAddOffer(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/admin-offer")
 }
 func RemoveOffer(c *gin.Context) {
-	
+	db := database.DB
+	delete_offer := c.Query("offer_name")
+	// Find and update the rows where 'offer_name' is same
+	result := db.Model(&models.Category{}).Where("offer_name = ?", delete_offer).Updates(map[string]interface{}{
+		"offer_name": nil,
+		"percentage": 0,
+	})
+	if result.Error != nil {
+		c.JSON(500, gin.H{"error": "Failed to delete data"})
+		return
+	}
+
+	// Find and update the rows where 'offer_name' is same
+	result2 := db.Model(&models.Product{}).Where("offer_name = ?", delete_offer).Updates(map[string]interface{}{
+		"offer_name": nil,
+		"percentage": 0,
+	})
+	if result2.Error != nil {
+		c.JSON(500, gin.H{"error": "Failed to delete data"})
+		return
+	}
+
+	// Find and update the rows where 'offer_name' is "Casual sale"
+	// result3 := db.Model(&models.Category_Offer{}).Where("offer_name = ?", delete_offer).Updates(map[string]interface{}{
+	// 	"offer_name": nil,
+	// 	"percentage": 0,
+	// })
+	db.Where("offer_name=?", delete_offer).Delete(&models.Category_Offer{})
+
+	c.Redirect(303, "/admin-category")
 }

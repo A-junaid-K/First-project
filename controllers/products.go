@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/first_project/database"
 	"github.com/first_project/models"
@@ -95,6 +96,17 @@ func AdminListproducts(c *gin.Context) {
 	c.HTML(200, "adminProductlist.html", data)
 }
 func Listproducts(c *gin.Context) {
+	var exp []models.Category_Offer
+	database.DB.Find(&exp)
+
+	currentdate := time.Now()
+
+	for _, offer := range exp {
+		if currentdate.After(offer.Expiry_date) {
+			log.Println("offer has expired")
+		}
+	}
+
 	data := DtTables()
 	c.HTML(200, "productsList2.html", data)
 }
@@ -204,7 +216,6 @@ func Deleteproduct(c *gin.Context) {
 		c.HTML(400, "adminProductlist.html", gin.H{"error": "Failed to find product"})
 		return
 	}
-	// c.HTML(http.StatusOK, "adminProductlist.html", product)
 	c.Redirect(303, "/admin-products-list")
 }
 func DtTables() interface{} {

@@ -32,17 +32,18 @@ func Cod(c *gin.Context) {
 		return
 	}
 
-	//checking stock level
 	var product models.Product
-	for _, v := range cartdata {
-		database.DB.First(&product, v.Product_ID)
-		if product.Stock-v.Quantity < 0 {
-			c.HTML(400, "cod.html", gin.H{
-				"error": "Please check quantity",
-			})
-			return
-		}
-	}
+
+	// //checking stock level
+	// for _, v := range cartdata {
+	// 	database.DB.First(&product, v.Product_ID)
+	// 	if product.Stock-v.Quantity < 0 {
+	// 		c.HTML(400, "cod.html", gin.H{
+	// 			"error": "Please check quantity",
+	// 		})
+	// 		return
+	// 	}
+	// }
 
 	//creating COD(not completed)
 	database.DB.Create(&models.Payment{
