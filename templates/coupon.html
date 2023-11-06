@@ -216,7 +216,7 @@
         
                                             <tbody>
                                                 <!-- Populate the table rows with category data -->
-                                                {{range .Categories}}
+                                                {{range .}}
                                                 <tr>
                                                     
                                                 <td>{{.CouponId}}</td>
@@ -224,9 +224,26 @@
                                                 <td>{{.Discount}}</td>
 
                                                         <!-- Action buttons -->
+                                                        
+                                                        <td>
+                                                            {{if not .Cancel}}
+                                                                <a href="/admin/cancel-coupon?coupon_id={{.CouponId}}">
+                                                                    <button class="btn btn-sm btn-outline-warning rounded font-sm" style="color:rgb(179, 116, 0)">
+                                                                        Cancel Coupon
+                                                                    </button>
+                                                                </a>
+                                                            {{else}}
+                                                                <a href="/admin/approve-coupon?coupon_id={{.CouponId}}">
+                                                                    <button class="btn btn-sm btn-outline-success rounded font-sm" style="color:green">
+                                                                        Approve Coupon
+                                                                    </button>
+                                                                </a>
+                                                            {{end}}
+                                                        </td>
+                                                        
                                                     <td  >
                                                         <a href="/admin/remove-coupon?coupon_id={{.CouponId}}" >
-                                                        <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
+                                                        <button class="btn btn-sm btn-outline-danger rounded font-sm" disabled>
                                                             Remove Coupon
                                                         </button></a>
                                                     </td>

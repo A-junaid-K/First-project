@@ -12,7 +12,9 @@ import (
 )
 
 func Coupon(c *gin.Context) {
-	c.HTML(200, "offer.html", nil)
+	var coupon models.Coupon
+	database.DB.Find(&coupon)
+	c.HTML(200, "coupon.html", coupon)
 }
 func PostAddCoupon(c *gin.Context) {
 	layout := "2006-02-01"
@@ -53,6 +55,63 @@ func PostAddCoupon(c *gin.Context) {
 		"success": "successfully created coupon",
 	})
 }
+func CancelCoupon(c *gin.Context) {
+	cid := c.Query("coupon_code")
+
+	var cou models.Coupon
+	err := database.DB.First(&cou, cid).Error
+
+	if err != nil {
+		log.Println("error : Failed to find coupon please try different id")
+		return
+	}
+
+	err = database.DB.Model(&models.Coupon{}).Where("coupon_id=?", cid).Updates(map[string]interface{}{"cancel": true, "ending_time": time.Now()}).Error
+	if err != nil {
+		log.Println("failed to cancel coupon : ", err)
+		return
+	}
+
+	c.Redirect(303, "/admin-coupon")
+}
+func ApproveCoupon(c *gin.Context) {
+	cid := c.Query("coupon_code")
+
+	var cou models.Coupon
+	err := database.DB.First(&cou, cid).Error
+
+	if err != nil {
+		log.Println("error : Failed to find coupon please try different id")
+		return
+	}
+
+	err = database.DB.Model(&models.Coupon{}).Where("coupon_id=?", cid).Updates(map[string]interface{}{
+		"cancel":      false,
+		"ending_time": time.Now().Add(time.Hour * 24 * time.Duration(cou.Ending_Time.Day())),
+	}).Error
+	if err != nil {
+		log.Println("failed to approve coupon : ", err)
+		return
+	}
+
+	c.Redirect(303, "/admin-coupon")
+}
+func RemoveCoupon(c *gin.Context) {
+	remove_coupon := c.Query("coupon_code")
+	err := database.DB.Where("offer_name=?", remove_coupon).Delete(&models.Coupon{}).Error
+	if err != nil {
+		log.Println("Failed to remove coupon : ", err)
+		return
+	}
+	c.Redirect(303, "/admin-coupon")
+}
+
+// func ApplyCoupon(c *gin.Context){
+
+// }
+
+//-------------------------------------------------OFFER-----------------------------------------------//
+
 func Offer(c *gin.Context) {
 	dtcategory := DtTables()
 	c.HTML(200, "offer.html", dtcategory)
@@ -148,12 +207,6 @@ func RemoveOffer(c *gin.Context) {
 		c.JSON(500, gin.H{"error": "Failed to delete data"})
 		return
 	}
-
-	// Find and update the rows where 'offer_name' is "Casual sale"
-	// result3 := db.Model(&models.Category_Offer{}).Where("offer_name = ?", delete_offer).Updates(map[string]interface{}{
-	// 	"offer_name": nil,
-	// 	"percentage": 0,
-	// })
 	db.Where("offer_name=?", delete_offer).Delete(&models.Category_Offer{})
 
 	c.Redirect(303, "/admin-category")

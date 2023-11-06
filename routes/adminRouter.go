@@ -34,9 +34,14 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/admin-listcategory/:category_id", middleware.AdminAuthentication, controllers.UnlistCategory)
 	r.GET("/admin-unlistcategory/:category_id", middleware.AdminAuthentication, controllers.ListCategory)
 
-	//add coupoun
+	// Coupoun
 	r.GET("/admin-coupon", middleware.AdminAuthentication, controllers.Coupon)
 	r.POST("/addcoupon/:coupon_code", middleware.AdminAuthentication, controllers.PostAddCoupon)
+	r.GET("/admin/cancel-coupon", middleware.AdminAuthentication, controllers.CancelCoupon)
+	r.GET("/admin/approve-coupon", middleware.AdminAuthentication, controllers.ApproveCoupon)
+	r.GET("/admin/remove-coupon", middleware.AdminAuthentication, controllers.RemoveCoupon)
+	// r.GET("/admin/apply-coupon", middleware.AdminAuthentication, controllers.ApplyCoupon)
+	
 
 	//offer
 	r.GET("/admin-offer", middleware.AdminAuthentication, controllers.Offer)
