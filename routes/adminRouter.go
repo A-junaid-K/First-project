@@ -40,7 +40,7 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/admin/cancel-coupon", middleware.AdminAuthentication, controllers.CancelCoupon)
 	r.GET("/admin/approve-coupon", middleware.AdminAuthentication, controllers.ApproveCoupon)
 	r.GET("/admin/remove-coupon", middleware.AdminAuthentication, controllers.RemoveCoupon)
-	// r.GET("/admin/apply-coupon", middleware.AdminAuthentication, controllers.ApplyCoupon)
+	r.GET("/admin/apply-coupon", middleware.AdminAuthentication, controllers.ApplyCoupon)
 	
 
 	//offer

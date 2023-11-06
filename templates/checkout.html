@@ -251,9 +251,8 @@ span.price {
               <input type="radio" name="payment" value="razorpay"> Razorpay
             </label>
             
-            
             <label for="cname" style="margin-top: 20px;" >Apply Coupon</label>
-            <input type="text" id="cname" name="cardname" placeholder="Add coupon">
+            <input type="text" id="cname" name="coupon_code" placeholder="Enter Coupon Code">
             <!-- <label for="ccnum">Credit card number</label>
             <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
             <label for="expmonth">Exp Month</label>
@@ -275,6 +274,9 @@ span.price {
           <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
         </label>
         
+        {{if .error}}
+        <p style="color: crimson;" >Error: {{.error}}</p>
+        {{end}}
 
         <input type="submit" value="Continue to checkout" class="btn">
       </form>

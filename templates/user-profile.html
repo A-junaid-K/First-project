@@ -101,6 +101,9 @@
                                     <a href="/changePassword" class="btn btn-info">Change Password</a>
                                 </div>
                             </div>
+                            {{if .error}}
+                            <p style="color: crimson;" >Error: {{.error}}</p>
+                            {{end}}
                         </div>
                     </div>
                 </div>

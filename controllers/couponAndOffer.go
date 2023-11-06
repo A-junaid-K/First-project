@@ -106,9 +106,83 @@ func RemoveCoupon(c *gin.Context) {
 	c.Redirect(303, "/admin-coupon")
 }
 
-// func ApplyCoupon(c *gin.Context){
+func ApplyCoupon(c *gin.Context){
+	user, _ := c.Get("user")
+	userId := user.(models.User).User_id
 
-// }
+	coupon_code := c.Request.FormValue("coupon_code")
+
+	//find the coupon
+	var coupon1 models.Coupon
+	row := database.DB.Where("coupon_code=?", coupon_code).First(&coupon1).RowsAffected
+	if row == 0 {
+		log.Println("Failed to find coupon")
+		c.HTML(400,"checkout.html" ,gin.H{"error": "Failed to find coupon",})
+		return
+	}
+
+	//checking coupon expired or not
+	if time.Now().Unix() > (coupon1.Ending_Time).Unix() {
+		log.Println("Coupon expired")
+		c.HTML(400,"checkout.html" ,gin.H{"error": "Coupon expired",})
+		return
+	}
+
+	//checking the coupon already applied or not
+	var cart []models.Cart
+	row = database.DB.Where("user_id=? AND coupon_applied = true", userId).Find(&cart).RowsAffected
+	if row >= 1 {
+		log.Println("coupon already applied")
+		c.HTML(400,"checkout.html" ,gin.H{"error": "coupon already applied",})
+		return
+	}
+	//calculating total amount
+	var totalprice uint
+	err := database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userId).Scan(&totalprice).Error
+	if err != nil {
+		log.Println("Cart is empty")
+		c.HTML(400,"checkout.html" ,gin.H{"error": "cart is empty",})
+		return
+	}
+
+	//getting the cart data
+	var cart1 []models.Cart
+	err = database.DB.Where("user_id=?", userId).Find(&cart1).Error
+	if err != nil {
+		log.Println("cart is empty")
+		return
+	}
+	//checking coupon valid or not
+	if coupon1.Cancel {
+		log.Println("Coupon is not valid")
+		c.HTML(400,"checkout.html" ,gin.H{"error": "Coupon is not valid",})
+		return
+	}
+
+	if coupon1.Type == "Percentage" {
+
+		for _, v := range cart1 {
+			discount := (v.Total_Price * coupon1.Value / 100)
+			err := database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userId, v.ID).Updates(map[string]interface{}{"total_price": v.Total_Price - discount, "coupon_discount": discount, "coupon_applied": true}).Error
+			if err != nil {
+				log.Println(err)
+				return
+			}
+		}
+		log.Println("Coupon applied successfully")
+	} else {
+		for _, v := range cart1 {
+			discount := coupon1.Value
+			err := database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userId, v.ID).Updates(map[string]interface{}{"total_price": v.Total_Price - discount, "coupon_discount": discount, "coupon_applied": true}).Error
+			if err != nil {
+				log.Println(err)
+				return
+			}
+		}
+	log.Println("coupon applied successfully")
+	}
+}
+//=====================APPLIED COUPON +++++++++++ HAVE TO CHECK
 
 //-------------------------------------------------OFFER-----------------------------------------------//
 

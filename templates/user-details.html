@@ -224,7 +224,9 @@
                             </div>
                             {{end}}
                         </div>
-                        
+                        {{if .error}}
+                        <p style="color: crimson;" >Error: {{.error}}</p>
+                        {{end}}
                         <!--  col.// -->
                         <!-- <div class="col-sm-6 col-xl-4 text-xl-end">
                                 <map class="mapbox position-relative d-inline-block">
