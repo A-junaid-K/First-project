@@ -3248,7 +3248,7 @@ ul.row, ul.row-sm {
 
 .mb-125 {
   margin-bottom: 125px !important;
-}
+} 
 
 .mb-130 {
   margin-bottom: 130px !important;
@@ -3875,8 +3875,8 @@ body.dark {
 }
 
 body.dark .content-main {
-  background-color: #222736;
-  color: #f6f6f6;
+  background-color: #f6f6f6;
+  color: #222736;
 }
 
 body.dark .card-title {

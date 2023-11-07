@@ -132,18 +132,55 @@ func Unblockuser(c *gin.Context) {
 func AdminDashboard(c *gin.Context) {
 	db := database.DB
 
-	var Revenue uint
-	db.Table("payments").Select("SUM(total_amount)").Scan(&Revenue)
+	// Revenue
+	var revenue uint
+	db.Table("payments").Select("SUM(total_amount)").Scan(&revenue)
+	log.Println("revenue : ", revenue)
 
-	//
+	// Pending Orders
+	var pending_orders int64
+	db.Model(&models.Order{}).Where("status=?", "pending").Count(&pending_orders)
+	log.Println("PENDING ORDER : ", pending_orders)
 
-	c.HTML(200, "adminDashboard.html", Revenue)
+	// Total products
+	var products int64
+	db.Model(&models.Product{}).Where("deleted_at IS NULL").Count(&products)
+	log.Println("TOTAL PRODUCTS : ", products)
 
-	var payment_type string
-	for i := 0; i < 20; i++ {
-		db.Table("payments").Select("payment_type").Where("payment_id=?", i).Scan(&payment_type)
-		db.Table("orders").Select("payment_type").Where("order_id=?", i).Update("payment_type", payment_type)
+	// Users
+	var users []models.User
+	db.Find(&users)
+	// log.Println("users : ", users)
+
+	// Latest Orders
+	var orders models.Order
+	db.Last(&orders)
+
+	var latest_orders []models.Order
+
+	log.Println("order.userid : ", orders.Order_ID)
+
+	for i := orders.Order_ID; i > orders.Order_ID-5; i-- {
+		var order models.Order
+		db.Where("order_id=?", i).Last(&order)
+		if order.Order_ID != 0 {
+			latest_orders = append(latest_orders, order)
+		}
 	}
+
+	c.HTML(200, "adminDashboard.html", gin.H{
+		"revenue":       revenue,
+		"pendingorders": pending_orders,
+		"totalproducts": products,
+		"users":         users,
+		"orders":        latest_orders,
+	})
+
+	// var payment_type string
+	// for i := 0; i < 20; i++ {
+	// 	db.Table("payments").Select("payment_type").Where("payment_id=?", i).Scan(&payment_type)
+	// 	db.Table("orders").Select("payment_type").Where("order_id=?", i).Update("payment_type", payment_type)
+	// }
 
 }
 
