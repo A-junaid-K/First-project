@@ -144,11 +144,13 @@ func RazorpaySuccess(c *gin.Context) {
 	}
 
 	err = database.DB.Create(&models.Order{
-		User_ID:     userid,
-		Address_ID:  order.Address_ID,
-		Total_Price: totalprice,
-		Payment_ID:  payment.Payment_ID,
-		Status:      "processing",
+		User_ID:      userid,
+		Address_ID:   order.Address_ID,
+		Total_Price:  totalprice,
+		Payment_ID:   payment.Payment_ID,
+		Status:       "processing",
+		Date:         time.Now(),
+		Payment_Type: "RAZOR PAY",
 	}).Error
 	if err != nil {
 		log.Println("failed to creat order : ", err)

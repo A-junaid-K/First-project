@@ -3,12 +3,14 @@ package models
 import "time"
 
 type Order struct {
-	Order_ID    uint   `gorm:"primaryKey;unique"`
-	User_ID     uint   `gorm:"not null"`
-	Address_ID  uint   `gorm:"not null"`
-	Total_Price uint   `gorm:"not null"`
-	Payment_ID  uint   `gorm:"not null"`
-	Status      string `gorm:"not null"`
+	Order_ID     uint `gorm:"primaryKey;unique"`
+	User_ID      uint `gorm:"not null"`
+	Address_ID   uint `gorm:"not null"`
+	Total_Price  uint `gorm:"not null"`
+	Payment_Type string
+	Payment_ID   uint   `gorm:"not null"`
+	Status       string `gorm:"not null"`
+	Date         time.Time
 }
 
 type OrderItem struct {

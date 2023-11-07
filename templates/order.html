@@ -13,6 +13,7 @@
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" href="/static/images/icon.png" />
         <!-- Template CSS -->
+        <link href="/static/css/main.css" rel="stylesheet" type="text/css" />
         <link href="/static/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
     </head>
 
@@ -127,107 +128,73 @@
                 </div>
             </header>
             <section class="content-main">
-                <div class="content-header">
-                    <h2 class="content-title">Products list</h2>
-                    <div>
-                        <a href="/add-product" class="btn btn-primary"><i class="material-icons md-plus"></i> Add product</a>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    <header class="card-header">
-                        <div class="row gx-3">
-                            <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
-                            </div>
-                            <div class="col-lg-2 col-md-3 col-6">
-                                <select class="form-select">
-                                    <option>Status</option>
-                                    <option>Active</option>
-                                    <option>Disabled</option>
-                                    <option>Show all</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-3 col-6">
-                                <select class="form-select">
-                                    <option>Show 20</option>
-                                    <option>Show 30</option>
-                                    <option>Show 40</option>
-                                </select>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- card-header end// -->
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Brand</th>
-                                        <th>Category</th>
-                                        <th>Description</th>
-                                        <th>Stock</th>
-                                        <th>Offer</th>
-                                        <th class="text-end" >Action</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{range .Products}}
-                                    <tr>
-                                        <td width="20%">
-                                            <a href="#" class="itemside">
-                                                <!-- <div class="left">
-                                                    <img src="static/images/people/avatar-1.png" class="img-sm img-avatar" alt="Userpic" />
-                                                </div> -->
-                                                <div class="info pl-3">
-                                                    <h6 class="mb-0 title"><img style="max-width: 130px;" src="/static/images/{{.Image}}" class="w-100" /></h6>
-                                                    <small style="margin: 30px;" >{{.Name}}</small>
-                                                
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>₹{{.Price}}</td>
-                                        <td style="font-weight: bolder;font-size: 17px;">{{.Brand_Name}}</td>
-                                        <td>{{.Category_Name}}</td>
-                                        <td>{{.Description}}</td>
-                                        <td><span class="badge rounded-pill alert-success">{{.Stock}}</span></td>
-                                        <td>
-                                            {{if .Offer_Name}}
-                                                <span class="text-success" >{{.Offer_Name}}|{{.Percentage}}% off</span>
-                                            {{else}}
-                                                No offers
-                                            {{end}}
-                                            
-                                        </td>
-                                        <td>
-                                            <!-- <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
-                                                Remove offer
-                                            </button> -->
-                                    </td>
-                                        <td class="text">
-                                            <a href="/edit-product/{{.ID}}"class="btn btn-sm btn-brand rounded font-sm mt-15" >Edit</a>
-                                        </td>
-                                        <td>
-                                            <a href="/delete-product/{{.ID}}" class="btn btn-brand btn-brand rounded font-sm mt-15" >Remove</a>
-                                        </td>
-                                    </tr>
-                                    {{end}}
+                <table id="myTable" class="table table-hover dataTable">
+                    <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th scope="col">User ID</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .}}
+                            <tr>
+                            <form action="/admin/order-status/{{.Order_ID}}" method="post" >
+                                <td >
+                                    {{.Order_ID}}
                                     
-                                    {{if .error}}
-                                    <p style="color: crimson;" >Error: {{.error}}</p>
-                                     {{end}}
-                                    
-                                </tbody>
-                            </table>
-                            <!-- table-responsive.// -->
-                        </div>
-                    </div>
-                    <!-- card-body end// -->
-                </div>
-                <!-- card end// -->
+                                </td>
+                                <td><b>
+                                        {{.User_ID}}
+                                    </b></td>
+                                <td>
+                                    {{.Payment_Type}}
+                                </td>
+                                <td>
+                                    {{.Total_Price}}
+                                </td>
+                                <!-- <td><span class="badge rounded-pill alert-warning">
+                                delivered
+                            </span></td> -->
+                                <td>
+                                    {{.Date}}
+                                </td>
+                               
+                                <td>
+                                    <!-- <div class="dropdown">
+                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a> -->
+
+
+                                
+                                    <select class="form-select statusSelector"  name="status" >
+                                        <option value="canceled">Canceled
+                                        </option>
+                                        <option value="placed">Placed</option>
+                                        <option value="pending">Pending
+                                        </option>
+                                        <option value="delivered" selected="">{{.Status}}
+                                        </option>
+                                        <option value="dispatched">Dispatched
+                                        </option>
+                                        <option value="returned">Returned
+                                        </option>
+                                        <option value="waitingForApproval">
+                                                req:Canceled
+                                        </option>
+                                    </select>
+                                </td>
+                                <td><button class="btn btn-md rounded font-sm show-items" >change</button></td>
+                                </form> 
+                                {{end}}
+                            
+                                <!-- </div> -->
+                                <!-- dropdown //end -->
+                    
             </section>
             <!-- content-main end// -->
             <footer class="main-footer font-xs">

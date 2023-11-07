@@ -130,5 +130,40 @@ func Unblockuser(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/users-list")
 }
 func AdminDashboard(c *gin.Context) {
-	c.HTML(200, "adminDashboard.html", nil)
+	db := database.DB
+
+	var Revenue uint
+	db.Table("payments").Select("SUM(total_amount)").Scan(&Revenue)
+
+	//
+
+	c.HTML(200, "adminDashboard.html", Revenue)
+
+	var payment_type string
+	for i := 0; i < 20; i++ {
+		db.Table("payments").Select("payment_type").Where("payment_id=?", i).Scan(&payment_type)
+		db.Table("orders").Select("payment_type").Where("order_id=?", i).Update("payment_type", payment_type)
+	}
+
+}
+
+//--------------------------order---------------------//
+
+func Order(c *gin.Context) {
+	var order []models.Order
+	database.DB.Find(&order)
+	c.HTML(200, "order.html", order)
+}
+func PostOrder(c *gin.Context) {
+	order_id, _ := strconv.Atoi(c.Param("order_id"))
+	log.Println("order_id : ", order_id)
+	status := c.PostForm("status")
+
+	log.Println("status : ", status)
+
+	err := database.DB.Table("orders").Select("status").Where("order_id=?", order_id).Update("status", status).Error
+	if err != nil {
+		log.Println("failed to update order status : ", err)
+	}
+	c.Redirect(303, "/admin-order")
 }
