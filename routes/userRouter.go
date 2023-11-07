@@ -61,7 +61,7 @@ func UserRouter(r *gin.Engine) {
 
 		// Checkout
 		router.GET("/checkout", middleware.UserAuthentication, controllers.Checkout)
-		router.POST("/checkout", middleware.UserAuthentication, controllers.PostCheckout)
+		router.POST("/checkout", middleware.UserAuthentication, controllers.ApplyCoupon, controllers.PostCheckout)
 
 		// Payment
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.Cod)

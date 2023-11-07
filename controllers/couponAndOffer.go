@@ -12,7 +12,7 @@ import (
 )
 
 func Coupon(c *gin.Context) {
-	var coupon models.Coupon
+	var coupon []models.Coupon
 	database.DB.Find(&coupon)
 	c.HTML(200, "coupon.html", coupon)
 }
@@ -29,14 +29,16 @@ func PostAddCoupon(c *gin.Context) {
 	database.DB.Where("coupon_code=?", coupon_code).First(&coupon1)
 
 	if coupon_code == coupon1.Coupon_Code {
-		c.JSON(400, gin.H{
+		log.Println("This coupon code already exist in database")
+		c.HTML(400, "coupon.html", gin.H{
 			"error": "This coupon code already exist in database",
 		})
 		return
 	}
 
 	if len(coupon_code) < 5 || len(coupon_code) > 10 {
-		c.JSON(400, gin.H{
+		log.Println("Coupon code must be lenght between 5 to 10")
+		c.HTML(400, "coupon.html", gin.H{
 			"error": "Coupon code must be lenght between 5 to 10",
 		})
 		return
@@ -51,13 +53,11 @@ func PostAddCoupon(c *gin.Context) {
 		// Max_Discount:  coupon.Max_Discount,
 		// Min_Discount:  coupon.Min_Discount,
 	})
-	c.JSON(200, gin.H{
-		"success": "successfully created coupon",
-	})
+	c.Redirect(303, "/admin-coupon")
 }
 func CancelCoupon(c *gin.Context) {
-	cid := c.Query("coupon_code")
-
+	cid := c.Query("coupon_id")
+	log.Println("COUPON ID		: ", cid)
 	var cou models.Coupon
 	err := database.DB.First(&cou, cid).Error
 
@@ -75,7 +75,7 @@ func CancelCoupon(c *gin.Context) {
 	c.Redirect(303, "/admin-coupon")
 }
 func ApproveCoupon(c *gin.Context) {
-	cid := c.Query("coupon_code")
+	cid := c.Query("coupon_id")
 
 	var cou models.Coupon
 	err := database.DB.First(&cou, cid).Error
@@ -97,8 +97,8 @@ func ApproveCoupon(c *gin.Context) {
 	c.Redirect(303, "/admin-coupon")
 }
 func RemoveCoupon(c *gin.Context) {
-	remove_coupon := c.Query("coupon_code")
-	err := database.DB.Where("offer_name=?", remove_coupon).Delete(&models.Coupon{}).Error
+	remove_coupon := c.Query("coupon_id")
+	err := database.DB.Where("coupon_id=?", remove_coupon).Delete(&models.Coupon{}).Error
 	if err != nil {
 		log.Println("Failed to remove coupon : ", err)
 		return
@@ -106,25 +106,30 @@ func RemoveCoupon(c *gin.Context) {
 	c.Redirect(303, "/admin-coupon")
 }
 
-func ApplyCoupon(c *gin.Context){
+func ApplyCoupon(c *gin.Context) {
 	user, _ := c.Get("user")
 	userId := user.(models.User).User_id
 
 	coupon_code := c.Request.FormValue("coupon_code")
+	log.Println("coupon  : ", coupon_code)
+	if coupon_code == "" {
+		c.Next()
+		return
+	}
 
 	//find the coupon
 	var coupon1 models.Coupon
 	row := database.DB.Where("coupon_code=?", coupon_code).First(&coupon1).RowsAffected
 	if row == 0 {
 		log.Println("Failed to find coupon")
-		c.HTML(400,"checkout.html" ,gin.H{"error": "Failed to find coupon",})
+		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find coupon"})
 		return
 	}
 
 	//checking coupon expired or not
 	if time.Now().Unix() > (coupon1.Ending_Time).Unix() {
 		log.Println("Coupon expired")
-		c.HTML(400,"checkout.html" ,gin.H{"error": "Coupon expired",})
+		c.HTML(400, "checkout.html", gin.H{"error": "Coupon expired"})
 		return
 	}
 
@@ -133,7 +138,7 @@ func ApplyCoupon(c *gin.Context){
 	row = database.DB.Where("user_id=? AND coupon_applied = true", userId).Find(&cart).RowsAffected
 	if row >= 1 {
 		log.Println("coupon already applied")
-		c.HTML(400,"checkout.html" ,gin.H{"error": "coupon already applied",})
+		c.HTML(400, "checkout.html", gin.H{"error": "coupon already applied"})
 		return
 	}
 	//calculating total amount
@@ -141,7 +146,7 @@ func ApplyCoupon(c *gin.Context){
 	err := database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userId).Scan(&totalprice).Error
 	if err != nil {
 		log.Println("Cart is empty")
-		c.HTML(400,"checkout.html" ,gin.H{"error": "cart is empty",})
+		c.HTML(400, "checkout.html", gin.H{"error": "cart is empty"})
 		return
 	}
 
@@ -155,7 +160,7 @@ func ApplyCoupon(c *gin.Context){
 	//checking coupon valid or not
 	if coupon1.Cancel {
 		log.Println("Coupon is not valid")
-		c.HTML(400,"checkout.html" ,gin.H{"error": "Coupon is not valid",})
+		c.HTML(400, "checkout.html", gin.H{"error": "Coupon is not valid"})
 		return
 	}
 
@@ -170,19 +175,22 @@ func ApplyCoupon(c *gin.Context){
 			}
 		}
 		log.Println("Coupon applied successfully")
+		c.Next()
 	} else {
+		var cartitems int64
+		database.DB.Model(&models.Cart{}).Where("user_id=?", userId).Count(&cartitems)
 		for _, v := range cart1 {
-			discount := coupon1.Value
+			discount := coupon1.Value / uint(cartitems)
 			err := database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userId, v.ID).Updates(map[string]interface{}{"total_price": v.Total_Price - discount, "coupon_discount": discount, "coupon_applied": true}).Error
 			if err != nil {
 				log.Println(err)
 				return
 			}
 		}
-	log.Println("coupon applied successfully")
+		log.Println("coupon applied successfully")
+		c.Next()
 	}
 }
-//=====================APPLIED COUPON +++++++++++ HAVE TO CHECK
 
 //-------------------------------------------------OFFER-----------------------------------------------//
 

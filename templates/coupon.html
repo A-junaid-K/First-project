@@ -165,10 +165,10 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <!-- Add Category Form -->
-                                    <form action="/admin-addcategory" method="post">
+                                    <form action="/admin-addcoupon" method="post">
                                         <div class="mb-4">
                                             <label for="category_name" class="form-label">Coupon Code</label>
-                                            <input type="text" placeholder="name" class="form-control" id="category_name" name="category_name" required />
+                                            <input type="text" placeholder="coupon code" class="form-control" id="category_name" name="couponcode" required />
                                         </div>
 
                                         <div class="col-md-4 col-6">
@@ -221,7 +221,7 @@
                                                     
                                                 <td>{{.CouponId}}</td>
                                                 <td><b>{{.Coupon_Code}}</b></td>
-                                                <td>{{.Discount}}</td>
+                                                <td>{{if eq .Type "Percentage"}}{{.Value}}%{{else if eq .Type "Fixed price"}}₹{{.Value}}{{end}}</td>
 
                                                         <!-- Action buttons -->
                                                         
@@ -243,7 +243,7 @@
                                                         
                                                     <td  >
                                                         <a href="/admin/remove-coupon?coupon_id={{.CouponId}}" >
-                                                        <button class="btn btn-sm btn-outline-danger rounded font-sm" disabled>
+                                                        <button class="btn btn-sm btn-outline-danger rounded font-sm" >
                                                             Remove Coupon
                                                         </button></a>
                                                     </td>
@@ -251,6 +251,9 @@
                                                 {{end}}
                                             </tbody>
                                         </table>
+                                        {{if .error}}
+                                        <p style="color: crimson;" >Error: {{.error}}</p>
+                                        {{end}}
                                     </div>
                                 </div>
                                 <!-- .col// -->

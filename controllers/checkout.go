@@ -12,9 +12,22 @@ import (
 func Checkout(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
-	var address []models.Address
-	database.DB.Where("user_id=?", userid).Find(&address)
-	c.HTML(200, "checkout.html", address)
+
+	var userr models.User
+	var adr []models.Address
+
+	database.DB.Where("user_id=?", userid).First(&userr)
+	database.DB.Where("user_id=?", userid).Find(&adr)
+
+	userdetails := struct {
+		Users     models.User
+		Addresses []models.Address
+	}{
+		Users:     userr,
+		Addresses: adr,
+	}
+
+	c.HTML(200, "checkout.html", userdetails)
 }
 func PostCheckout(c *gin.Context) {
 	name := c.Request.FormValue("name")
