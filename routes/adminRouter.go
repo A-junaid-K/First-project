@@ -11,6 +11,9 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/admin-login", controllers.Adminlogin)
 	r.POST("/admin-login", controllers.PostAdminlogin)
 
+	// Dashboard
+	r.GET("/admin-dashboard", middleware.AdminAuthentication, controllers.AdminDashboard)
+
 	// user
 	r.GET("/users-list", middleware.AdminAuthentication, controllers.Listusers)
 	r.GET("/block/:user_id", middleware.AdminAuthentication, controllers.Blockuser)

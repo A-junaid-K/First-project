@@ -129,3 +129,6 @@ func Unblockuser(c *gin.Context) {
 	log.Println("Successfully unblocked " + user.Name)
 	c.Redirect(http.StatusSeeOther, "/users-list")
 }
+func AdminDashboard(c *gin.Context) {
+	c.HTML(200, "adminDashboard.html", nil)
+}
