@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"net/http"
 	"strconv"
 
 	"github.com/first_project/database"
@@ -47,13 +46,12 @@ func PostAddAddress(c *gin.Context) {
 	c.Redirect(303, "/user/user-details")
 }
 func EditAddress(c *gin.Context) {
-	// user, _ := c.Get("user")
-	// userId := user.(models.User).User_id
+	adrid, _ := strconv.Atoi(c.Param("adrid"))
 
-	// var dtadr models.Address
-	// database.DB.Table("addresses").Where("user_id=?", userId).Find(&dtadr)
-	// c.HTML(200, "editaddress.html", dtadr)
-	c.HTML(200, "editaddress.html", nil)
+	var address models.Address
+	database.DB.Where("address_id=?", adrid).First(&address)
+
+	c.HTML(200, "editaddress.html", address)
 }
 func PostEditAddress(c *gin.Context) {
 	user, _ := c.Get("user")
@@ -74,11 +72,16 @@ func PostEditAddress(c *gin.Context) {
 	landmark := c.Request.FormValue("landmark")
 	zip := c.Request.FormValue("zip")
 
-	var address models.Address
-	err = database.DB.Where("address_id=? AND user_id=?", adrid, userId).First(&address).Error
+	err = database.DB.Table("addresses").Where("address_id=? AND user_id=?", adrid, userId).Updates(map[string]interface{}{
+		"building_name": building_name,
+		"city":          city,
+		"state":         state,
+		"landmark":      landmark,
+		"zip_code":      zip,
+	}).Error
 
 	if err != nil {
-		fmt.Println("Failed to fetch address")
+		fmt.Println("Failed to fetch address", err)
 		c.HTML(400, "editaddress.html", gin.H{
 			"error": "Failed to fetch address",
 		})
@@ -109,14 +112,20 @@ func PostEditAddress(c *gin.Context) {
 		return
 	}
 
-	var dtadr models.Address
-	database.DB.Table("addresses").Where("user_id=?", userId).First(&dtadr)
-	c.HTML(200, "editaddress.html", dtadr)
-
+	c.Redirect(303, "/user/user-details")
 }
 
+//----------------------------------------user profile-------------------------------------//
+
 func Editprofile(c *gin.Context) {
-	c.HTML(200, "editprofile.html", nil)
+
+	user, _ := c.Get("user")
+	userId := user.(models.User).User_id
+
+	var userr models.User
+	database.DB.Where("user_id=?", userId).First(&userr)
+
+	c.HTML(200, "editprofile.html", userr)
 }
 
 func PostEditprofile(c *gin.Context) {
@@ -169,20 +178,20 @@ func PostEditprofile(c *gin.Context) {
 		return
 	}
 
-	var dtuser models.User
+	// var dtuser models.User
 
-	database.DB.Where("email=?", email).First(&dtuser)
-	if email == dtuser.Email {
-		c.HTML(http.StatusBadRequest, "SignUp.html", gin.H{
-			"error": email + " has already been used",
-		})
-		return
-	}
+	// database.DB.Where("email=?", email).First(&dtuser)
+	// if email == dtuser.Email {
+	// 	c.HTML(http.StatusBadRequest, "SignUp.html", gin.H{
+	// 		"error": email + " has already been used",
+	// 	})
+	// 	return
+	// }
 
 	err = database.DB.Table("users").Where("user_id=?", userId).Updates(map[string]interface{}{
 		"name":     name,
 		"email":    email,
-		"phone":    email,
+		"phone":    phone,
 		"password": password,
 	}).Error
 

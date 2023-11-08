@@ -144,23 +144,26 @@ button{
         <h3>Edit your profile</h3>
       
           <label for="username">Your name</label>
-        <input type="text" name="name" placeholder="First & last name" id="name" required>
+        <input type="text" name="name" value="{{.Name}}" id="name" required>
 
                  <label for="mobilenumber">Mobile number</label>
-        <input type="text" name="number" placeholder="Mobile number" id="number" required>
+        <input type="text" name="number" value="{{.Phone}}" id="number" required>
       
         <label for="email">Email</label>
-        <input type="text" name="email" placeholder="Email" id="username" required>
+        <input type="text" name="email" value="{{.Email}}" id="username" required>
 
         <label for="password">Password</label>
-        <input type="password" name="password" placeholder="Password" id="password" required>
+        <input type="password" name="password" value="{{.Password}}" id="password" required>
 
         <label for="Confirmpassword">Confirm Password</label>
-        <input type="password" name="confpassword" placeholder="Re-Password" id="password" required>
+        <input type="password" name="confpassword" value="{{.Password}}" id="password" required>
         <br>
-        <p style="color: crimson;" >{{.error}}</p>
+        
         <button type="submit" >Conform edit</button>
-      
+        
+        {{if .error}}
+        <p style="color: crimson;" >{{.error}}</p>
+        {{end}}
 
     </form>
 </body>

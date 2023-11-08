@@ -146,29 +146,33 @@ button{
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    
-    
-        <h3>Edit Address</h3>
 
       <form action="/user/edit-address/{{.Address_ID}}" method="post" enctype="multipart/form-data">
-            <label for="username">{{.Building_Name}}</label>
-            <input type="text" name="buildingname" placeholder="Building name" id="buildingname" required>
+
+            <h3>Edit Address</h3>
+
+            <label for="username">Building Name</label>
+            <input type="text" name="buildingname" value="{{.Building_Name}}" id="buildingname">
 
                     <label for="mobilenumber">City</label>
-            <input type="text" name="city" placeholder="City" id="number" required>
+            <input type="text" name="city" value="{{.City}}" id="number" >
         
             <label for="email">State</label>
-            <input type="text" name="state" placeholder="State" id="state" required>
+            <input type="text" name="state" value="{{.State}}" id="state">
 
             <label for="password">Landmark</label>
-            <input type="text" name="landmark" placeholder="Landmark" id="landmark" required>
+            <input type="text" name="landmark" value="{{.Landmark}}" id="landmark">
 
             <label for="Confirmpassword">PIN code</label>
-            <input type="text" name="zip" placeholder="PIN code" id="zip" required>
+            <input type="text" name="zip" value="{{.Zip_code}}" id="zip">
             <br>
-            <p style="color: crimson;" >{{.error}}</p>
             <button type="submit" >Edit address</button> 
+            {{if .error}}
+             <p style="color: crimson;" >{{.error}}</p>
+            {{end}}
       </form>
+
+      
 
 </body>
 </html> 
