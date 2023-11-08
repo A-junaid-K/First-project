@@ -126,7 +126,7 @@ func AddBrand(c *gin.Context) {
 		log.Println("Failed to add brand")
 		return
 	}
-	c.Redirect(303, "/admin-brand")
+	c.Redirect(303, "/admin-brands")
 }
 func FilterBrand(c *gin.Context) {
 	filtered_brand := c.Query("brand_name")
