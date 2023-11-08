@@ -44,7 +44,7 @@ func PostAdminlogin(c *gin.Context) {
 	//----------set token into browser-------
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("jwt_admin", tokenstring, 3600*24*30, "", "", true, false)
-	c.Redirect(303, "/users-list")
+	c.Redirect(303, "/admin-dashboard")
 }
 func Listusers(c *gin.Context) {
 	type user struct {
@@ -175,12 +175,6 @@ func AdminDashboard(c *gin.Context) {
 		"users":         users,
 		"orders":        latest_orders,
 	})
-
-	// var payment_type string
-	// for i := 0; i < 20; i++ {
-	// 	db.Table("payments").Select("payment_type").Where("payment_id=?", i).Scan(&payment_type)
-	// 	db.Table("orders").Select("payment_type").Where("order_id=?", i).Update("payment_type", payment_type)
-	// }
 
 }
 

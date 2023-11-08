@@ -54,6 +54,12 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/admin-order", middleware.AdminAuthentication, controllers.Order)
 	r.POST("/admin/order-status/:order_id", middleware.AdminAuthentication, controllers.PostOrder)
 
+	//Sales
+	r.GET("/admin-sales", middleware.AdminAuthentication, controllers.Sales)
+	r.POST("/admin-sales-post", middleware.AdminAuthentication, controllers.Salesreport)
+	r.GET("/admin/salesreport/xlsx", middleware.AdminAuthentication, controllers.DownloadExel)
+	r.GET("/admin/salesreport/pdf", middleware.AdminAuthentication, controllers.Downloadpdf)
+
 	r.GET("/generate-sales-report", middleware.AdminAuthentication, controllers.Getsalesreport)
 	r.POST("/generate-sales-reports", middleware.AdminAuthentication, controllers.SalesReport)
 

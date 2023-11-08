@@ -76,11 +76,13 @@ func Cod(c *gin.Context) {
 	}
 
 	err = database.DB.Create(&models.Order{
-		User_ID:     userid,
-		Address_ID:  order.Address_ID,
-		Total_Price: totalprice,
-		Payment_ID:  payment.Payment_ID,
-		Status:      "Processing",
+		User_ID:      userid,
+		Address_ID:   order.Address_ID,
+		Total_Price:  totalprice,
+		Payment_ID:   payment.Payment_ID,
+		Status:       "Processing",
+		Payment_Type: "COD",
+		Date:         time.Now(),
 	}).Error
 	if err != nil {
 		fmt.Println("failed to create order")
