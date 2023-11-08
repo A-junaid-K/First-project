@@ -89,7 +89,7 @@ func Salesreport(c *gin.Context) {
 		f.SetCellValue(sheet, fmt.Sprintf("A%d", k), v.User_ID)
 		f.SetCellValue(sheet, fmt.Sprintf("B%d", k), v.Address_ID)
 		f.SetCellValue(sheet, fmt.Sprintf("C%d", k), v.Order_ID)
-		f.SetCellValue(sheet, fmt.Sprintf("D%d", k), v.Date)
+		f.SetCellValue(sheet, fmt.Sprintf("D%d", k), v.Date.Format(layout))
 		f.SetCellValue(sheet, fmt.Sprintf("E%d", k), v.Payment_Type)
 		f.SetCellValue(sheet, fmt.Sprintf("F%d", k), v.Payment_ID)
 		f.SetCellValue(sheet, fmt.Sprintf("G%d", k), v.Total_Price)
