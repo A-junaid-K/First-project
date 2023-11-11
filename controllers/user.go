@@ -156,6 +156,7 @@ func PostVarifyOtp(c *gin.Context) {
 		})
 	}
 }
+//---------------------------------------------------------------------------------------------//
 
 func Login(c *gin.Context) {
 	c.HTML(200, "login.html", nil)

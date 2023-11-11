@@ -9,7 +9,7 @@ import (
 func UserRouter(r *gin.Engine) {
 	r.LoadHTMLGlob("templates/*.html")
 	r.Static("/static", "./static")
-	r.GET("/", middleware.UserAuthentication, controllers.Home)
+	r.GET("/", controllers.Home)
 	router := r.Group("/user")
 	{
 		//   User

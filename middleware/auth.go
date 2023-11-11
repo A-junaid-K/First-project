@@ -14,14 +14,12 @@ import (
 )
 
 func UserAuthentication(c *gin.Context) {
+
 	tokenString, err := c.Cookie("jwt_user")
 	if err != nil {
-		log.Println("Unautherized access ", err)
-		// c.HTML(401, "login.html", gin.H{
-		// 	"error": err,
-		// })
 		c.Redirect(303, "/user/login")
-
+		c.AbortWithStatus(400)
+		return
 	}
 
 	//Decode / validate it
@@ -70,8 +68,8 @@ func UserAuthentication(c *gin.Context) {
 func AdminAuthentication(c *gin.Context) {
 	tokenString, err := c.Cookie("jwt_admin")
 	if err != nil {
-		log.Println("unatherized acces")
-		c.AbortWithStatus(404)
+		log.Println("unatherized access")
+		c.Redirect(303, "/admin-login")
 		return
 	}
 
