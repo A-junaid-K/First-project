@@ -15,17 +15,17 @@ func UserRouter(r *gin.Engine) {
 		//   User
 		router.GET("/signup", controllers.SignUp)
 		router.POST("/signup", controllers.PostSignUp)
+
 		router.GET("/varifyotp", controllers.VarifyOtp)
 		router.POST("/varifyotp", controllers.PostVarifyOtp)
+
 		router.GET("/login", controllers.Login)
 		router.POST("/login", controllers.Postlogin)
-		router.GET("/log-out", middleware.UserAuthentication, controllers.Logout)
 
-		router.GET("/about", controllers.About)
-		router.GET("/gallery", controllers.Gallery)
-		router.GET("/testimonial", controllers.Testimonial)
-		router.GET("/contac", controllers.Contact)
-		router.GET("/news", controllers.News)
+		router.GET("/login/forgot-password", controllers.ForgotPassword)
+		router.POST("/login/forgot-password", controllers.PostForgotPassword)
+
+		router.GET("/log-out", middleware.UserAuthentication, controllers.Logout)
 
 		// User details
 		router.GET("/user-details", middleware.UserAuthentication, controllers.ListUserDetails)

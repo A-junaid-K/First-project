@@ -2,14 +2,23 @@ package controllers
 
 import (
 	"errors"
+	"regexp"
 	"strings"
 )
 
 func namevalidator(name string) error {
-	sname := strings.TrimSpace(name)
-	if len(sname) < 3 || len(name) > 20 {
-		return errors.New("name length must be between 4-20")
+	var sname string
+	nameRegex := regexp.MustCompile(`^[a-zA-Z ]+$`)
+	if nameRegex.MatchString(name) {
+		sname = name
+	} else {
+		return errors.New("name is not valid")
 	}
+	sname = strings.TrimSpace(name)
+	if len(sname) < 2 || len(name) > 20 {
+		return errors.New("name length must be between 3-20")
+	}
+
 	return nil
 }
 func numbervalidator(number string) error {

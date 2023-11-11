@@ -118,6 +118,7 @@ func PostSignUp(c *gin.Context) {
 	c.Redirect(303, "/user/varifyotp")
 }
 
+// -----------------------------------OTP varification page-------------------------------------//
 func VarifyOtp(c *gin.Context) {
 	c.HTML(200, "otp.html", nil)
 }
@@ -126,6 +127,11 @@ func PostVarifyOtp(c *gin.Context) {
 	otp := c.Request.FormValue("otp")
 	var user models.User
 	err := database.DB.First(&user, "email =?", eMail).Error
+	if err != nil {
+		c.HTML(400, "otp.html", gin.H{
+			"error": "Invalid Email or otp",
+		})
+	}
 
 	if user.Otp == otp && err == nil {
 
@@ -145,7 +151,7 @@ func PostVarifyOtp(c *gin.Context) {
 			return
 		}
 
-		c.HTML(200, "otp.html", gin.H{
+		c.HTML(400, "otp.html", gin.H{
 			"error": "Invalid Email or otp",
 		})
 	}
@@ -159,8 +165,8 @@ func Postlogin(c *gin.Context) {
 
 	email := c.Request.FormValue("email")
 	password := c.Request.FormValue("password")
-	//finding with username in database
 
+	//finding with username in database
 	var user models.User
 	get := database.DB.Where("email=?", email).First(&user)
 
@@ -196,25 +202,78 @@ func Postlogin(c *gin.Context) {
 
 	c.Redirect(303, "/")
 }
+
+func ForgotPassword(c *gin.Context) {
+
+	c.HTML(200, "forgotpassword.html", nil)
+}
+func PostForgotPassword(c *gin.Context) {
+	// Fetching values from Fron-end
+	email := c.Request.FormValue("email")
+	password := c.Request.FormValue("password")
+	confpassword := c.Request.FormValue("confpassword")
+
+	//  validation
+	err := emailvalidator(email)
+	if err != nil {
+		c.HTML(400, "forgotpassword.html", gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	err = passwordvalidator(password)
+	if err != nil {
+		c.HTML(400, "forgotpassword.html", gin.H{
+			"error": err,
+		})
+		return
+	}
+	if confpassword != password {
+		c.HTML(400, "forgotpassword.html", gin.H{
+			"error": "Incorrect confirm password",
+		})
+		return
+	}
+
+	// cheking the email
+	var dtuser models.User
+	database.DB.Where("email=?", email).First(&dtuser)
+	if email != dtuser.Email {
+		c.HTML(http.StatusBadRequest, "forgotpassword.html", gin.H{
+			"error": "invalid email or password",
+		})
+		return
+	}
+
+	// OTP Generating and Varification
+	dtotp := helpers.VerifyOtp(c, email)
+
+	//Password Hashing
+	hashPassword, err := hashPassword(password)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	// Updating the otp and password in database
+	err = database.DB.Table("users").Where("email=?", email).Updates(map[string]interface{}{
+		"password": hashPassword,
+		"otp":      dtotp,
+	}).Error
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	c.Redirect(303, "/user/varifyotp")
+
+}
+
 func Logout(c *gin.Context) {
 	c.SetCookie("jwt_user", "", -1, "", "", false, false)
 	c.Redirect(303, "/user/login")
 }
 func Home(c *gin.Context) {
 	c.HTML(200, "index.html", nil)
-}
-func About(c *gin.Context) {
-	c.HTML(200, "about.html", nil)
-}
-func Gallery(c *gin.Context) {
-	c.HTML(200, "gallery.html", nil)
-}
-func Testimonial(c *gin.Context) {
-	c.HTML(200, "testimonial.html", nil)
-}
-func Contact(c *gin.Context) {
-	c.HTML(200, "contact.html", nil)
-}
-func News(c *gin.Context) {
-	c.HTML(200, "news.html", nil)
 }

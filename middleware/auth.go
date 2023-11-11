@@ -21,7 +21,6 @@ func UserAuthentication(c *gin.Context) {
 		// 	"error": err,
 		// })
 		c.Redirect(303, "/user/login")
-		return
 
 	}
 
@@ -40,10 +39,6 @@ func UserAuthentication(c *gin.Context) {
 	})
 
 	if err != nil {
-		// log.Println("Failed to generate token when parse", err)
-		// c.HTML(303, "login.html", gin.H{
-		// 	"error": err,
-		// })
 		c.Redirect(303, "/user/login")
 		return
 	}
