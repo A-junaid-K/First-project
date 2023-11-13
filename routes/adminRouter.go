@@ -60,7 +60,7 @@ func AuthRoutes(r *gin.Engine) {
 	r.GET("/admin/salesreport/xlsx", middleware.AdminAuthentication, controllers.DownloadExel)
 	r.GET("/admin/salesreport/pdf", middleware.AdminAuthentication, controllers.Downloadpdf)
 
-	r.GET("/generate-sales-report", middleware.AdminAuthentication, controllers.Getsalesreport)
-	r.POST("/generate-sales-reports", middleware.AdminAuthentication, controllers.SalesReport)
+	// r.GET("/generate-sales-report", middleware.AdminAuthentication, controllers.Getsalesreport)
+	// r.POST("/generate-sales-reports", middleware.AdminAuthentication, controllers.SalesReport)
 
 }

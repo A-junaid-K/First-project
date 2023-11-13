@@ -18,6 +18,7 @@ import (
 func Addproducts(c *gin.Context) {
 	c.HTML(http.StatusOK, "addProduct.html", nil)
 }
+
 func PostAddproducts(c *gin.Context) {
 	var err error
 
@@ -91,10 +92,12 @@ func PostAddproducts(c *gin.Context) {
 	}
 	c.Redirect(http.StatusSeeOther, "/admin-products-list")
 }
+
 func AdminListproducts(c *gin.Context) {
 	data := DtTables()
 	c.HTML(200, "adminProductlist.html", data)
 }
+
 func Listproducts(c *gin.Context) {
 	var exp []models.Category_Offer
 	database.DB.Find(&exp)
@@ -114,8 +117,6 @@ func Listproducts(c *gin.Context) {
 func ProductDetails(c *gin.Context) {
 	productiD := c.Param("id")
 
-	sizepd, _ := strconv.Atoi(c.PostForm("size"))
-	fmt.Println("sizepd : ", sizepd)
 
 	var products models.Product
 	database.DB.Table("products").Where("id=?", productiD).First(&products)

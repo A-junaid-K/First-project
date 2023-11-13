@@ -59,7 +59,10 @@ func AddToWishlist(c *gin.Context) {
 	c.Redirect(303, "/user/wishlist")
 }
 func ListWishlist(c *gin.Context) {
-	user, _ := c.Get("user")
+	user, err := c.Get("user")
+	if !err {
+		log.Println("err in wsihlist : ", err)
+	}
 	user_id := user.(models.User).User_id
 	var userwishlist []models.Wishlist
 	database.DB.Where("user_id=?", user_id).Find(&userwishlist)

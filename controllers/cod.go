@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	"github.com/first_project/database"
@@ -9,6 +9,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func GetCod(c *gin.Context) {
+	user, _ := c.Get("user")
+	userid := user.(models.User).User_id
+
+	//getting total price of cart
+	var totalprice uint
+	err := database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
+	if err != nil {
+		if err != nil {
+			c.HTML(400, "cod.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
+			return
+		}
+		return
+	}
+	// Fetch the payment from database
+	var payment models.Payment
+	database.DB.Last(&payment)
+
+	c.HTML(200, "cod.html", gin.H{
+		"userid":     userid,
+		"paymentid":  payment.Payment_ID + 1,
+		"totalprice": totalprice,
+	})
+
+}
 func Cod(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
@@ -23,7 +48,7 @@ func Cod(c *gin.Context) {
 
 	//getting total price of cart
 	var totalprice uint
-	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+	err = database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
 	if err != nil {
 		if err != nil {
 			c.HTML(400, "cod.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
@@ -34,16 +59,17 @@ func Cod(c *gin.Context) {
 
 	var product models.Product
 
-	// //checking stock level
-	// for _, v := range cartdata {
-	// 	database.DB.First(&product, v.Product_ID)
-	// 	if product.Stock-v.Quantity < 0 {
-	// 		c.HTML(400, "cod.html", gin.H{
-	// 			"error": "Please check quantity",
-	// 		})
-	// 		return
-	// 	}
-	// }
+	//checking stock level
+	for _, v := range cartdata {
+		database.DB.First(&product, v.Product_ID)
+		if product.Stock-v.Quantity < 0 {
+			log.Println("error : please check quantity : ", err)
+			c.HTML(400, "cod.html", gin.H{
+				"error": "Please check quantity",
+			})
+			return
+		}
+	}
 
 	//creating COD(not completed)
 	database.DB.Create(&models.Payment{
@@ -55,10 +81,9 @@ func Cod(c *gin.Context) {
 	})
 
 	var adrid int
-	// err = database.DB.Table("contactdetails").Where("user_id=?", userid).Last(&order).Error
 	err = database.DB.Model(&models.Contactdetails{}).Select("address_id").Where("user_id=?", userid).Scan(&adrid).Error
 	if err != nil {
-		fmt.Println("failed to fetch address id from checkout page")
+		log.Println("failed to fetch address id from checkout page")
 		c.HTML(400, "cod.html", gin.H{"error": "Failed to find address,choose different id"})
 		return
 	}
@@ -85,15 +110,15 @@ func Cod(c *gin.Context) {
 		Date:         time.Now(),
 	}).Error
 	if err != nil {
-		fmt.Println("failed to create order")
+		log.Println("failed to create order")
 		c.HTML(400, "cod.html", gin.H{"error": err.Error()})
 		return
 	}
 
-	var cartbrand struct {
-		Brand_Name    string
-		Category_Name string
-	}
+	// var cartbrand struct {
+	// 	Brand_Name    string
+	// 	Category_Name string
+	// }
 
 	var order1 models.Order
 	database.DB.Last(&order1)
@@ -101,17 +126,18 @@ func Cod(c *gin.Context) {
 	//have to check it out
 
 	for _, cartdata := range cartdata {
-		database.DB.Table("products").Select("brands.brand_name,categories.category_name").
-			Joins("INNER JOIN brands ON brands.brand_id=products.brand_id").
-			Joins("INNER JOIN categories ON categories.category_id=products.category_id").
-			Where("id=?", cartdata.Product_ID).Scan(&cartbrand)
+		// database.DB.Table("products").Select("brands.brand_name,categories.category_name").
+		// 	Joins("INNER JOIN brands ON brands.brand_name=products.brand_name").
+		// 	Joins("INNER JOIN categories ON categories.name=products.category_name").
+		// 	Where("id=?", cartdata.Product_ID).Scan(&cartbrand)
+
 		err = database.DB.Create(&models.OrderItem{
 			Order_ID:    order1.Order_ID,
 			User_ID:     userid,
 			Product_ID:  uint(cartdata.Product_ID),
 			Address_ID:  order.Address_ID,
-			Brand:       cartbrand.Brand_Name,
-			Category:    cartbrand.Category_Name,
+			Brand:       cartdata.Brand_Name,
+			Category:    cartdata.Category_Name,
 			Quantity:    cartdata.Quantity,
 			Price:       uint(cartdata.Price),
 			Total_Price: cartdata.Total_Price,
@@ -125,7 +151,7 @@ func Cod(c *gin.Context) {
 		}
 	}
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		c.HTML(400, "cod.html", gin.H{"error": err.Error()})
 		return
 	}
@@ -134,31 +160,31 @@ func Cod(c *gin.Context) {
 	var products models.Product
 	for _, v := range cartdata {
 		database.DB.First(&products, v.Product_ID)
-		database.DB.Model(&models.Product{}).Where("id=?", v.Product_ID).Update("stock", product.Stock-v.Quantity)
+		database.DB.Model(&models.Product{}).Where("id=?", v.Product_ID).Update("stock", products.Stock-v.Quantity)
 	}
 
 	//deleting the checked out cart
 	err = database.DB.Delete(&models.Cart{}, "user_id=?", userid).Error
 	if err != nil {
-		fmt.Println("Failed to delete checked out cart data")
+		log.Println("Failed to delete checked out cart data")
 		c.HTML(400, "cod.html", gin.H{"error": "failed to delete used cart" + err.Error()})
 		return
 	}
 
 	c.Redirect(303, "/user/payment-success")
 
-	//-----------------------------success------------------------------------------
-
-	// pid, err := strconv.Atoi(c.Query("id"))
-	// if err != nil {
-	// 	c.HTML(400, "success.html", gin.H{
-	// 		"error": "Error in string conversion",
-	// 	})
-	// 	return
-	// }
-
-	// c.HTML(200, "success.html", gin.H{
-	// 	"paymentid": pid,
-	// })
-
 }
+
+//-----------------------------success------------------------------------------
+
+// pid, err := strconv.Atoi(c.Query("id"))
+// if err != nil {
+// 	c.HTML(400, "success.html", gin.H{
+// 		"error": "Error in string conversion",
+// 	})
+// 	return
+// }
+
+// c.HTML(200, "success.html", gin.H{
+// 	"paymentid": pid,
+// })

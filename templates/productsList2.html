@@ -227,25 +227,6 @@
       <!-- sidebar -->
       <!-- content -->
       <div class="col-lg-9">
-        <!-- <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-          <strong class="d-block py-2">32 Items found </strong>
-          <div class="ms-auto">
-            <select class="form-select d-inline-block w-auto border pt-1">
-              <option value="0">Best match</option>
-              <option value="1">Recommended</option>
-              <option value="2">High rated</option>
-              <option value="3">Randomly</option>
-            </select>
-            <div class="btn-group shadow-0 border">
-              <a href="#" class="btn btn-light" title="List view">
-                <i class="fa fa-bars fa-lg"></i>
-              </a>
-              <a href="#" class="btn btn-light active" title="Grid view">
-                <i class="fa fa-th fa-lg"></i>
-              </a>
-            </div>
-          </div>
-        </header> -->
 
         {{range .Products}}
         
@@ -283,9 +264,9 @@
                     <h6 class="text-success">{{.Offer_Name}} | {{.Percentage}}%off</h6>
                     {{end}}
                     <div class="mt-4">
-                    <form action="/user/cart/{{.ID}}" method="GET" >
+                    <!-- <form action="/user/cart/{{.ID}}" method="GET" >
                    <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
-                  </form>
+                  </form> -->
                   <form action="/user/wishlist/{{.ID}}" method="GET" >  
                    <button href="/user/wishlist" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></button>
                     <!-- <button style="margin-bottom: 10px;" href="/user/wishlist" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to wishlist</button> -->

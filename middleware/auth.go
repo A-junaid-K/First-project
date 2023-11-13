@@ -17,6 +17,7 @@ func UserAuthentication(c *gin.Context) {
 
 	tokenString, err := c.Cookie("jwt_user")
 	if err != nil {
+		log.Println("error in jwt_user : ", err)
 		c.Redirect(303, "/user/login")
 		c.AbortWithStatus(400)
 		return

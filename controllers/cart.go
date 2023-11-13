@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/first_project/database"
@@ -13,7 +14,14 @@ func AddtoCart(c *gin.Context) {
 	user, _ := c.Get("user")
 	userId := user.(models.User).User_id
 
+	//get the product id
 	product_id, _ := strconv.Atoi(c.Param("id"))
+
+	// Get the size & quantity
+	pdsize := c.PostForm("size")
+	log.Println("pdsize : ", pdsize)
+	pdquantity, _ := strconv.Atoi(c.PostForm("quantity"))
+	log.Println("pdquantity : ", pdquantity)
 
 	var product models.Product
 
@@ -30,13 +38,13 @@ func AddtoCart(c *gin.Context) {
 	err = database.DB.Where("product_id=? AND user_id=?", product_id, userId).First(&dtcart).Error
 	if err != nil {
 		err = database.DB.Create(&models.Cart{
-			Product_ID:  product_id,
-			Name:        product.Name,
-			Description: product.Description,
-			Quantity:    1,
-			Stock:       int(product.Stock),
-			Price:       int(product.Price),
-			// Size:          size,
+			Product_ID:    product_id,
+			Name:          product.Name,
+			Description:   product.Description,
+			Quantity:      uint(pdquantity),
+			Stock:         int(product.Stock),
+			Price:         int(product.Price),
+			Size:          pdsize,
 			Total_Price:   uint(product.Price),
 			Category_Name: product.Category_Name,
 			Brand_Name:    product.Brand_Name,
@@ -46,6 +54,9 @@ func AddtoCart(c *gin.Context) {
 	} else {
 		fmt.Println("already exist in cart")
 		c.Redirect(303, "/user/cart")
+		// c.HTML(http.StatusBadRequest, "cart2.html", gin.H{
+		// 	"error": "the product already exist in cart",
+		// })
 		return
 	}
 	if err != nil {

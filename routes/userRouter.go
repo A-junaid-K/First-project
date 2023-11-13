@@ -46,11 +46,11 @@ func UserRouter(r *gin.Engine) {
 		router.POST("/product-details", controllers.ProductDetails)
 
 		//Filter
-		router.GET("/products-list/category", middleware.UserAuthentication, controllers.FilterCategory)
-		router.GET("/products-list/brand", middleware.UserAuthentication, controllers.FilterBrand)
+		router.GET("/products-list/category", controllers.FilterCategory)
+		router.GET("/products-list/brand", controllers.FilterBrand)
 
 		//Cart
-		router.GET("/cart/:id", middleware.UserAuthentication, controllers.AddtoCart)
+		router.POST("/cart/:id", middleware.UserAuthentication, controllers.AddtoCart)
 		router.GET("/cart", middleware.UserAuthentication, controllers.ListCart)
 		router.GET("/remove-from-cart/:productid", middleware.UserAuthentication, controllers.RemoveFromCart)
 
@@ -64,7 +64,8 @@ func UserRouter(r *gin.Engine) {
 		router.POST("/checkout", middleware.UserAuthentication, controllers.ApplyCoupon, controllers.PostCheckout)
 
 		// Payment
-		router.GET("/payment-cod", middleware.UserAuthentication, controllers.Cod)
+		router.GET("/payment-cod", middleware.UserAuthentication, controllers.GetCod)
+		router.GET("/payment-cod-success", middleware.UserAuthentication, controllers.Cod)
 		router.GET("/payment-razorpay", middleware.UserAuthentication, controllers.RazorPay)
 		router.GET("/payment-razorpay-success", middleware.UserAuthentication, controllers.RazorpaySuccess)
 		router.GET("/payment-success", middleware.UserAuthentication, controllers.Success)
