@@ -62,7 +62,8 @@ func Cod(c *gin.Context) {
 	//checking stock level
 	for _, v := range cartdata {
 		database.DB.First(&product, v.Product_ID)
-		if product.Stock-v.Quantity < 0 {
+		level := int(product.Stock) - v.Quantity
+		if int(level) < 0 {
 			log.Println("error : please check quantity : ", err)
 			c.HTML(400, "cod.html", gin.H{
 				"error": "Please check quantity",
@@ -138,7 +139,7 @@ func Cod(c *gin.Context) {
 			Address_ID:  order.Address_ID,
 			Brand:       cartdata.Brand_Name,
 			Category:    cartdata.Category_Name,
-			Quantity:    cartdata.Quantity,
+			Quantity:    uint(cartdata.Quantity),
 			Price:       uint(cartdata.Price),
 			Total_Price: cartdata.Total_Price,
 			Discount:    cartdata.Category_Offer + cartdata.Coupon_Discount,
@@ -160,7 +161,10 @@ func Cod(c *gin.Context) {
 	var products models.Product
 	for _, v := range cartdata {
 		database.DB.First(&products, v.Product_ID)
-		database.DB.Model(&models.Product{}).Where("id=?", v.Product_ID).Update("stock", products.Stock-v.Quantity)
+		err = database.DB.Model(&models.Product{}).Where("id=?", v.Product_ID).Update("stock", products.Stock-uint(v.Quantity)).Error
+		if err != nil {
+			log.Println("failed to update stock in database : ", err)
+		}
 	}
 
 	//deleting the checked out cart

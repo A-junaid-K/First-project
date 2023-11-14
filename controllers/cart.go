@@ -41,7 +41,7 @@ func AddtoCart(c *gin.Context) {
 			Product_ID:    product_id,
 			Name:          product.Name,
 			Description:   product.Description,
-			Quantity:      uint(pdquantity),
+			Quantity:      pdquantity,
 			Stock:         int(product.Stock),
 			Price:         int(product.Price),
 			Size:          pdsize,
@@ -54,13 +54,9 @@ func AddtoCart(c *gin.Context) {
 	} else {
 		fmt.Println("already exist in cart")
 		c.Redirect(303, "/user/cart")
-		// c.HTML(http.StatusBadRequest, "cart2.html", gin.H{
-		// 	"error": "the product already exist in cart",
-		// })
 		return
 	}
 	if err != nil {
-		fmt.Println("error @ 51")
 		c.HTML(400, "cart2.html", gin.H{
 			"error": "Failed to fetch cart database",
 		})
@@ -68,8 +64,39 @@ func AddtoCart(c *gin.Context) {
 	}
 	fmt.Println("added to cart. \nError : ", err)
 
-	// c.HTML(200, "cart2.html", dtcart)
-	c.Redirect(303, "/user/cart")
+	//searching for database all cart data
+	var cartdata []models.Cart
+	err = database.DB.Where("user_id=?", userId).Find(&cartdata).Error
+	if err != nil {
+		c.HTML(400, "cod.html", gin.H{"error": "Please check your cart"})
+		return
+	}
+
+	//checking stock level
+	var level int
+
+	database.DB.First(&product, product_id)
+	level = int(product.Stock) - pdquantity
+
+	if level < 0 {
+		log.Println("error : please check quantity : ", err)
+		log.Println("stock : ", product.Stock)
+		log.Println("quantity : ", pdquantity)
+		log.Println("levell : ", level)
+		err = database.DB.Where("product_id=?", product.ID).Delete(&models.Cart{}).Error
+		if err != nil {
+			log.Println("checking stock level in cart : ", err)
+		}
+	}
+
+	// Redirection
+	if level >= 0 {
+		c.Redirect(303, "/user/cart")
+	} else {
+		c.Redirect(303, fmt.Sprintf("/user/product-details/%v", product_id))
+
+	}
+
 }
 func ListCart(c *gin.Context) {
 	user, _ := c.Get("user")

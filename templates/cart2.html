@@ -153,8 +153,13 @@
         </div>
           {{end}}
      <!--//error here-->
+     {{if gt (len .) 0}}
+     <a href="/user/checkout" class="btn shadow-0 btn-dark">Checkout</a>
+     {{else}}
+     <h3>No Products in cart</h3>
+    {{end}}
+ 
 
-    <a href="/user/checkout" class="btn shadow-0 btn-dark" >Checkout</a>
         <hr />
       </div>
     </div>

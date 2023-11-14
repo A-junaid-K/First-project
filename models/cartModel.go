@@ -10,7 +10,7 @@ type Cart struct {
 	Category_Name   string `gorm:"not null"`
 	Brand_Name      string `gorm:"not null"`
 	Product_ID      int    `gorm:"not null"`
-	Quantity        uint   `gorm:"not null"`
+	Quantity        int   `gorm:"not null"`
 	Total_Price     uint   `gorm:"not null"`
 	User_ID         uint   `gorm:"not null"`
 	Coupon_Applied  bool   `gorm:"default:false"`

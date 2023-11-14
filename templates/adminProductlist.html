@@ -193,7 +193,11 @@
                                         <td style="font-weight: bolder;font-size: 17px;">{{.Brand_Name}}</td>
                                         <td>{{.Category_Name}}</td>
                                         <td>{{.Description}}</td>
+                                        {{if ne .Stock 0}}
                                         <td><span class="badge rounded-pill alert-success">{{.Stock}}</span></td>
+                                        {{else}}
+                                        <td><span class="badge rounded-pill alert-danger">Out of Stock</span></td>
+                                        {{end}}
                                         <td>
                                             {{if .Offer_Name}}
                                                 <span class="text-success" >{{.Offer_Name}}|{{.Percentage}}% off</span>

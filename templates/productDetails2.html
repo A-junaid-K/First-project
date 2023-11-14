@@ -29,19 +29,13 @@
             <img src="/static/images/logo.png" height="35" />
           </a>
         </div>
-        <!-- Left elements -->
-
-        <!-- Center elements -->
         <div class="order-lg-last col-lg-5 col-sm-8 col-8">
           <div class="d-flex float-end">
-            <a href="/user/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center btn-light " target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Sign in</p> </a>
-            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center btn-light " target="_blank"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
-            <a href="/user/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center btn-light " target="_blank"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
+            <a href="/user/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center btn-light "> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Sign in</p> </a>
+            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center btn-light "> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
+            <a href="/user/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center btn-light "> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
           </div>
         </div>
-        <!-- Center elements -->
-
-        <!-- Right elements -->
         <div class="col-lg-5 col-md-12 col-12">
           <div class="input-group float-center">
             <div class="form-outline">
@@ -70,35 +64,8 @@
           <a href="" class="text-whit" style="color: #ffffff;" ><u>Data</u></a>
         </h6>
       </nav>
-      <!-- <nav class="d-flex mb-2">
-        <h6 class="mb-0">
-          <a href="/" class="text-white-50">Home</a>
-          <span class="text-white-50 mx-2"> > </span>
-          <a href="" class="text-white"><u>Data</u></a>
-        </h6>
-      </nav> -->
-      <!-- Breadcrumb -->
     </div>
   </div>
-  <!-- Heading -->
-  <!-- Heading -->
-  <!-- <div class="primary" style="background-color: #000000c8;">
-    <div class="container py-4" style="background-color: #0000007c;" > -->
-
-      <!-- Breadcrumb -->
-      <!-- <nav class="d-flex">
-        <h6 class="mb-0" style="color: #000000;">
-          <a href="/" class="text-white-5" style="color: #000000;" >Home</a>
-          <span class="text-white-50 fgfg" style="color: #000000;" > > </span>
-          <a href="" class="text-white-5" style="color: #000000;">Library</a>
-          <span class="text-white-50 mx-2"> </span>
-          <a href="" class="text-whit" style="color: #000000;" ><u>Data</u></a>
-        </h6>
-      </nav> -->
-      <!-- Breadcrumb -->
-    <!-- </div>
-  </div> -->
-  <!-- Heading -->
 </header>
 
 <!-- content -->
@@ -162,7 +129,11 @@
             <dd class="col-9">{{.Brand_Name}}</dd>
 
             <dt class="col-3">Stock</dt>
+            {{if eq .Stock 0}}
+            <dd style="color: crimson;" class="col-9">Out of stock</dd>
+            {{else}}
             <dd class="col-9">{{.Stock}}</dd>
+            {{end}}
           </div>
 
           <hr />
@@ -212,12 +183,13 @@
 
             <input type="hidden" name="size" id="selected-size" value="">
           <!-- <a href="#" class="btn btn-warning shadow-0"> Buy now </a> -->
+          {{if ne .Stock 0}}
           <button class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
+          {{end}}
           <a href="/user/wishlist/{{.ID}}" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a>  
     </form>
         </div>
-      </main>
-  
+      </main>   
     </div>
   </div>
 </section>

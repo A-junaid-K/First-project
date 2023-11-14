@@ -173,7 +173,7 @@ func RazorpaySuccess(c *gin.Context) {
 			Address_ID:  order.Address_ID,
 			Brand:       cartbrand.Brand_Name,
 			Category:    cartbrand.Category_Name,
-			Quantity:    cartdata.Quantity,
+			Quantity:    uint(cartdata.Quantity),
 			Price:       uint(cartdata.Price),
 			Total_Price: cartdata.Total_Price,
 			Discount:    cartdata.Category_Offer + cartdata.Coupon_Discount,
@@ -195,7 +195,7 @@ func RazorpaySuccess(c *gin.Context) {
 	var products models.Product
 	for _, v := range cartdata {
 		database.DB.First(&products, v.Product_ID)
-		database.DB.Model(&models.Product{}).Where("id=?", v.Product_ID).Update("stock", product.Stock-v.Quantity)
+		database.DB.Model(&models.Product{}).Where("id=?", v.Product_ID).Update("stock", product.Stock-uint(v.Quantity))
 	}
 
 	//deleting the checked out cart

@@ -43,7 +43,7 @@ func UserRouter(r *gin.Engine) {
 		//Product
 		router.GET("/products-list", controllers.Listproducts)
 		router.GET("/product-details/:id", controllers.ProductDetails)
-		router.POST("/product-details", controllers.ProductDetails)
+		// router.POST("/product-details", controllers.ProductDetails)
 
 		//Filter
 		router.GET("/products-list/category", controllers.FilterCategory)
