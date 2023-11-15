@@ -59,15 +59,29 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/wishlist", middleware.UserAuthentication, controllers.ListWishlist)
 		router.GET("/remove-from-wishlist/:productid", middleware.UserAuthentication, controllers.RemoveFromWishlist)
 
+		// Order
+		router.GET("/orders", middleware.UserAuthentication, controllers.Userorder)
+		router.GET("/cancel-order/:orderitem_id", middleware.UserAuthentication, controllers.CancelOrder)
+
+		// ------------Payment-----------//
+
 		// Checkout
 		router.GET("/checkout", middleware.UserAuthentication, controllers.Checkout)
 		router.POST("/checkout", middleware.UserAuthentication, controllers.ApplyCoupon, controllers.PostCheckout)
 
-		// Payment
+		// COD
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.GetCod)
 		router.GET("/payment-cod-success", middleware.UserAuthentication, controllers.Cod)
+
+		// Razor Pay
 		router.GET("/payment-razorpay", middleware.UserAuthentication, controllers.RazorPay)
 		router.GET("/payment-razorpay-success", middleware.UserAuthentication, controllers.RazorpaySuccess)
+
+		// Wallet
+		router.GET("/payment-wallet", middleware.UserAuthentication, controllers.PaywithWallet)
+		router.GET("/payment-wallet-success", middleware.UserAuthentication, controllers.WalletSuccess)
+
+		// Success
 		router.GET("/payment-success", middleware.UserAuthentication, controllers.Success)
 	}
 

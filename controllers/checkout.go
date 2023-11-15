@@ -30,10 +30,13 @@ func Checkout(c *gin.Context) {
 	c.HTML(200, "checkout.html", userdetails)
 }
 func PostCheckout(c *gin.Context) {
-	name := c.Request.FormValue("name")
-	email := c.Request.FormValue("email")
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
+
+	// Recieve user details from Front-end
+	name := c.Request.FormValue("name")
+	email := c.Request.FormValue("email")
+
 	//get the user
 	var dtuser models.User
 	err := database.DB.First(&dtuser, userid).Error
@@ -52,7 +55,7 @@ func PostCheckout(c *gin.Context) {
 
 	//Add total amount
 	var totalprice uint
-	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+	err = database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
 	if err != nil {
 		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
 		return
@@ -70,6 +73,7 @@ func PostCheckout(c *gin.Context) {
 	paymentMethod := c.PostForm("payment")
 	cod := "cash-on-delivery"
 	razorpay := "razorpay"
+	wallet := "wallet"
 
 	//creating contact details
 	result := database.DB.Where("user_id=?", userid).Create(&models.Contactdetails{
@@ -90,10 +94,13 @@ func PostCheckout(c *gin.Context) {
 		c.Redirect(303, "/user/payment-cod")
 	} else if paymentMethod == razorpay {
 		c.Redirect(303, "/user/payment-razorpay")
-	} else {
-		c.HTML(400, "checkout.html", gin.H{"error": "Select any payment method"})
-		return
+	} else if paymentMethod == wallet {
+		c.Redirect(303, "/user/payment-wallet")
 	}
 
-}
+	//else {
+	// 	c.HTML(400, "checkout.html", gin.H{"error": "Select any payment method"})
+	// 	return
+	// }
 
+}

@@ -141,9 +141,10 @@ func ApplyCoupon(c *gin.Context) {
 		c.HTML(400, "checkout.html", gin.H{"error": "coupon already applied"})
 		return
 	}
+
 	//calculating total amount
 	var totalprice uint
-	err := database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userId).Scan(&totalprice).Error
+	err := database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userId).Scan(&totalprice).Error
 	if err != nil {
 		log.Println("Cart is empty")
 		c.HTML(400, "checkout.html", gin.H{"error": "cart is empty"})
@@ -157,6 +158,7 @@ func ApplyCoupon(c *gin.Context) {
 		log.Println("cart is empty")
 		return
 	}
+
 	//checking coupon valid or not
 	if coupon1.Cancel {
 		log.Println("Coupon is not valid")
@@ -179,8 +181,14 @@ func ApplyCoupon(c *gin.Context) {
 	} else {
 		var cartitems int64
 		database.DB.Model(&models.Cart{}).Where("user_id=?", userId).Count(&cartitems)
+		log.Println("cart lentght  ", len(cart1))
 		for _, v := range cart1 {
 			discount := coupon1.Value / uint(cartitems)
+			log.Println("cart 1 : ", cart1)
+			log.Println("COUPON : ", coupon1.Value)
+			log.Println("cart items : ", cartitems)
+			log.Println("discount : ", discount)
+			log.Println("total price : ", v.Total_Price)
 			err := database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userId, v.ID).Updates(map[string]interface{}{"total_price": v.Total_Price - discount, "coupon_discount": discount, "coupon_applied": true}).Error
 			if err != nil {
 				log.Println(err)

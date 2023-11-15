@@ -22,11 +22,4 @@ func Success(c *gin.Context) {
 
 	fmt.Println("success payment id  : ", pid)
 
-	// if err != nil {
-	// 	c.HTML(400, "success.html", gin.H{
-	// 		"error": "Error in string conversion",
-	// 	})
-	// 	return
-	// }
-
 }

@@ -134,7 +134,8 @@
                       <h4 class="mb-1 me-1">₹{{.Price}}</h4>
                       <span class="text-danger"><s></s></span>
                     </div>
-                    <h6 class="text-success">Free shipping</h6>
+                    <h6 class="text-dark" >Total price ₹{{.Total_Price}}</h6>
+                    <h7 class="text-success">Free shipping</h7>
                     <!-- <h6 class="text-succes">Nike</h6> -->
                     <div class="mt-4">
                         <form action="/user/remove-from-cart/{{.Product_ID}}" method="GET" >

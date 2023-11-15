@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/first_project/database"
@@ -9,42 +10,96 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetCod(c *gin.Context) {
+func Wallet(c *gin.Context) {
+	//Initializing DB
+	db := database.DB
+	//find user
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
 
-	//getting total price of cart
-	var totalprice uint
-	err := database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
-	if err != nil {
-		if err != nil {
-			c.HTML(400, "cod.html", gin.H{"error": "Failed to find total price", "message": "cart is empty"})
-			return
-		}
+	// Get the wallet from front-end
+	wallet, _ := strconv.Atoi(c.Request.FormValue("wallet"))
+	log.Println("wallet  : ", wallet)
+	if wallet == 0 {
+		c.Next()
 		return
 	}
-	
+
+	// Get the cart data
+	var cartdata []models.Cart
+	db.Where("user_id=?", userid).Find(&cartdata)
+
+	// Get the user data
+	var userwallet models.User
+	db.Where("user_id=?", userid).Find(&userwallet)
+
+	//getting total price of cart
+	var totalprice uint
+	err := db.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+	if err != nil {
+		log.Println("Failed to find total price : ", err)
+		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find total price"})
+		return
+	}
+
+}
+
+//----------------------Payment with Wallet--------------//
+
+func PaywithWallet(c *gin.Context) {
+	//Initializing db
+	db := database.DB
+
+	// Find user
+	user, _ := c.Get("user")
+	userid := user.(models.User).User_id
+
+	var wallet models.User
+	db.First(&wallet, userid)
+
+	// Retrieve cart data
+	var cartdata models.Cart
+	db.Find(&cartdata, userid)
+
+	// Fetch Total price from cart
+	var totalprice uint
+	err := db.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+	if err != nil {
+		log.Println("Failed to find total price : ", err)
+		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find total price"})
+		return
+	}
+
+	// Validate Wallet balance
+	if wallet.Wallet < int(totalprice) {
+		log.Println("Insufficient Funds")
+		c.HTML(400, "checkout.html", gin.H{"error": "Sorry, you don't have enough money in your wallet"})
+		return
+	}
+
 	// Fetch the payment from database
 	var payment models.Payment
 	database.DB.Last(&payment)
 
-	c.HTML(200, "cod.html", gin.H{
+	c.HTML(200, "wallet.html", gin.H{
 		"userid":     userid,
 		"paymentid":  payment.Payment_ID + 1,
 		"totalprice": totalprice,
 	})
-
 }
 
-func Cod(c *gin.Context) {
+//--------------Wallet Success----------------//
+
+func WalletSuccess(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
 
-	//searching for database all cart data
+	//Retrieve cart data from DB
 	var cartdata []models.Cart
 	err := database.DB.Where("user_id=?", userid).Find(&cartdata).Error
 	if err != nil {
-		c.HTML(400, "cod.html", gin.H{"error": "Please check your cart"})
+		log.Println("Please check your cart : ", err)
+		c.HTML(400, "wallet.html", gin.H{"error": "Please check your cart"})
 		return
 	}
 
@@ -53,7 +108,7 @@ func Cod(c *gin.Context) {
 	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
 	if err != nil {
 		log.Println("Failed to find total price")
-		c.HTML(400, "cod.html", gin.H{"error": "Failed to find total price"})
+		c.HTML(400, "wallet.html", gin.H{"error": "Failed to find total price"})
 		return
 	}
 
@@ -65,27 +120,19 @@ func Cod(c *gin.Context) {
 		level := int(product.Stock) - v.Quantity
 		if int(level) < 0 {
 			log.Println("error : please check quantity : ", err)
-			c.HTML(400, "cod.html", gin.H{
+			c.HTML(400, "wallet.html", gin.H{
 				"error": "Please check quantity",
 			})
 			return
 		}
 	}
 
-	//creating COD
-	database.DB.Create(&models.Payment{
-		Payment_Type:   "COD",
-		Total_Amount:   totalprice,
-		Payment_Status: "Pending",
-		User_ID:        userid,
-		Date:           time.Now(),
-	})
-
+	// Retrieve address id from DB
 	var adrid int
 	err = database.DB.Model(&models.Contactdetails{}).Select("address_id").Where("user_id=?", userid).Scan(&adrid).Error
 	if err != nil {
 		log.Println("failed to fetch address id from checkout page")
-		c.HTML(400, "cod.html", gin.H{"error": "Failed to find address,choose different id"})
+		c.HTML(400, "wallet.html", gin.H{"error": "Failed to find address,choose different id"})
 		return
 	}
 
@@ -97,7 +144,7 @@ func Cod(c *gin.Context) {
 	var address models.Address
 	err = database.DB.Where("user_id=? AND address_id=?", userid, order.Address_ID).Last(&address).Error
 	if err != nil {
-		c.HTML(400, "cod.html", gin.H{"error": "Failed to find address,choose different id"})
+		c.HTML(400, "wallet.html", gin.H{"error": "Failed to find address,choose different id"})
 		return
 	}
 
@@ -107,14 +154,23 @@ func Cod(c *gin.Context) {
 		Total_Price:  totalprice,
 		Payment_ID:   payment.Payment_ID,
 		Status:       "Processing",
-		Payment_Type: "COD",
+		Payment_Type: "Wallet",
 		Date:         time.Now(),
 	}).Error
 	if err != nil {
 		log.Println("failed to create order")
-		c.HTML(400, "cod.html", gin.H{"error": err.Error()})
+		c.HTML(500, "wallet.html", gin.H{"error": err.Error()})
 		return
 	}
+
+	//creating Wallet
+	database.DB.Create(&models.Payment{
+		Payment_Type:   "Wallet",
+		Total_Amount:   totalprice,
+		Payment_Status: "Completed",
+		User_ID:        userid,
+		Date:           time.Now(),
+	})
 
 	var order1 models.Order
 	database.DB.Last(&order1)
@@ -141,8 +197,19 @@ func Cod(c *gin.Context) {
 		}
 	}
 	if err != nil {
-		log.Println(err)
-		c.HTML(400, "cod.html", gin.H{"error": err.Error()})
+		log.Println("Failed to create Order Item", err)
+		c.HTML(400, "wallet.html", gin.H{"error": err.Error()})
+		return
+	}
+
+	// Deduct the total price from the user's wallet
+	var userwallet models.User
+	database.DB.Where("user_id=?", userid).Find(&userwallet)
+
+	userwallet.Wallet -= int(totalprice)
+	if err := database.DB.Save(&userwallet).Error; err != nil {
+		log.Println("Failed to update user wallet: ", err)
+		c.HTML(500, "wallet.html", gin.H{"error": "Failed to update user wallet"})
 		return
 	}
 
@@ -160,10 +227,11 @@ func Cod(c *gin.Context) {
 	err = database.DB.Delete(&models.Cart{}, "user_id=?", userid).Error
 	if err != nil {
 		log.Println("Failed to delete checked out cart data")
-		c.HTML(400, "cod.html", gin.H{"error": "failed to delete used cart" + err.Error()})
+		c.HTML(400, "wallet.html", gin.H{"error": "failed to delete used cart" + err.Error()})
 		return
 	}
 
 	c.Redirect(303, "/user/payment-success")
-
 }
+
+//----------------------------------------------//

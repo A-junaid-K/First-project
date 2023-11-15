@@ -15,6 +15,7 @@ type User struct {
 	Validate   bool
 	User_type  string `validate:"required, eq=ADMIN|eq=USER"`
 	Created_at time.Time
+	Wallet int
 }
 
 type Address struct {

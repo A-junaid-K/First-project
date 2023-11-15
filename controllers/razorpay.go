@@ -25,16 +25,11 @@ func RazorPay(c *gin.Context) {
 
 	//Add total amount
 	var totalprice uint
-	// err := database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
-	// if err != nil {
-	// 	c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
-	// 	return
-	// }
 
 	row := db.Table("carts").Where("user_id=?", userid).Select("SUM(total_price)").Row()
 	err := row.Scan(&totalprice)
 	if err != nil {
-		c.HTML(400, "razorpay.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
+		c.HTML(400, "app.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
 		return
 	}
 
@@ -47,7 +42,7 @@ func RazorPay(c *gin.Context) {
 	body, err := client.Order.Create(data, nil)
 	if err != nil {
 		fmt.Println("failed to get razor client : ", err)
-		c.HTML(400, "razorpay.html", gin.H{"error": err})
+		c.HTML(400, "app.html", gin.H{"error": err})
 		return
 	}
 	value := body["id"]
@@ -96,21 +91,21 @@ func RazorpaySuccess(c *gin.Context) {
 
 	//getting total price of cart
 	var totalprice uint
-	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+	err = database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
 	if err != nil {
 		log.Println("error: Failed to find total price, message: cart is empty : ", err)
 		return
 	}
 	var product models.Product
 
-	// //checking stock level
-	// for _, v := range cartdata {
-	// 	database.DB.First(&product, v.Product_ID)
-	// 	if product.Stock-v.Quantity < 0 {
-	// 		log.Println("error: Please check quantity : ", err)
-	// 		return
-	// 	}
-	// }
+	//checking stock level
+	for _, v := range cartdata {
+		database.DB.First(&product, v.Product_ID)
+		if int(product.Stock)-v.Quantity < 0 {
+			log.Println("error: Please check quantity : ", err)
+			return
+		}
+	}
 
 	var adrid int
 	err = database.DB.Model(&models.Contactdetails{}).Select("address_id").Where("user_id=?", userid).Scan(&adrid).Error
@@ -175,7 +170,7 @@ func RazorpaySuccess(c *gin.Context) {
 			Category:    cartbrand.Category_Name,
 			Quantity:    uint(cartdata.Quantity),
 			Price:       uint(cartdata.Price),
-			Total_Price: cartdata.Total_Price,
+			Total_Price: totalprice,
 			Discount:    cartdata.Category_Offer + cartdata.Coupon_Discount,
 			Cart_ID:     cartdata.ID,
 			Status:      "processing",

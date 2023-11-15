@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="shortcut icon" type="image/x-icon" href="/static/images/icon.png" />
+<!-- <link rel="stylesheet" href="/static/css/main.css"> -->
+<!-- <link rel="stylesheet" href="/static/css/productDetails.css" /> -->
 <style>
 body {
   font-family: Arial;
@@ -83,8 +85,25 @@ label {
   font-size: 17px;
 }
 
+.wallet {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 9px;
+  margin-top: 50px;
+  border: 2px solid #59c45f; 
+  width: 50%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: none;
+}
+.wallet:hover {
+  color: #fff;
+  background-color: #51b256;
+}
+
 .btn:hover {
-  background-color: #45a049;
+  background-color: #45a149;
 }
 
 a {
@@ -225,11 +244,19 @@ span.price {
             <h3>Payment</h3>
 
             <label>
-              <input type="radio" name="payment" value="cash-on-delivery" style="margin-top: 25px;"> Cash on delivery
+              <input type="radio" name="payment" value="cash-on-delivery" required> Cash on delivery
             </label>
+      
             <label>
-              <input type="radio" name="payment" value="razorpay"> Razorpay
+              <input type="radio" name="payment" value="razorpay" required> Razorpay
             </label>
+      
+            <label>
+              <input type="radio" name="payment" value="wallet" required>Wallet
+            </label>
+
+            <label for="cname" style="margin-top: 20px;" >Wallet : ₹{{.Users.Wallet}}</label>
+            <input type="text" id="cname" name="wallet" placeholder="Add amount">
             
             <label for="cname" style="margin-top: 20px;" >Apply Coupon</label>
             <input type="text" id="cname" name="coupon_code" placeholder="Enter Coupon Code">
