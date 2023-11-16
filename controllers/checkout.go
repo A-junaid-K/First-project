@@ -13,21 +13,45 @@ func Checkout(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
 
+	//get cart data
+	var cartdata []models.Cart
+	err := database.DB.Where("user_id=?", userid).Find(&cartdata).Error
+	if err != nil {
+		c.HTML(400, "checkout.html", gin.H{"error": "Please check your cart"})
+		return
+	}
+
 	var userr models.User
 	var adr []models.Address
 
 	database.DB.Where("user_id=?", userid).First(&userr)
 	database.DB.Where("user_id=?", userid).Find(&adr)
 
-	userdetails := struct {
-		Users     models.User
-		Addresses []models.Address
-	}{
-		Users:     userr,
-		Addresses: adr,
+	//Add total amount
+	var totalprice uint
+	err = database.DB.Table("carts").Select("SUM(total_price)").Where("user_id=?", userid).Scan(&totalprice).Error
+	if err != nil {
+		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
+		return
 	}
 
-	c.HTML(200, "checkout.html", userdetails)
+	c.HTML(200, "checkout.html", gin.H{
+		"Users":      userr,
+		"Addresses":  adr,
+		"Carts":      cartdata,
+		"totalprice": totalprice,
+	})
+
+	// userdetails := struct {
+	// 	Users     models.User
+	// 	Addresses []models.Address
+	// 	Carts []models.Cart
+	// }{
+	// 	Users:     userr,
+	// 	Addresses: adr,
+	// 	Carts: cartdata,
+	// }
+
 }
 func PostCheckout(c *gin.Context) {
 	user, _ := c.Get("user")
@@ -45,21 +69,13 @@ func PostCheckout(c *gin.Context) {
 		return
 	}
 
-	//get cart data
-	var cartdata models.Cart
-	err = database.DB.Where("user_id=?", userid).Find(&cartdata).Error
-	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "Please check your cart"})
-		return
-	}
-
-	//Add total amount
-	var totalprice uint
-	err = database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
-	if err != nil {
-		c.HTML(400, "checkout.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
-		return
-	}
+	// //Add total amount
+	// var totalprice uint
+	// err = database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
+	// if err != nil {
+	// 	c.HTML(400, "checkout.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
+	// 	return
+	// }
 
 	// recieving the address
 	adrid, _ := strconv.Atoi(c.PostForm("userchosenaddress"))
@@ -97,10 +113,4 @@ func PostCheckout(c *gin.Context) {
 	} else if paymentMethod == wallet {
 		c.Redirect(303, "/user/payment-wallet")
 	}
-
-	//else {
-	// 	c.HTML(400, "checkout.html", gin.H{"error": "Select any payment method"})
-	// 	return
-	// }
-
 }

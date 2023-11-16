@@ -42,6 +42,52 @@ func Wallet(c *gin.Context) {
 		return
 	}
 
+	log.Println("totalprice : ", totalprice)
+
+	// Validate user entered Wallet amount
+	if wallet >= int(totalprice) {
+
+		// Validate Wallet balance
+		if userwallet.Wallet < int(totalprice) {
+			log.Println("Insufficient Funds")
+			c.HTML(400, "checkout.html", gin.H{"error": "Sorry, you don't have enough money in your wallet"})
+			return
+		}
+		log.Println("pay full with wallet")
+		c.Redirect(303, "/user/payment-wallet")
+		return
+	} else {
+
+		//Validte Wallet balance
+		if userwallet.Wallet < wallet {
+			log.Println("Insufficient Funds")
+			c.HTML(400, "checkout.html", gin.H{"error": "Sorry, you don't have enough money in your wallet"})
+			return
+		}
+
+		walletprice := totalprice - uint(wallet)
+		var cartitems int64
+		database.DB.Model(&models.Cart{}).Where("user_id=?", userid).Count(&cartitems)
+		for _, v := range cartdata {
+			newprice := walletprice / uint(cartitems)
+			err := database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userid, v.ID).Updates(map[string]interface{}{"total_price": newprice}).Error
+			if err != nil {
+				log.Println(err)
+				return
+			}
+		}
+
+		userwallet.Wallet -= wallet
+		if err := database.DB.Save(&userwallet).Error; err != nil {
+			log.Println("Failed to update user wallet: ", err)
+			c.HTML(500, "wallet.html", gin.H{"error": "Failed to update user wallet"})
+			return
+		}
+
+		log.Println("Wallet amount apllied Successfully")
+		c.Next()
+	}
+
 }
 
 //----------------------Payment with Wallet--------------//

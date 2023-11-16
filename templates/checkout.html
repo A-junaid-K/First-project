@@ -116,7 +116,7 @@ hr {
 
 span.price {
   float: right;
-  color: grey;
+  color: rgb(85, 85, 85);
 }
 .menu-aside .menu-item.has-submenu > .menu-link:after {
   display: inline-block;
@@ -205,21 +205,7 @@ span.price {
             <label for="email"><i class="fa fa-envelope"></i> Email</label>
             <input type="text" id="email" name="email" value="{{.Users.Email}}">
             <!-- <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street"> -->
-          
-            
-            <!-- <li class="menu-item has-submenu active">
-              <a class="menu-link" href="page-sellers-cards.html">
-                  <i class="icon material-icons md-store"></i>
-                  <span class="text">Sellers</span>
-              </a>
-              <div class="submenu">
-                  <a href="page-sellers-cards.html">Sellers cards</a>
-                  <a href="page-sellers-list.html">Sellers list</a>
-                  <a href="page-seller-detail.html" class="active">Seller profile</a>
-              </div>
-          </li> -->
-      
+            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street"> -->  
           
           <div class="col-md-4 col-6">
             <label class="mb-2">Address</label>
@@ -255,7 +241,7 @@ span.price {
               <input type="radio" name="payment" value="wallet" required>Wallet
             </label>
 
-            <label for="cname" style="margin-top: 20px;" >Wallet : ₹{{.Users.Wallet}}</label>
+            <label for="cname" style="margin-top: 20px;" >Wallet</label>
             <input type="text" id="cname" name="wallet" placeholder="Add amount">
             
             <label for="cname" style="margin-top: 20px;" >Apply Coupon</label>
@@ -272,15 +258,18 @@ span.price {
 
   </div>
   <div class="col-25">
-    <!-- <div class="container">
-      <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>4</b></span></h4>
-      <p><a href="#">Product 1</a> <span class="price">$15</span></p>
-      <p><a href="#">Product 2</a> <span class="price">$5</span></p>
-      <p><a href="#">Product 3</a> <span class="price">$8</span></p>
-      <p><a href="#">Product 4</a> <span class="price">$2</span></p>
+    <div class="container">
+      <h4>Cart <span class="price" style="color:black; margin-right: 30px;"><i class="fa fa-shopping-cart"></i> </span></h4>
+      {{range .Carts}}
+      <p>{{.Name}} <span class="price">₹{{.Total_Price}}</span></p>
+      {{end}}
       <hr>
-      <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
-    </div> -->
+      <p>Total <span class="price" style="color:black"><b>₹{{.totalprice}}</b></span></p>
+      
+    </div>
+    <div class="container" style="margin-top: 20px;" >
+      <h4>Wallet <span class="price" style="color:black; margin-right: 30px;"><i>₹ {{.Users.Wallet}}</i> </span></h4>      
+    </div>
   </div>
   {{if .error}}
   <p style="color: crimson;" >Error: {{.error}}</p>
