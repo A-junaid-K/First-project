@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/first_project/database"
 	"github.com/first_project/helpers"
@@ -192,9 +193,23 @@ func PostOrder(c *gin.Context) {
 
 	log.Println("status : ", status)
 
-	err := database.DB.Table("orders").Select("status").Where("order_id=?", order_id).Update("status", status).Error
+	//Update  Status in Orders
+	err := database.DB.Table("orders").Select("status").Where("order_id=?", order_id).Updates(map[string]interface{}{
+		"status": status,
+		"date":   time.Now(),
+	}).Error
 	if err != nil {
 		log.Println("failed to update order status : ", err)
 	}
+
+	//Update Status in Order_Items
+	err = database.DB.Table("order_items").Select("status").Where("order_id=?", order_id).Updates(map[string]interface{}{
+		"status": status,
+		"date":   time.Now(),
+	}).Error
+	if err != nil {
+		log.Println("failed to update order items status : ", err)
+	}
+
 	c.Redirect(303, "/admin-order")
 }

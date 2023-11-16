@@ -85,19 +85,84 @@ func CancelOrder(c *gin.Context) {
 
 	//Refund
 	var order models.Order
-	db.Where("order_id=?",orderItem.Order_ID).First(&order)
+	db.Where("order_id=?", orderItem.Order_ID).First(&order)
 
-		if order.Payment_Type != "COD" {
-			var cancellingUser models.User
-			db.Where("user_id=?",orderItem.User_ID).First(&cancellingUser)
-			wallet := cancellingUser.Wallet + int(orderItem.Total_Price)
-			err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", wallet).Error
-			if err != nil {
-				log.Println("Failed to update wallet in db : ", err)
-				return
-			}
-			log.Println("waller updated : ", orderItem.Total_Price)
-		
+	if order.Payment_Type != "COD" {
+		var cancellingUser models.User
+		db.Where("user_id=?", orderItem.User_ID).First(&cancellingUser)
+		wallet := cancellingUser.Wallet + int(orderItem.Total_Price)
+		err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", wallet).Error
+		if err != nil {
+			log.Println("Failed to update wallet in db : ", err)
+			return
 		}
-		c.Redirect(303, "/user/orders")
+		log.Println("waller updated : ", orderItem.Total_Price)
+
+	}
+	c.Redirect(303, "/user/orders")
+}
+
+func ReturnOrder(c *gin.Context) {
+
+	db := database.DB
+
+	orderItemId, _ := strconv.Atoi(c.Param("orderitem_id"))
+	var orderItem models.OrderItem
+
+	// Ordered item data from table
+	err := db.First(&orderItem, orderItemId).Error
+	if err != nil {
+		log.Println("Order id does not exist : ", err)
+		return
+	}
+
+	//checking it already cancelled or not
+	if orderItem.Status == "cancelled" {
+		log.Println("Order already cancelled")
+		c.HTML(http.StatusBadRequest, "userorder.html", gin.H{
+			"error": "Order already cancelled",
+		})
+		return
+	}
+
+	// changing the order status in database
+	db.Model(&models.Order{}).Where("order_id=?", orderItem.Order_ID).Update("status", "cancelled")
+	err = db.Model(&models.OrderItem{}).Where("order_item_Id=?", orderItem.Order_ItemID).Update("status", "cancelled").Error
+	if err != nil {
+		log.Println("failed to cancel order in table : ", err)
+		return
+	}
+	log.Println("db status updated : cancelled")
+
+	// Update the Inventory
+	var orderedProduct models.Product
+	db.Where("id=?", orderItem.Product_ID).First(&orderedProduct)
+
+	stock := orderedProduct.Stock + orderItem.Quantity
+
+	err = db.Table("products").Where("id=?", orderItem.Product_ID).Update("stock", stock).Error
+	if err != nil {
+		log.Println("Failed to update stock in db : ", err)
+		return
+	}
+	log.Println("updated stock : ", stock)
+
+	//Refund
+	var order models.Order
+	db.Where("order_id=?", orderItem.Order_ID).First(&order)
+
+	if order.Payment_Type != "COD" {
+		var cancellingUser models.User
+		db.Where("user_id=?", orderItem.User_ID).First(&cancellingUser)
+		wallet := cancellingUser.Wallet + int(orderItem.Total_Price)
+		err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", wallet).Error
+		if err != nil {
+			log.Println("Failed to update wallet in db : ", err)
+			return
+		}
+		log.Println("waller updated : ", orderItem.Total_Price)
+
+	}
+	c.Redirect(303, "/user/orders")
+
 }
