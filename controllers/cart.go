@@ -40,18 +40,19 @@ func AddtoCart(c *gin.Context) {
 	err = database.DB.Where("product_id=? AND user_id=?", product_id, userId).First(&dtcart).Error
 	if err != nil {
 		err = database.DB.Create(&models.Cart{
-			Product_ID:    product_id,
-			Name:          product.Name,
-			Description:   product.Description,
-			Quantity:      pdquantity,
-			Stock:         int(product.Stock),
-			Price:         int(product.Price),
-			Size:          pdsize,
-			Total_Price:   totalprice,
-			Category_Name: product.Category_Name,
-			Brand_Name:    product.Brand_Name,
-			User_ID:       userId,
-			Image:         product.Image,
+			Product_ID:     product_id,
+			Name:           product.Name,
+			Description:    product.Description,
+			Quantity:       pdquantity,
+			Stock:          int(product.Stock),
+			Price:          int(product.Price),
+			Size:           pdsize,
+			Total_Price:    totalprice,
+			Category_Name:  product.Category_Name,
+			Brand_Name:     product.Brand_Name,
+			Category_Offer: product.Percentage,
+			User_ID:        userId,
+			Image:          product.Image,
 		}).Error
 	} else {
 		fmt.Println("already exist in cart")

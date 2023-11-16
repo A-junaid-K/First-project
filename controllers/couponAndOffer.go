@@ -273,7 +273,7 @@ func PostAddOffer(c *gin.Context) {
 		log.Println("errrrrrr : ", err)
 	}
 
-	err = database.DB.Table("carts").Where("category_name=?", category).Update("category_offer",percentage).Error
+	err = database.DB.Table("carts").Where("category_name=?", category).Update("category_offer", percentage).Error
 	if err != nil {
 		log.Println("errrrrrr : ", err)
 	}
