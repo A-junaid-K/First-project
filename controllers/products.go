@@ -117,14 +117,13 @@ func Listproducts(c *gin.Context) {
 func ProductDetails(c *gin.Context) {
 	productiD := c.Param("id")
 
-
 	var products models.Product
 	database.DB.Table("products").Where("id=?", productiD).First(&products)
 
 	//checking the offer
 	if products.Offer_Name != "" {
 		offerprice := products.Price * products.Percentage / 100
-		products.Price = products.Price - offerprice
+		products.Price -= offerprice
 	}
 
 	c.HTML(http.StatusOK, "productDetails2.html", products)

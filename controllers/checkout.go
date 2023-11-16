@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/first_project/database"
@@ -42,16 +43,6 @@ func Checkout(c *gin.Context) {
 		"totalprice": totalprice,
 	})
 
-	// userdetails := struct {
-	// 	Users     models.User
-	// 	Addresses []models.Address
-	// 	Carts []models.Cart
-	// }{
-	// 	Users:     userr,
-	// 	Addresses: adr,
-	// 	Carts: cartdata,
-	// }
-
 }
 func PostCheckout(c *gin.Context) {
 	user, _ := c.Get("user")
@@ -69,13 +60,25 @@ func PostCheckout(c *gin.Context) {
 		return
 	}
 
-	// //Add total amount
-	// var totalprice uint
-	// err = database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userid).Scan(&totalprice).Error
-	// if err != nil {
-	// 	c.HTML(400, "checkout.html", gin.H{"error": "Failed to find the total price", "message": "please check your cart"})
-	// 	return
-	// }
+	//------------------------------------Checking Offer-------------------------------//
+
+	//Fetching cart data and Count
+	var cartdata []models.Cart
+	database.DB.Where("user_id=?", userid).Find(&cartdata)
+
+	// var cartitems int64
+	// database.DB.Model(&models.Cart{}).Where("user_id=?", userid).Count(&cartitems)
+
+	for _, v := range cartdata {
+		if v.Category_Offer != 0 {
+
+			discount := v.Total_Price * v.Category_Offer / 100
+			newprice := v.Total_Price - discount
+
+			database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userid, v.ID).Update("total_price", newprice)
+			log.Println("Offer price updated")
+		}
+	}
 
 	// recieving the address
 	adrid, _ := strconv.Atoi(c.PostForm("userchosenaddress"))
