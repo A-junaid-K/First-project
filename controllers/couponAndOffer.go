@@ -21,6 +21,7 @@ func PostAddCoupon(c *gin.Context) {
 
 	coupon_code := c.Request.FormValue("couponcode")
 	coupon_type := c.PostForm("type")
+
 	raw_expiry_date := c.PostForm("expiryDate")
 	expiry_date, _ := time.Parse(layout, raw_expiry_date)
 	discount, _ := strconv.Atoi(c.Request.FormValue("discount"))
@@ -202,20 +203,23 @@ func Offer(c *gin.Context) {
 	c.HTML(200, "offer.html", dtcategory)
 }
 func PostAddOffer(c *gin.Context) {
-	layout := "2006-02-01"
+	layout := "2006-01-02"
 	offer_name := c.Request.FormValue("offer_name")
 
 	raw_starting_date := c.PostForm("startingDate")
 	starting_date, err := time.Parse(layout, raw_starting_date)
 	if err != nil {
-		log.Println("faild to get starting date : ", err)
+		log.Println("failed to get starting date : ", err)
 	}
 	raw_expiry_date := c.PostForm("expiryDate")
-	expiry_date, _ := time.Parse(layout, raw_expiry_date)
-
-	percentage, err := strconv.Atoi(c.Request.FormValue("percentage"))
+	expiry_date, errr := time.Parse(layout, raw_expiry_date)
+	if errr != nil {
+		log.Println("failed to get starting date : ", err)
+	}
 
 	log.Println("starting time : ", starting_date, "\n ending time : ", expiry_date)
+
+	percentage, err := strconv.Atoi(c.Request.FormValue("percentage"))
 
 	if err != nil {
 		log.Println("failed form value : ", err)
@@ -249,6 +253,14 @@ func PostAddOffer(c *gin.Context) {
 		Percentage:    uint(percentage),
 		Offer:         true,
 	})
+	if result.Error != nil {
+		log.Println("Failed to add offer : ", result.Error)
+		c.HTML(http.StatusBadRequest, "offer.html", gin.H{
+			"error": "Failed to add offer",
+		})
+		return
+	}
+
 	database.DB.Table("products").Where("category_name=?", category).Updates(map[string]interface{}{
 		"offer_name": offer_name,
 		"percentage": percentage,
@@ -261,13 +273,14 @@ func PostAddOffer(c *gin.Context) {
 		log.Println("errrrrrr : ", err)
 	}
 
-	if result.Error != nil {
-		log.Println("Failed to add offer : ", result.Error)
-		c.HTML(http.StatusBadRequest, "offer.html", gin.H{
-			"error": "Failed to add offer",
-		})
-		return
+	err = database.DB.Table("carts").Where("category_name=?", category).Updates(map[string]interface{}{
+		"offer_name": offer_name,
+		"percentage": percentage,
+	}).Error
+	if err != nil {
+		log.Println("errrrrrr : ", err)
 	}
+
 	c.Redirect(http.StatusSeeOther, "/admin-offer")
 }
 func RemoveOffer(c *gin.Context) {

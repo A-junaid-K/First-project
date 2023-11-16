@@ -184,6 +184,9 @@
                             <td>₹{{.Total_Price}}</td>
                             {{if eq .Status "cancelled"}}
                             <td style="color: crimson;" >{{.Status}}</td>
+                            {{end}}
+                            {{if eq .Status "returned"}}
+                            <td style="color: crimson;" >{{.Status}}</td>
                             {{else}}
                             <td>{{.Status}}</td>
                             {{end}}
@@ -197,6 +200,14 @@
                             <button class="btn btn-sm btn-outline-dark rounded font-sm mt-15">Cancel</button>
                             </form>
                             {{ end }}
+                            {{if eq .Status "delivered"}}
+                             <!-- Check if it has been more than 48 hours since delivery -->
+                            <form action="/user/return-order/{{.Order_ItemID}}" method="get">
+                            <button class="btn btn-sm btn-outline-dark rounded font-sm mt-15">Return</button>
+                            </form>
+                          
+                            {{end}}
+
                             </td>
                         </tr>
 

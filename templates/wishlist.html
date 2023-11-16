@@ -110,7 +110,7 @@
                 <div class="row g-0">
                   <div class="col-xl-3 col-md-4 d-flex justify-content-center">
                     <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                      <a href="/user/product-details/{{.ID}}">
+                      <a href="/user/product-details/{{.Product_ID}}">
                       <img src="/static/images/{{.Image}}" class="w-100" />
                     </a>
                       <a href="#!">
@@ -137,9 +137,9 @@
                     <!-- <h6 class="text-succes">Nike</h6> -->
                     <div class="mt-4">
                        
-                      <form action="/user/cart/{{.Product_ID}}" method="GET" >
+                      <!-- <form action="/user/cart/{{.Product_ID}}" method="GET" >
                         <button style="margin-bottom: 10px;" href="/user/cart" class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
-                       </form>
+                       </form> -->
                       <form action="/user/remove-from-wishlist/{{.Product_ID}}" method="GET" >
                       <a href="/user/remove-from-wishlist/{{.Product_ID}}" class="btn btn-dark shadow-0" style="color: rgb(255, 122, 122); margin-top: 10px;">Remove</a>
                       </form>

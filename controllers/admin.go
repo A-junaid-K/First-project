@@ -205,7 +205,7 @@ func PostOrder(c *gin.Context) {
 	//Update Status in Order_Items
 	err = database.DB.Table("order_items").Select("status").Where("order_id=?", order_id).Updates(map[string]interface{}{
 		"status": status,
-		"date":   time.Now(),
+		"created_at":   time.Now(),
 	}).Error
 	if err != nil {
 		log.Println("failed to update order items status : ", err)

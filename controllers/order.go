@@ -25,6 +25,7 @@ func Userorder(c *gin.Context) {
 		Status       string
 		Payment_Type string
 		Order_ItemID uint
+		CTime        time.Time
 	}
 
 	var order []orderedItems
@@ -117,22 +118,50 @@ func ReturnOrder(c *gin.Context) {
 	}
 
 	//checking it already cancelled or not
-	if orderItem.Status == "cancelled" {
-		log.Println("Order already cancelled")
+	if orderItem.Status == "returned" {
+		log.Println("Order already returned")
 		c.HTML(http.StatusBadRequest, "userorder.html", gin.H{
-			"error": "Order already cancelled",
+			"error": "Order already returned",
 		})
 		return
 	}
 
-	// changing the order status in database
-	db.Model(&models.Order{}).Where("order_id=?", orderItem.Order_ID).Update("status", "cancelled")
-	err = db.Model(&models.OrderItem{}).Where("order_item_Id=?", orderItem.Order_ItemID).Update("status", "cancelled").Error
-	if err != nil {
-		log.Println("failed to cancel order in table : ", err)
+	//Check it Delivered
+	var orders models.Order
+	db.Where("order_id=?", orderItem.Order_ID).First(&orders)
+
+	if orders.Status != "delivered" {
+		log.Println("This order cannot return")
+		c.HTML(http.StatusBadRequest, "userorder.html", gin.H{
+			"error": "This Order cannot return",
+		})
 		return
 	}
-	log.Println("db status updated : cancelled")
+
+	// Checking the Returning Time period
+	twoDaysAgo := time.Now().Add(-48 * time.Hour) // Subtract 48 hours for a two-day period
+	if orderItem.Created_at.Before(twoDaysAgo) {
+		log.Println("Cannot return. Returning time expired")
+		c.HTML(400, "userorder.html", gin.H{"error": "Cannot return. Returning time expired"})
+		return
+	}
+
+	// changing the order status in database
+	db.Model(&models.Order{}).Where("order_id=?", orderItem.Order_ID).Updates(map[string]interface{}{
+		"status": "returned",
+		"date":   time.Now(),
+	})
+
+	err = db.Model(&models.OrderItem{}).Where("order_item_Id=?", orderItem.Order_ItemID).Updates(map[string]interface{}{
+		"status":     "returned",
+		"created_at": time.Now(),
+	}).Error
+
+	if err != nil {
+		log.Println("failed to return order in table : ", err)
+		return
+	}
+	log.Println("db status updated : returned")
 
 	// Update the Inventory
 	var orderedProduct models.Product
@@ -147,22 +176,52 @@ func ReturnOrder(c *gin.Context) {
 	}
 	log.Println("updated stock : ", stock)
 
-	//Refund
+	// Refund
 	var order models.Order
 	db.Where("order_id=?", orderItem.Order_ID).First(&order)
 
-	if order.Payment_Type != "COD" {
-		var cancellingUser models.User
-		db.Where("user_id=?", orderItem.User_ID).First(&cancellingUser)
-		wallet := cancellingUser.Wallet + int(orderItem.Total_Price)
-		err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", wallet).Error
-		if err != nil {
-			log.Println("Failed to update wallet in db : ", err)
-			return
-		}
-		log.Println("waller updated : ", orderItem.Total_Price)
+	// Calculate the time 7 days ago
+	weekAgo := time.Now().Add(-7 * 24 * time.Hour)
 
+	// Check if the product was returned at least 7 days ago
+	if orderItem.Created_at.Before(weekAgo) {
+		if order.Payment_Type != "COD" {
+			var cancellingUser models.User
+			db.Where("user_id=?", orderItem.User_ID).First(&cancellingUser)
+
+			// Calculate the new wallet balance after the refund
+			newWalletBalance := cancellingUser.Wallet + int(orderItem.Total_Price)
+
+			// Update the user's wallet in the database
+			err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", newWalletBalance).Error
+			if err != nil {
+				log.Println("Failed to update wallet in db : ", err)
+				return
+			}
+
+			log.Println("Wallet updated for refund : ", orderItem.Total_Price)
+		}
+	} else {
+		log.Println("Refund period has not elapsed yet")
 	}
+
 	c.Redirect(303, "/user/orders")
 
 }
+
+// //Refund
+// var order models.Order
+// db.Where("order_id=?", orderItem.Order_ID).First(&order)
+
+// if order.Payment_Type != "COD" {
+// 	var cancellingUser models.User
+// 	db.Where("user_id=?", orderItem.User_ID).First(&cancellingUser)
+// 	wallet := cancellingUser.Wallet + int(orderItem.Total_Price)
+// 	err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", wallet).Error
+// 	if err != nil {
+// 		log.Println("Failed to update wallet in db : ", err)
+// 		return
+// 	}
+// 	log.Println("waller updated : ", orderItem.Total_Price)
+
+// }
