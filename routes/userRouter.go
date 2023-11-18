@@ -61,7 +61,8 @@ func UserRouter(r *gin.Engine) {
 		// Order
 		router.GET("/orders", middleware.UserAuthentication, controllers.Userorder)
 		router.GET("/cancel-order/:orderitem_id", middleware.UserAuthentication, controllers.CancelOrder)
-		router.GET("/return-order/:orderitem_id", middleware.UserAuthentication, controllers.ReturnOrder)
+		router.GET("/return-order-form/:orderitem_id", middleware.UserAuthentication, controllers.Reason)
+		router.POST("/return-order/:orderitem_id", middleware.UserAuthentication, controllers.ReturnOrder)
 
 		// ------------Payment-----------//
 

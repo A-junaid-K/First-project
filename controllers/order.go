@@ -120,7 +120,7 @@ func ReturnOrder(c *gin.Context) {
 	//checking it already cancelled or not
 	if orderItem.Status == "returned" {
 		log.Println("Order already returned")
-		c.HTML(http.StatusBadRequest, "userorder.html", gin.H{
+		c.HTML(http.StatusBadRequest, "return.html", gin.H{
 			"error": "Order already returned",
 		})
 		return
@@ -132,7 +132,7 @@ func ReturnOrder(c *gin.Context) {
 
 	if orders.Status != "delivered" {
 		log.Println("This order cannot return")
-		c.HTML(http.StatusBadRequest, "userorder.html", gin.H{
+		c.HTML(http.StatusBadRequest, "return.html", gin.H{
 			"error": "This Order cannot return",
 		})
 		return
@@ -142,7 +142,7 @@ func ReturnOrder(c *gin.Context) {
 	twoDaysAgo := time.Now().Add(-48 * time.Hour) // Subtract 48 hours for a two-day period
 	if orderItem.Created_at.Before(twoDaysAgo) {
 		log.Println("Cannot return. Returning time expired")
-		c.HTML(400, "userorder.html", gin.H{"error": "Cannot return. Returning time expired"})
+		c.HTML(400, "return.html", gin.H{"error": "Returning time expired.You can only return a product within two days"})
 		return
 	}
 
@@ -205,7 +205,21 @@ func ReturnOrder(c *gin.Context) {
 		log.Println("Refund period has not elapsed yet")
 	}
 
+	log.Println("Successfully Returned")
+
 	c.Redirect(303, "/user/orders")
+
+}
+
+func Reason(c *gin.Context) {
+
+	orderItemId, _ := strconv.Atoi(c.Param("orderitem_id"))
+
+	log.Println("order item id : ", orderItemId)
+
+	c.HTML(200, "return.html", gin.H{
+		"orderitemid": orderItemId,
+	})
 
 }
 
