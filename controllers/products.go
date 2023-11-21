@@ -101,7 +101,6 @@ func AdminListproducts(c *gin.Context) {
 func Listproducts(c *gin.Context) {
 	var exp []models.Category_Offer
 	database.DB.Find(&exp)
-
 	currentdate := time.Now()
 
 	for _, offer := range exp {
@@ -110,7 +109,20 @@ func Listproducts(c *gin.Context) {
 		}
 	}
 
+	// var category []models.Category
+	// database.DB.Find(&category)
+
+	// var product []models.Product
+	// database.DB.Find(&product)
+
+	// for _,v := range category{	
+	// 	if v.Unlist{
+	// 		ad
+	// 	}
+	// }
+
 	data := DtTables()
+
 	c.HTML(200, "productsList2.html", data)
 }
 

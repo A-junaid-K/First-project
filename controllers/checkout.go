@@ -42,8 +42,8 @@ func Checkout(c *gin.Context) {
 		"Carts":      cartdata,
 		"totalprice": totalprice,
 	})
-
 }
+
 func PostCheckout(c *gin.Context) {
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id
@@ -60,14 +60,9 @@ func PostCheckout(c *gin.Context) {
 		return
 	}
 
-	//------------------------------------Checking Offer-------------------------------//
-
 	//Fetching cart data and Count
 	var cartdata []models.Cart
 	database.DB.Where("user_id=?", userid).Find(&cartdata)
-
-	// var cartitems int64
-	// database.DB.Model(&models.Cart{}).Where("user_id=?", userid).Count(&cartitems)
 
 	for _, v := range cartdata {
 		if v.Category_Offer != 0 {

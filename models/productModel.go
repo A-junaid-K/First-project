@@ -14,11 +14,14 @@ type Product struct {
 	Image         string `gorm:"not null"`
 	Offer_Name    string
 	Percentage    uint
+	Unlist      bool   `gorm:"default:false"`
 }
+
 type Brand struct {
 	Brand_id   uint   `gorm:"primaryKey;unique"`
 	Brand_Name string `gorm:"not null"`
 }
+
 type Category struct {
 	Category_id uint   `gorm:"primaryKey;unique"`
 	Name        string `gorm:"not null"`

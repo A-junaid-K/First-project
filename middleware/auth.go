@@ -22,17 +22,17 @@ func UserAuthentication(c *gin.Context) {
 		c.AbortWithStatus(400)
 		return
 	}
-
+	log.Println("token string is = ", tokenString)
 	//Decode / validate it
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			c.Redirect(303, "/user/login")
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
 
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		}
 
 		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
@@ -62,6 +62,7 @@ func UserAuthentication(c *gin.Context) {
 		c.Next()
 	} else {
 		fmt.Println("Failed \n @62")
+		c.Redirect(303, "/user/login")
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 }

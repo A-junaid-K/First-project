@@ -16,6 +16,7 @@ func DisplayCategory(c *gin.Context) {
 
 	c.HTML(200, "category.html", category)
 }
+
 func AddCategory(c *gin.Context) {
 	categoryName := c.Request.FormValue("category_name")
 	var ctr models.Category
@@ -34,44 +35,77 @@ func AddCategory(c *gin.Context) {
 	}
 	c.Redirect(303, "/admin-category")
 }
+
 func UnlistCategory(c *gin.Context) {
 	//get the id
 	id, _ := strconv.Atoi(c.Param("category_id"))
+	log.Println("category id  = ", id)
 	var category models.Category
 	result := database.DB.First(&category, id)
 	if result.Error != nil {
 		log.Println(result.Error)
-		c.HTML(http.StatusBadRequest, "users-list.html", gin.H{"error": result.Error})
+		c.HTML(http.StatusBadRequest, "category.html", gin.H{"error": result.Error})
 		return
 	}
 	//Unlisting the Category
 	result = database.DB.Model(&models.Category{}).Where("category_id=?", id).Update("unlist", true)
 	if result.Error != nil {
 		log.Println("Failed to Unlist Category")
-		c.HTML(http.StatusBadRequest, "users-list.html", gin.H{"error": "Failed to Unlist Category"})
+		c.HTML(http.StatusBadRequest, "category.html", gin.H{"error": "Failed to Unlist Category"})
 		return
 	}
-	c.Redirect(http.StatusSeeOther, "/category")
+	log.Println("Unlisted in category")
+
+	//Unlisting the Category in products
+	result = database.DB.Model(&models.Product{}).Where("category_name=?", category.Name).Update("unlist", true)
+	if result.Error != nil {
+		log.Println("Failed to Unlist Category in products")
+		c.HTML(http.StatusBadRequest, "category.html", gin.H{"error": "Failed to Unlist Category in products"})
+		return
+	}
+	log.Println("unlisted in products")
+
+	c.Redirect(http.StatusSeeOther, "/admin-category")
 }
+
 func ListCategory(c *gin.Context) {
 	//get the id
-	id, _ := strconv.Atoi(c.Param("category_id"))
+	strid := c.Param("category_id")
+	log.Println("category string id = ", strid)
+	id, err := strconv.Atoi(strid)
+	log.Println("category id = ", strid)
+	if err != nil {
+		log.Println("category list error : ", err)
+		return
+	}
+
 	var category models.Category
 	result := database.DB.First(&category, id)
 	if result.Error != nil {
-		log.Println(result.Error)
-		c.HTML(http.StatusBadRequest, "users-list.html", gin.H{"error": result.Error})
+		log.Println("failed to fetch category : ", result.Error)
+		c.HTML(http.StatusBadRequest, "category.html", gin.H{"error": result.Error})
 		return
 	}
-	//Unlisting the Category
+	//listing the Category
 	result = database.DB.Model(&models.Category{}).Where("category_id=?", id).Update("unlist", false)
 	if result.Error != nil {
 		log.Println("Failed to list Category")
-		c.HTML(http.StatusBadRequest, "users-list.html", gin.H{"error": "Failed to list Category"})
+		c.HTML(http.StatusBadRequest, "category.html", gin.H{"error": "Failed to list Category"})
 		return
 	}
-	c.Redirect(http.StatusSeeOther, "/category")
+	log.Println("listed in category")
+	//listing the Category in products
+	result = database.DB.Model(&models.Product{}).Where("category_name=?", category.Name).Update("unlist", false)
+	if result.Error != nil {
+		log.Println("Failed to list Category products")
+		c.HTML(http.StatusBadRequest, "category.html", gin.H{"error": "Failed to list Category  products"})
+		return
+	}
+	log.Println("listed in products")
+
+	c.Redirect(http.StatusSeeOther, "/admin-category")
 }
+
 func FilterCategory(c *gin.Context) {
 	filtered_category := c.Query("category_name")
 	var filterproduct []models.Product

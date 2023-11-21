@@ -34,8 +34,8 @@ func AuthRoutes(r *gin.Engine) {
 	// Add Category
 	r.GET("/admin-category", middleware.AdminAuthentication, controllers.DisplayCategory)
 	r.POST("/admin-addcategory", middleware.AdminAuthentication, controllers.AddCategory)
-	r.GET("/admin-listcategory/:category_id", middleware.AdminAuthentication, controllers.UnlistCategory)
-	r.GET("/admin-unlistcategory/:category_id", middleware.AdminAuthentication, controllers.ListCategory)
+	r.GET("/admin-unlistcategory/:category_id", middleware.AdminAuthentication, controllers.UnlistCategory)
+	r.GET("/admin-list-category/:category_id", middleware.AdminAuthentication, controllers.ListCategory)
 
 	// Coupoun
 	r.GET("/admin-coupon", middleware.AdminAuthentication, controllers.Coupon)
@@ -59,8 +59,5 @@ func AuthRoutes(r *gin.Engine) {
 	r.POST("/admin-sales-post", middleware.AdminAuthentication, controllers.Salesreport)
 	r.GET("/admin/salesreport/xlsx", middleware.AdminAuthentication, controllers.DownloadExel)
 	r.GET("/admin/salesreport/pdf", middleware.AdminAuthentication, controllers.Downloadpdf)
-
-	// r.GET("/generate-sales-report", middleware.AdminAuthentication, controllers.Getsalesreport)
-	// r.POST("/generate-sales-reports", middleware.AdminAuthentication, controllers.SalesReport)
 
 }

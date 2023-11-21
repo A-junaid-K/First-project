@@ -48,11 +48,6 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/products-list/category", controllers.FilterCategory)
 		router.GET("/products-list/brand", controllers.FilterBrand)
 
-		//Cart
-		router.POST("/cart/:id", middleware.UserAuthentication, controllers.AddtoCart)
-		router.GET("/cart", middleware.UserAuthentication, controllers.ListCart)
-		router.GET("/remove-from-cart/:productid", middleware.UserAuthentication, controllers.RemoveFromCart)
-
 		//Wishlist
 		router.GET("/wishlist/:id", middleware.UserAuthentication, controllers.AddToWishlist)
 		router.GET("/wishlist", middleware.UserAuthentication, controllers.ListWishlist)
@@ -63,6 +58,11 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/cancel-order/:orderitem_id", middleware.UserAuthentication, controllers.CancelOrder)
 		router.GET("/return-order-form/:orderitem_id", middleware.UserAuthentication, controllers.Reason)
 		router.POST("/return-order/:orderitem_id", middleware.UserAuthentication, controllers.ReturnOrder)
+
+		//Cart
+		router.POST("/cart/:id", middleware.UserAuthentication, controllers.AddtoCart)
+		router.GET("/cart", middleware.UserAuthentication, controllers.ListCart)
+		router.GET("/remove-from-cart/:productid", middleware.UserAuthentication, controllers.RemoveFromCart)
 
 		// ------------Payment-----------//
 

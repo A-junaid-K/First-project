@@ -213,11 +213,22 @@
                                                         </button></a>
                                                 {{end}}
                                                     </td>
-                                                    <!-- <td class="text-end">
-                                                        <a href="/admin/editCategory?id=1" class="btn btn-sm btn-success rounded font-sm text-white mt-15">Edit</a>
-                                                        <button id="categId1" class="btn btn-sm btn-danger rounded font-sm mt-15 ms-2">List</button>
-                                                    </td> -->
-                                                </tr>
+                                                    <td>
+                                                {{if not .Unlist}}
+                                                        <a href="/admin-unlistcategory/{{.Category_id}}" >
+                                                        <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
+                                                            Unlist Category
+                                                        </button></a>
+                                                {{end}}
+                                                {{if .Unlist}}
+                                                        <a href="/admin-list-category/{{.Category_id}}" >
+                                                        <button class="btn btn-sm btn-outline-success rounded font-sm" disabled>
+                                                            List Category
+                                                        </button></a>
+                                                {{end}}
+                                                    </td>
+
+                                                    </tr>
                                                 {{end}}
                                                 <!-- Add more table rows for other categories -->
                                                 
