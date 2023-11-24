@@ -70,6 +70,9 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/checkout", middleware.UserAuthentication, controllers.Checkout)
 		router.POST("/checkout", middleware.UserAuthentication, controllers.ApplyCoupon, controllers.Wallet, controllers.PostCheckout)
 
+		//Instand Purchase
+		router.GET("/buy-now/:product_id", middleware.UserAuthentication, controllers.BuyNow)
+
 		// COD
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.GetCod)
 		router.GET("/payment-cod-success", middleware.UserAuthentication, controllers.Cod)

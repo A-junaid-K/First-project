@@ -35,6 +35,7 @@ func Salesreport(c *gin.Context) {
 	raw_expiry_date := c.PostForm("endingdate")
 	log.Println("rew exp : ", raw_expiry_date)
 	end, errr := time.Parse(layout, raw_expiry_date)
+	end = end.AddDate(0, 0, 1)
 	if errr != nil {
 		log.Println("faild to get ending date : ", err)
 		return
@@ -42,28 +43,9 @@ func Salesreport(c *gin.Context) {
 	log.Println("start  : ", start)
 	log.Println("end : ", end)
 
-	// startingDate := c.PostForm("startingdate")
-	// endingDate := c.PostForm("endingdate")
-
-	// start, err := time.Parse(layout, startingDate)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	c.JSON(400, gin.H{
-	// 		"error": "Starting date conversion error",
-	// 	})
-	// 	return
-	// }
-	// end, err := time.Parse("2006-01-02", endingDate)
-	// if err != nil {
-	// 	c.JSON(400, gin.H{
-	// 		"error": "Ending date conversion error",
-	// 	})
-	// 	return
-	// }
-
 	//Fetching data from database and inner joins product table knowing product details
 	var orders []models.Order
-	err = database.DB.Table("orders").Where("date BETWEEN ? AND ?", start, end).Scan(&orders).Error
+	err = database.DB.Table("orders").Where("date BETWEEN ? AND ? AND status =?", start, end, "delivered").Scan(&orders).Error
 	if err != nil {
 		log.Println("scanning error : ", err)
 		c.HTML(400, "salesreports.html", gin.H{"error": "Scanning error"})

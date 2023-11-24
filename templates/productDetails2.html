@@ -97,6 +97,7 @@
             <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
             <span class="text-success ms-2">In stock</span>
           </div>
+          <input type="hidden" value={{.ID}} id="productId">
 
           <div class="mb-3">
             {{if .Offer_Name}}
@@ -124,199 +125,112 @@
             <dt class="col-3">Stock</dt>
             {{if eq .Stock 0}}
             <dd style="color: crimson;" class="col-9">Out of stock</dd>
-            {{else}}
+            {{else}}{{.ID}}
             <dd class="col-9">{{.Stock}}</dd>
             {{end}}
           </div>
+          <hr/>
+          <form action="/user/cart/{{.ID}}" method="POST" id="addToCartForm">
+            <div class="col-md-4 col-6">
+                <label class="mb-2">Size</label>
+                <select id="size" class="form-select border border-secondary" style="height: 35px;margin-bottom: 20px" name="size" required>
+                    <option id="selected" selected disabled value="">select</option>
+                    <option>UK 6</option>
+                    <option>UK 7</option>
+                    <option>UK 8</option>
+                    <option>UK 9</option>
+                    <option>UK 10</option>
+                </select>
+            </div>
+            <div class="col-md-4 col-6">
+                <label class="mb-2">Quantity</label>
+                <select class="form-select border border-secondary" style="height: 35px;margin-bottom: 20px" id="qty" name="quantity" required>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+            <input type="hidden" name="size" id="selectedSize" value="">
+            <button class="btn btn-dark shadow-0" onclick="updateSecondFormValues()"><i class="me-1 fa fa-shopping-basket"></i>Add to cart</button>
+        </form>
 
-          <hr />
-
-  <form action="/user/cart/{{.ID}}" method="POST" >
-        <div class="col-md-4 col-6">
-          <label class="mb-2">Size</label>
-          <select class="form-select border border-secondary" style="height: 35px;margin-bottom: 20px" name="size" required >
-            <option id="selected" selected disabled value="">select</option>
-            <option>UK 6</option>
-            <option>UK 7</option>
-            <option>UK 8</option>
-            <option>UK 9</option>
-            <option>UK 10</option>
-          </select>
-        </div>
-        <div class="col-md-4 col-6">
-          <label class="mb-2">Quantity</label>
-          <select class="form-select border border-secondary" style="height: 35px;margin-bottom: 20px" name="quantity" required >
-            <!-- <option id="selected" selected disabled value="">select</option> -->
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-          </select>
-        </div>
-    </div> 
-
-            <input type="hidden" name="size" id="selected-size" value="">
-          <!-- <a href="#" class="btn btn-warning shadow-0"> Buy now </a> -->
-          {{if ne .Stock 0}}
-          <button class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
-          {{end}}
-          <a href="/user/wishlist/{{.ID}}" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
-          <!-- <a href="/user/checkout" class="btn shadow-0 btn-dark">Buy now</a>  -->
-    </form>
-    <form action="/user/buy-now" method="post" >
-      <button class="btn btn-dark shadow-0"> <i class="me-1 fa fa-shopping-basket"></i>Buy now</button>
-    </form>
-        </div>
-      </main>   
+        <form id="productForm" onsubmit="submitBuyNow(event)" >
+            <input type="hidden" name="size" id="selectedSizeForBuyNow" value="">
+            <button class="btn btn-dark shadow-0"><i class="me-1 fa fa-shopping-basket"></i>Buy now</button>
+        </form>
     </div>
-  </div>
-</section>
-<!-- modal -->
-<!-- <div id="myModal" class="modal">
-  <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <p>Select the size of the product</p>
-  </div>
-</div> -->
-
-<!-- content -->
-
-
-<section class="bg-light border-top py-4">
-  <div class="container">
-    <div class="row gx-4">
-      <div class="col-lg-8 mb-4">
-        <div class="border rounded-2 px-3 py-2 bg-white">
-          <!-- Pills navs -->
-          <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-            <li class="nav-item d-flex" role="presentation">
-              <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1" aria-selected="true">Specification</a>
-            </li>
-            <li class="nav-item d-flex" role="presentation">
-              <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2" data-mdb-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2" aria-selected="false">Warranty info</a>
-            </li>
-            <li class="nav-item d-flex" role="presentation">
-              <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3" data-mdb-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3" aria-selected="false">Shipping info</a>
-            </li>
-            <li class="nav-item d-flex" role="presentation">
-              <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4" data-mdb-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4" aria-selected="false">Seller profile</a>
-            </li>
-          </ul>
-          <!-- Pills navs -->
-
-          <!-- Pills content -->
-          <div class="tab-content" id="ex1-content">
-            <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-              <p>
-                With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                pariatur.
-              </p>
-              <div class="row mb-2">
-                <div class="col-12 col-md-6">
-                  <ul class="list-unstyled mb-0">
-                    <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                    <li><i class="fas fa-check text-success me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
-                  </ul>
-                </div>
-                <div class="col-12 col-md-6 mb-0">
-                  <ul class="list-unstyled">
-                    <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
-                    <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                    <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-              Tab content or sample information now <br />
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            </div>
-          </div>
-          <!-- Pills content -->
-        </div>
-      </div>
-      <!-- <div class="col-lg-4">
-        <div class="px-0 border rounded-2 shadow-0">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Similar items</h5>
-              <div class="d-flex mb-3">
-                <a href="#" class="me-3">
-                  <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                </a>
-                <div class="info">
-                  <a href="#" class="nav-link mb-1">
-                    Rucksack Backpack Large <br />
-                    Line Mounts
-                  </a>
-                  <strong class="text-dark"> $38.90</strong>
-                </div>
-              </div>
-
-              <div class="d-flex mb-3">
-                <a href="#" class="me-3">
-                  <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                </a>
-                <div class="info">
-                  <a href="#" class="nav-link mb-1">
-                    Summer New Men's Denim <br />
-                    Jeans Shorts
-                  </a>
-                  <strong class="text-dark"> $29.50</strong>
-                </div>
-              </div>
-
-              <div class="d-flex mb-3">
-                <a href="#" class="me-3">
-                  <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                </a>
-                <div class="info">
-                  <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
-                  <strong class="text-dark"> $120.00</strong>
-                </div>
-              </div>
-
-              <div class="d-flex">
-                <a href="#" class="me-3">
-                  <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                </a>
-                <div class="info">
-                  <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
-                  <strong class="text-dark"> $339.90</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-    </div>
-  </div>
+</main>
+</div>
+</div>
 </section>
 
-    <!-- MDB -->
-    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
-    <!-- Custom scripts -->
-    <!-- <script type="text/javascript" src="static/js/productDetails.js"></script> -->
-    
-    <!--gpt-->
-    <!-- Load jQuery -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap CSS and JavaScript -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- Your custom JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const submitBuyNow = async(e) => {
+    e.preventDefault()
+    try {
+      const formData = new FormData()
+
+      const sizeInput = document.getElementById("size").value
+      const qtyInput = document.getElementById("qty").value
+      const productId = document.getElementById("productId").value
+      formData.append("size", sizeInput)
+      formData.append("qty", qtyInput)
+
+      console.log(sizeInput, "size");
+      console.log(qtyInput, "qyt");
+      console.log(productId);
+      window.location.href = `http://localhost:3000/user/buy-now/${productId}?size=${sizeInput}&qty=${qtyInput}`
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  function updateSecondFormValues() {
+      // var selectedSize = document.getElementById('size').value;
+      // document.getElementById('selectedSizeForBuyNow').value = selectedSize;
+
+  }
+</script>
 
 </body>
 </html>
+
+<!-- 
+<script>
+  function submitForm(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get selected size and quantity values
+    var selectedSize = document.querySelector('select[name="size"]').value;
+    var selectedQuantity = document.querySelector('select[name="quantity"]').value;
+
+    // Create an object with the data to send to the backend
+    var formData = {
+      size: selectedSize,
+      quantity: selectedQuantity
+    };
+
+    // Make an Axios POST request to the backend
+    axios.post('/api/submit-product', formData)
+      .then(function (response) {
+        console.log(response.data);
+        // Handle the response from the backend if needed
+      })
+      .catch(function (error) {
+        console.error('Error submitting form:', error);
+      });
+  }
+</script> -->

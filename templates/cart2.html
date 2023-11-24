@@ -136,12 +136,9 @@
                     </div>
                     <h6 class="text-dark" >Total price ₹{{.Total_Price}}</h6>
                     <h7 class="text-success">Free shipping</h7>
-                    <!-- <h6 class="text-succes">Nike</h6> -->
                     <div class="mt-4">
                         <form action="/user/remove-from-cart/{{.Product_ID}}" method="GET" >
-                      <!-- <button class="btn btn-primary shadow-0" type="button" href="/user/checkout" >checkout</button> -->
                       <a href="/user/wishlist/{{.Product_ID}}" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
-                      <!-- <button style="color: rgb(255, 122, 122);margin-top: 10px;" class="btn btn-primary shadow-0" type="button" href="/user/remove-from-cart" >Remove</button> -->
                       <a href="/user/remove-from-cart/{{.Product_ID}}" class="btn btn-dark shadow-0" style="color: rgb(255, 122, 122); margin-top: 10px;">Remove</a>
 
                     </form>

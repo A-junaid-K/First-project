@@ -23,7 +23,7 @@ func GetCod(c *gin.Context) {
 		}
 		return
 	}
-	
+
 	// Fetch the payment from database
 	var payment models.Payment
 	database.DB.Last(&payment)
