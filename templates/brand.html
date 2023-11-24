@@ -182,8 +182,10 @@
                                                 <tr>
                                                     <th style="width: 5%">ID</th>
                                                     <th style="width: 10%">Name</th>
-                                                    
                                                     <th></th>
+                                                    <th>Action</th>
+                                                    
+                                        
                                                 </tr>
                                             </thead>
         
@@ -194,9 +196,14 @@
                                                     
                                                 <td>{{.Brand_id}}</td>
                                                 <td><b>{{.Brand_Name}}</b></td>
-
-                                                        <!-- Action buttons -->
                                                         <th></th>
+                                                <td>
+                                                    <a href="/admin/remove-brands/{{.Brand_id}}" >
+                                                        <button class="btn btn-sm btn-outline-warning rounded font-sm" disabled>
+                                                            Remove Brand
+                                                        </button></a>
+                                                </td>
+
                                                 </tr>
                                                 <!-- Add more table rows for other categories -->
                                                 {{end}}

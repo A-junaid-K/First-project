@@ -1,282 +1,334 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Merrel</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="shortcut icon" type="image/x-icon" href="/static/images/icon.png" />
-<!-- <link rel="stylesheet" href="/static/css/main.css"> -->
-<!-- <link rel="stylesheet" href="/static/css/productDetails.css" /> -->
-<style>
-body {
-  font-family: Arial;
-  font-size: 17px;
-  padding: 8px;
-}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/static/images/icon.png" />
+  <!-- <link rel="stylesheet" href="/static/css/main.css"> -->
+  <!-- <link rel="stylesheet" href="/static/css/productDetails.css" /> -->
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 17px;
+      padding: 8px;
+    }
 
-* {
-  box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.row {
-  display: -ms-flexbox; /* IE10 */
-  display: flex;
-  -ms-flex-wrap: wrap; /* IE10 */
-  flex-wrap: wrap;
-  margin: 0 -16px;
-}
+    .row {
+      display: -ms-flexbox;
+      /* IE10 */
+      display: flex;
+      -ms-flex-wrap: wrap;
+      /* IE10 */
+      flex-wrap: wrap;
+      margin: 0 -16px;
+    }
 
-.col-25 {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
-}
+    .col-25 {
+      -ms-flex: 25%;
+      /* IE10 */
+      flex: 25%;
+    }
 
-.col-50 {
-  -ms-flex: 50%; /* IE10 */
-  flex: 50%;
-}
+    .col-50 {
+      -ms-flex: 50%;
+      /* IE10 */
+      flex: 50%;
+    }
 
-.col-75 {
-  -ms-flex: 75%; /* IE10 */
-  flex: 75%;
-}
+    .col-75 {
+      -ms-flex: 75%;
+      /* IE10 */
+      flex: 75%;
+    }
 
-.col-25,
-.col-50,
-.col-75 {
-  padding: 0 16px;
-}
+    .col-25,
+    .col-50,
+    .col-75 {
+      padding: 0 16px;
+    }
 
-.container {
-  background-color: #f2f2f2;
-  padding: 5px 20px 15px 20px;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-}
+    .container {
+      background-color: #f2f2f2;
+      padding: 5px 20px 15px 20px;
+      border: 1px solid lightgrey;
+      border-radius: 3px;
+    }
 
-input[type=text] {
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
+    input[type=text] {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
 
-label {
-  margin-bottom: 10px;
-  display: block;
-}
+    label {
+      margin-bottom: 10px;
+      display: block;
+    }
 
-.icon-container {
-  margin-bottom: 20px;
-  padding: 7px 0;
-  font-size: 24px;
-}
+    .icon-container {
+      margin-bottom: 20px;
+      padding: 7px 0;
+      font-size: 24px;
+    }
 
-.btn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  width: 100%;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 17px;
-}
+    .btn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      width: 100%;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 17px;
+    }
 
-.wallet {
-  background-color: #ffffff;
-  color: rgb(0, 0, 0);
-  padding: 9px;
-  margin-top: 50px;
-  border: 2px solid #59c45f; 
-  width: 50%;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 15px;
-  text-decoration: none;
-}
-.wallet:hover {
-  color: #fff;
-  background-color: #51b256;
-}
+    .wallet {
+      background-color: #ffffff;
+      color: rgb(0, 0, 0);
+      padding: 9px;
+      margin-top: 50px;
+      border: 2px solid #59c45f;
+      width: 50%;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 15px;
+      text-decoration: none;
+    }
 
-.btn:hover {
-  background-color: #45a149;
-}
+    .wallet:hover {
+      color: #fff;
+      background-color: #51b256;
+    }
 
-a {
-  color: #2196F3;
-}
+    .btn:hover {
+      background-color: #45a149;
+    }
 
-hr {
-  border: 1px solid lightgrey;
-}
+    a {
+      color: #2196F3;
+    }
 
-span.price {
-  float: right;
-  color: rgb(85, 85, 85);
-}
-.menu-aside .menu-item.has-submenu > .menu-link:after {
-  display: inline-block;
-  position: absolute;
-  right: 10px;
-  top: 15px;
-  margin-top: .6em;
-  vertical-align: middle;
-  content: "";
-  border-top: 5px solid #adb5bd;
-  border-right: 5px solid transparent;
-  border-bottom: 0;
-  border-left: 5px solid transparent;
-}
-.menu-aside .submenu a:before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  position: absolute;
-  background-color: #adb5bd;
-  left: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-radius: 50%;
-}
+    hr {
+      border: 1px solid lightgrey;
+    }
 
-.menu-aside .menu-item.active .submenu {
-  display: block;
-}
-.menu-aside .menu-item.active .menu-link {
-  background-color: rgba(59, 183, 126, 0.2);
-}
+    span.price {
+      float: right;
+      color: rgb(85, 85, 85);
+    }
 
-.menu-aside .menu-item.active .submenu a.active {
-  color: #3BB77E !important;
-}
+    .menu-aside .menu-item.has-submenu>.menu-link:after {
+      display: inline-block;
+      position: absolute;
+      right: 10px;
+      top: 15px;
+      margin-top: .6em;
+      vertical-align: middle;
+      content: "";
+      border-top: 5px solid #adb5bd;
+      border-right: 5px solid transparent;
+      border-bottom: 0;
+      border-left: 5px solid transparent;
+    }
 
-.menu-aside .menu-link {
-  padding: 10px;
-  font-weight: 800;
-  font-size: 13px;
-  color: #292f46;
-  border-radius: 0.3rem;
-  position: relative;
-  line-height: 1;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
+    .menu-aside .submenu a:before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      position: absolute;
+      background-color: #adb5bd;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      border-radius: 50%;
+    }
+
+    .menu-aside .menu-item.active .submenu {
+      display: block;
+    }
+
+    .menu-aside .menu-item.active .menu-link {
+      background-color: rgba(59, 183, 126, 0.2);
+    }
+
+    .menu-aside .menu-item.active .submenu a.active {
+      color: #3BB77E !important;
+    }
+
+    .menu-aside .menu-link {
+      padding: 10px;
+      font-weight: 800;
+      font-size: 13px;
+      color: #292f46;
+      border-radius: 0.3rem;
+      position: relative;
+      line-height: 1;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
       -ms-flex-align: center;
-          align-items: center;
-}
+      align-items: center;
+    }
 
-.menu-aside .menu-link:hover {
-  -webkit-transition: .2s linear;
-  transition: .2s linear;
-  background-color: #e9ecef;
-}
+    .menu-aside .menu-link:hover {
+      -webkit-transition: .2s linear;
+      transition: .2s linear;
+      background-color: #e9ecef;
+    }
 
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
-@media (max-width: 800px) {
-  .row {
-    flex-direction: column-reverse;
-  }
-  .col-25 {
-    margin-bottom: 20px;
-  }
-}
-</style>
+    /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
+    @media (max-width: 800px) {
+      .row {
+        flex-direction: column-reverse;
+      }
+
+      .col-25 {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<img src="/static/images/logo.png" alt="logo image">
-<!-- <h2>Responsive Checkout Form</h2> -->
-<div class="row">
-  <div class="col-75">
-    <div class="container">
-      <form action="/user/checkout" method="post" >
-      
-        <div class="row">
-          <div class="col-50">
-            <h3>Billing Address</h3>
+  <img src="/static/images/logo.png" alt="logo image">
+  <!-- <h2>Responsive Checkout Form</h2> -->
+  <div class="row">
+    <div class="col-75">
+      <div class="container">
+        <form id="register_form" action="/user/checkout" method="post" onsubmit="return validateform()">
 
-            <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-            <input type="text" id="fname" name="name" value="{{.Users.Name}}">
-            <label for="email"><i class="fa fa-envelope"></i> Email</label>
-            <input type="text" id="email" name="email" value="{{.Users.Email}}">
-            <!-- <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street"> -->  
-          
-          <div class="col-md-4 col-6">
-            <label class="mb-2">Address</label>
-            <select class="form-select border border-secondary" style="height: 35px;" name="userchosenaddress" required >
-              <option id="selected" selected disabled value="">select</option>
-              {{range .Addresses}}
-              <option>
-                <option value="{{.Address_ID}}">
-                {{.Building_Name}},
-                {{.City}},
-                {{.State}},
-                {{.Landmark}},
-                {{.Zip_code}},
-              </option>
-              {{end}}
-            </select>
+          <div class="row">
+            <div class="col-50">
+              <h3>Billing Address</h3>
+
+              <label for="name"><i class="fa fa-user"></i> Full Name</label>
+              <input type="text" id="name" name="name" value="{{.Users.Name}}" required>
+              <div id="errorContainer1" style="color: crimson;" class="text-danger"></div>
+
+              <label for="email"><i class="fa fa-envelope"></i> Email</label>
+              <input type="text" id="email" name="email" value="{{.Users.Email}}" required>
+              <div id="errorContainer3" style="color: crimson;" class="text-danger"></div>
+
+              <label for="adr"><i class="fa fa-phone "></i> Phone</label>
+              <input type="text" id="number" name="number" value="{{.Users.Phone}}" required>
+              <div id="errorContainer2" style="color: crimson;" class="text-danger"></div>
+
+
+              <div class="col-md-4 col-6">
+                <label class="mb-2">Address</label>
+                <select class="form-select border border-secondary" style="height: 35px;" name="userchosenaddress"
+                  required>
+                  <option id="selected" selected disabled value="">select</option>
+                  {{range .Addresses}}
+                  <option>
+                  <option value="{{.Address_ID}}">
+                    {{.Building_Name}},
+                    {{.City}},
+                    {{.State}},
+                    {{.Landmark}},
+                    {{.Zip_code}},
+                  </option>
+                  {{end}}
+                </select>
+              </div>
+
+            </div>
+
+            <div class="col-50">
+              <h3>Payment</h3>
+
+              <label>
+                <input type="radio" name="payment" value="cash-on-delivery" required> Cash on delivery
+              </label>
+
+              <label>
+                <input type="radio" name="payment" value="razorpay" required> Razorpay
+              </label>
+
+              <label>
+                <input type="radio" name="payment" value="wallet" required>Wallet
+              </label>
+
+              <label for="cname" style="margin-top: 20px;">Wallet</label>
+              <input type="text" id="cname" name="wallet" placeholder="Add amount">
+
+              <label for="cname" style="margin-top: 20px;">Apply Coupon</label>
+              <input type="text" id="cname" name="coupon_code" placeholder="Enter Coupon Code">
+
+            </div>
+
           </div>
+          <a href="/user/add-address">
+            <p style="margin-top: 20px;"> Add address</p>
+          </a>
 
-          </div>
+          <button type="submit" class="btn btn-success">Continue to checkout</button>
+        </form>
+      </div>
 
-          <div class="col-50">
-            <h3>Payment</h3>
-
-            <label>
-              <input type="radio" name="payment" value="cash-on-delivery" required> Cash on delivery
-            </label>
-      
-            <label>
-              <input type="radio" name="payment" value="razorpay" required> Razorpay
-            </label>
-      
-            <label>
-              <input type="radio" name="payment" value="wallet" required>Wallet
-            </label>
-
-            <label for="cname" style="margin-top: 20px;" >Wallet</label>
-            <input type="text" id="cname" name="wallet" placeholder="Add amount">
-            
-            <label for="cname" style="margin-top: 20px;" >Apply Coupon</label>
-            <input type="text" id="cname" name="coupon_code" placeholder="Enter Coupon Code">
-
-          </div>
-          
-        </div>
-        <a href="/user/add-address"><p style="margin-top: 20px;" > Add address</p></a>
-
-        <input type="submit" value="Continue to checkout" class="btn">
-      </form>
     </div>
+    <div class="col-25">
+      <div class="container">
+        <h4>Cart <span class="price" style="color:black; margin-right: 30px;"><i class="fa fa-shopping-cart"></i>
+          </span></h4>
+        {{range .Carts}}
+        <p>{{.Name}} <span class="price">₹{{.Total_Price}}</span></p>
+        {{end}}
+        <hr>
+        <p>Total <span class="price" style="color:black"><b>₹{{.totalprice}}</b></span></p>
 
+      </div>
+      <div class="container" style="margin-top: 20px;">
+        <h4>Wallet <span class="price" style="color:black; margin-right: 30px;"><i>₹ {{.Users.Wallet}}</i> </span></h4>
+      </div>
+    </div>
+    {{if .error}}
+    <p style="color: crimson;">Error: {{.error}}</p>
+    {{end}}
   </div>
-  <div class="col-25">
-    <div class="container">
-      <h4>Cart <span class="price" style="color:black; margin-right: 30px;"><i class="fa fa-shopping-cart"></i> </span></h4>
-      {{range .Carts}}
-      <p>{{.Name}} <span class="price">₹{{.Total_Price}}</span></p>
-      {{end}}
-      <hr>
-      <p>Total <span class="price" style="color:black"><b>₹{{.totalprice}}</b></span></p>
-      
-    </div>
-    <div class="container" style="margin-top: 20px;" >
-      <h4>Wallet <span class="price" style="color:black; margin-right: 30px;"><i>₹ {{.Users.Wallet}}</i> </span></h4>      
-    </div>
-  </div>
-  {{if .error}}
-  <p style="color: crimson;" >Error: {{.error}}</p>
-  {{end}}
-</div>
-
-
 </body>
+
 </html>
 
+<script>
+  document.getElementById("register_form").addEventListener("submit", function (event) {
+    if (!validateform()) {
+      event.preventDefault();
+    }
+  });
+
+  function validateform() {
+    let name = document.forms["register_form"]["name"].value.trim();
+    let number = document.forms["register_form"]["number"].value.trim();
+    let email = document.forms["register_form"]["email"].value.trim();
+    let pattern = /^[a-zA-Z0-9](\.?[a-zA-Z0-9]){5,}@gmail\.com$/;
+    if (name == null || name === "") {
+      document.getElementById("errorContainer1").innerHTML = "Name must be filled out";
+      return false;
+    } else if (!isNaN(name)) {
+      document.getElementById("errorContainer1").innerHTML = "Name must be characters";
+      return false;
+    } else if (isNaN(number)) {
+      document.getElementById("errorContainer2").innerHTML = "Phone number should be a number";
+      return false;
+    } else if (number.length !== 10) {
+      document.getElementById("errorContainer2").innerHTML = "Phone number should contain 10 digits";
+      return false;
+    } else if (!pattern.test(email)) {
+      document.getElementById("errorContainer3").innerHTML = "Invalid email";
+      return false;
+    }
+    return true;
+  }
+</script>

@@ -22,7 +22,6 @@ func UserAuthentication(c *gin.Context) {
 		c.AbortWithStatus(400)
 		return
 	}
-	log.Println("token string is = ", tokenString)
 	//Decode / validate it
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 

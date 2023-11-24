@@ -115,7 +115,7 @@ func Listproducts(c *gin.Context) {
 	// var product []models.Product
 	// database.DB.Find(&product)
 
-	// for _,v := range category{	
+	// for _,v := range category{
 	// 	if v.Unlist{
 	// 		ad
 	// 	}

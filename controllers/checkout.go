@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/first_project/database"
@@ -51,10 +52,27 @@ func PostCheckout(c *gin.Context) {
 	// Recieve user details from Front-end
 	name := c.Request.FormValue("name")
 	email := c.Request.FormValue("email")
+	phone := c.Request.FormValue("number")
+
+	log.Println("name : ", name)
+	log.Println("phone : ", phone)
+
+	err := namevalidator(name)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "checkout.html", gin.H{"error": err})
+	}
+	err = emailvalidator(email)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "checkout.html", gin.H{"error": err})
+	}
+	err = numbervalidator(phone)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "checkout.html", gin.H{"error": err})
+	}
 
 	//get the user
 	var dtuser models.User
-	err := database.DB.First(&dtuser, userid).Error
+	err = database.DB.First(&dtuser, userid).Error
 	if err != nil {
 		c.HTML(404, "checkout.html", gin.H{"error": "This user not found"})
 		return
@@ -96,6 +114,7 @@ func PostCheckout(c *gin.Context) {
 		Address_ID:     uint(adrid),
 		Payment_Method: paymentMethod,
 		User_ID:        userid,
+		Phone:          phone,
 	})
 	if result.Error != nil {
 		c.HTML(400, "checkout.html", gin.H{"error": "Failed to creat contact details"})
@@ -111,4 +130,32 @@ func PostCheckout(c *gin.Context) {
 	} else if paymentMethod == wallet {
 		c.Redirect(303, "/user/payment-wallet")
 	}
+}
+
+func BuyNow(c *gin.Context) {
+
+	// Retrieving user details
+
+	user, _ := c.Get("user")
+	userid := user.(models.User).User_id
+
+	var userr models.User
+	var adr []models.Address
+
+	database.DB.Where("user_id=?", userid).First(&userr)
+	database.DB.Where("user_id=?", userid).Find(&adr)
+
+	// Retreive product details
+
+	product_id, _ := strconv.Atoi(c.Param("product_id"))
+
+	// Get the size & quantity
+	pdsize := c.PostForm("size")
+	log.Println("pdsize : ", pdsize)
+	pdquantity, _ := strconv.Atoi(c.PostForm("quantity"))
+	log.Println("pdquantity : ", pdquantity)
+
+	var product models.Product
+	database.DB.First(&product, product_id)
+
 }

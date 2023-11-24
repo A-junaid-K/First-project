@@ -25,13 +25,15 @@ func Userorder(c *gin.Context) {
 		Status       string
 		Payment_Type string
 		Order_ItemID uint
+		Order_ID     uint
+		Payment_ID   uint
 		CTime        time.Time
 	}
 
 	var order []orderedItems
 
 	database.DB.Table("order_items").
-		Select("products.image,products.name,order_items.price,order_items.total_price,order_items.quantity,order_items.created_at,orders.status,orders.payment_type,order_items.order_item_id").
+		Select("products.image,products.name,order_items.price,order_items.total_price,order_items.quantity,order_items.created_at,orders.status,orders.payment_type,order_items.order_item_id,orders.order_id,orders.payment_id").
 		Joins("INNER JOIN products ON products.id=order_items.product_id").
 		Joins("INNER JOIN orders ON orders.order_id=order_items.order_id").
 		Where("order_items.user_id=?", userid).Scan(&order)
@@ -222,20 +224,3 @@ func Reason(c *gin.Context) {
 	})
 
 }
-
-// //Refund
-// var order models.Order
-// db.Where("order_id=?", orderItem.Order_ID).First(&order)
-
-// if order.Payment_Type != "COD" {
-// 	var cancellingUser models.User
-// 	db.Where("user_id=?", orderItem.User_ID).First(&cancellingUser)
-// 	wallet := cancellingUser.Wallet + int(orderItem.Total_Price)
-// 	err = db.Table("users").Where("user_id", orderItem.User_ID).Update("wallet", wallet).Error
-// 	if err != nil {
-// 		log.Println("Failed to update wallet in db : ", err)
-// 		return
-// 	}
-// 	log.Println("waller updated : ", orderItem.Total_Price)
-
-// }

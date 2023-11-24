@@ -30,6 +30,7 @@ type Address struct {
 type Contactdetails struct {
 	Contactdetails_id int `gorm:"primaryKey"`
 	Name           string `validate:"required, min=2,max=50"`
+	Phone string
 	Email          string `gorm:"not null"`
 	Address_ID     uint   `gorm:"not null"`
 	Payment_Method string

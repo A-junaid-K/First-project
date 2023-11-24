@@ -137,8 +137,9 @@
                 <table id="myTable" class="table table-hover dataTable">
                     <thead>
                         <tr>
-                            <th>#ID</th>
+                            <th>Order ID</th>
                             <th scope="col">User ID</th>
+                            <th scope="col">Payment ID</th>
                             <th scope="col">Payment Method</th>
                             <th scope="col">Total</th>
                             <th scope="col">Date</th>
@@ -158,6 +159,7 @@
                                 <td><b>
                                         {{.User_ID}}
                                     </b></td>
+                                    <td>{{.Payment_ID}}</td>
                                 <td>
                                     {{.Payment_Type}}
                                 </td>

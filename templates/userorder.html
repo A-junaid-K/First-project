@@ -153,6 +153,8 @@
                     <thead>
                         <tr>
                             <th>Product</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Payment ID</th>
                             <th scope="col">Price</th>
                             <th scope="col">Quantity</th>
                             <th scope="col">Total</th>
@@ -179,6 +181,8 @@
                                     </div>
                                 </a>
                             </td>
+                            <td>{{.Order_ID}}</td>
+                            <td>{{.Payment_ID}}</td>
                             <td>₹{{.Price}}</td>
                             <td>{{.Quantity}}</td>
                             <td>₹{{.Total_Price}}</td>

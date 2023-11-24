@@ -192,3 +192,37 @@ func FilterBrand(c *gin.Context) {
 
 	c.HTML(200, "productsList2.html", data)
 }
+
+func RemoveBrand(c *gin.Context) {
+
+	//get the id
+	id, _ := strconv.Atoi(c.Param("brand_id"))
+	log.Println("brand  id  = ", id)
+	var brand models.Brand
+	result := database.DB.First(&brand, id)
+	if result.Error != nil {
+		log.Println(result.Error)
+		c.HTML(http.StatusBadRequest, "brand.html", gin.H{"error": result.Error})
+		return
+	}
+	//Removing the Brand
+	result = database.DB.Where("brand_id=?", id).Delete(&models.Brand{})
+	if result.Error != nil {
+		log.Println("Failed to Remove brand")
+		c.HTML(http.StatusBadRequest, "brand.html", gin.H{"error": "Failed to Remove brand"})
+		return
+	}
+	log.Println("Removed in Brands")
+
+	//Removing brands in products
+	result = database.DB.Where("brand_name=?", brand.Brand_Name).Delete(&models.Product{})
+	if result.Error != nil {
+		log.Println("Failed to Remove brands in products")
+		c.HTML(http.StatusBadRequest, "brand.html", gin.H{"error": "Failed to Remove brands in products"})
+		return
+	}
+	log.Println("Removed brands in products")
+
+	c.Redirect(http.StatusSeeOther, "/admin-brands")
+
+}

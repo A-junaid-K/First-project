@@ -110,9 +110,9 @@
                 <div class="row g-0">
                   <div class="col-xl-3 col-md-4 d-flex justify-content-center">
                     <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                      
-                      <img src="/static/images/{{.Image}}" class="w-100" />
-                   
+                      <a href="/user/product-details/{{.Product_ID}}">
+                        <img src="/static/images/{{.Image}}" class="w-100" />
+                      </a>
                       <a href="#!">
                         <div class="hover-overlay">
                           <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
@@ -140,7 +140,7 @@
                     <div class="mt-4">
                         <form action="/user/remove-from-cart/{{.Product_ID}}" method="GET" >
                       <!-- <button class="btn btn-primary shadow-0" type="button" href="/user/checkout" >checkout</button> -->
-                      <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
+                      <a href="/user/wishlist/{{.Product_ID}}" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
                       <!-- <button style="color: rgb(255, 122, 122);margin-top: 10px;" class="btn btn-primary shadow-0" type="button" href="/user/remove-from-cart" >Remove</button> -->
                       <a href="/user/remove-from-cart/{{.Product_ID}}" class="btn btn-dark shadow-0" style="color: rgb(255, 122, 122); margin-top: 10px;">Remove</a>
 

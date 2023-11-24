@@ -30,7 +30,7 @@ func numbervalidator(number string) error {
 }
 func emailvalidator(email string) error {
 	semail := strings.TrimSpace(email)
-	if !strings.Contains(semail, "@") {
+	if !strings.Contains(semail, "@") || !strings.HasSuffix(semail, ".com") {
 		return errors.New("invalid Email Id")
 	}
 	if len(semail) < 4 {
