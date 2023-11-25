@@ -38,11 +38,13 @@ func UserRouter(r *gin.Engine) {
 		// User details
 		router.GET("/user-details", middleware.UserAuthentication, controllers.ListUserDetails)
 
-		//edit address
+		// Address
 		router.GET("/add-address", middleware.UserAuthentication, controllers.AddAddress)
 		router.POST("/add-address", middleware.UserAuthentication, controllers.PostAddAddress)
 		router.GET("/edit-address/:adrid", middleware.UserAuthentication, controllers.EditAddress)
 		router.POST("/edit-address/:adrid", middleware.UserAuthentication, controllers.PostEditAddress)
+		router.GET("/remove-address/:adrid", middleware.UserAuthentication, controllers.RemoveAddress)
+		router.GET("/primary-address/:adrid", middleware.UserAuthentication, controllers.PrimaryAddress)
 
 		//edit profile
 		router.GET("/edit-profile", middleware.UserAuthentication, controllers.Editprofile)
@@ -71,6 +73,9 @@ func UserRouter(r *gin.Engine) {
 		router.POST("/cart/:id", middleware.UserAuthentication, controllers.AddtoCart)
 		router.GET("/cart", middleware.UserAuthentication, controllers.ListCart)
 		router.GET("/remove-from-cart/:productid", middleware.UserAuthentication, controllers.RemoveFromCart)
+
+		// Search
+		router.POST("/search",middleware.UserAuthentication,controllers.Search)
 
 		// ------------Payment-----------//
 

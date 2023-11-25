@@ -232,13 +232,17 @@
                   <option id="selected" selected disabled value="">select</option>
                   {{range .Addresses}}
                   <option>
+                  {{if .Primary }}
                   <option value="{{.Address_ID}}">
-                    {{.Building_Name}},
-                    {{.City}},
-                    {{.State}},
-                    {{.Landmark}},
-                    {{.Zip_code}},
+                   Primary Address
                   </option>
+                  {{else}}
+                  <option value="{{.Address_ID}}">
+
+                    {{.Building_Name}},{{.City}},{{.State}},{{.Landmark}},{{.Zip_code}},
+
+                  </option>
+                  {{end}}
                   {{end}}
                 </select>
               </div>

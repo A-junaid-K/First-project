@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/first_project/database"
@@ -12,6 +13,7 @@ import (
 func AddAddress(c *gin.Context) {
 	c.HTML(200, "address.html", nil)
 }
+
 func PostAddAddress(c *gin.Context) {
 	user, _ := c.Get("user")
 	userId := user.(models.User).User_id
@@ -45,6 +47,7 @@ func PostAddAddress(c *gin.Context) {
 
 	c.Redirect(303, "/user/user-details")
 }
+
 func EditAddress(c *gin.Context) {
 	adrid, _ := strconv.Atoi(c.Param("adrid"))
 
@@ -53,6 +56,7 @@ func EditAddress(c *gin.Context) {
 
 	c.HTML(200, "editaddress.html", address)
 }
+
 func PostEditAddress(c *gin.Context) {
 	user, _ := c.Get("user")
 	userId := user.(models.User).User_id
@@ -112,6 +116,25 @@ func PostEditAddress(c *gin.Context) {
 		return
 	}
 
+	c.Redirect(303, "/user/user-details")
+}
+
+func RemoveAddress(c *gin.Context) {
+	adrid, _ := strconv.Atoi(c.Param("adrid"))
+	database.DB.Where("address_id=?", adrid).Delete(&models.Address{})
+	log.Println("adderress Successfully Removed")
+	c.Redirect(303, "/user/user-details")
+}
+
+func PrimaryAddress(c *gin.Context) {
+	adrid, _ := strconv.Atoi(c.Param("adrid"))
+	err := database.DB.Model(&models.Address{}).Where("address_id=?", adrid).Update("primary", true).Error
+	if err != nil {
+		fmt.Println("Failed to make primary address")
+		c.HTML(400, "editaddress.html", gin.H{"error": "Failed to make primary address"})
+		return
+	}
+	log.Println("adderress Successfully Updated as primary")
 	c.Redirect(303, "/user/user-details")
 }
 

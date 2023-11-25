@@ -109,18 +109,6 @@ func Listproducts(c *gin.Context) {
 		}
 	}
 
-	// var category []models.Category
-	// database.DB.Find(&category)
-
-	// var product []models.Product
-	// database.DB.Find(&product)
-
-	// for _,v := range category{
-	// 	if v.Unlist{
-	// 		ad
-	// 	}
-	// }
-
 	data := DtTables()
 
 	c.HTML(200, "productsList2.html", data)
@@ -255,7 +243,6 @@ func DtTables() interface{} {
 		Addresses  []models.Address
 		Users      []models.User
 		Brands     []models.Brand
-		// Offers     []models.Category_Offer
 	}{
 		Products:   products,
 		Categories: categories,
@@ -263,7 +250,6 @@ func DtTables() interface{} {
 		Addresses:  addresses,
 		Users:      users,
 		Brands:     brands,
-		// Offers:     offers,
 	}
 
 	return data

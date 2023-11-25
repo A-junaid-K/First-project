@@ -15,7 +15,7 @@ type User struct {
 	Validate   bool
 	User_type  string `validate:"required, eq=ADMIN|eq=USER"`
 	Created_at time.Time
-	Wallet int
+	Wallet     int
 }
 
 type Address struct {
@@ -26,13 +26,14 @@ type Address struct {
 	Landmark      string `gorm:"not null"`
 	Zip_code      string `gorm:"not null"`
 	User_ID       uint   `gorm:"not null"`
+	Primary       bool
 }
 type Contactdetails struct {
-	Contactdetails_id int `gorm:"primaryKey"`
-	Name           string `validate:"required, min=2,max=50"`
-	Phone string
-	Email          string `gorm:"not null"`
-	Address_ID     uint   `gorm:"not null"`
-	Payment_Method string
-	User_ID        uint `gorm:"not null"`
+	Contactdetails_id int    `gorm:"primaryKey"`
+	Name              string `validate:"required, min=2,max=50"`
+	Phone             string
+	Email             string `gorm:"not null"`
+	Address_ID        uint   `gorm:"not null"`
+	Payment_Method    string
+	User_ID           uint `gorm:"not null"`
 }
