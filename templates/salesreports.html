@@ -175,7 +175,7 @@
                                       <th scope="col">User ID</th>
                                       <th scope="col">Address ID</th>
                                       <th scope="col">Order ID</th>
-                                      <th scope="col">Date</th>
+                                      <th scope="col">Date & Time</th>
                                       <th scope="col">Payment Method</th>
                                       <th scope="col">Payment ID</th>
                                       <th scope="col">Grand Total</th>
@@ -191,7 +191,8 @@
                                         <td>{{.User_ID}}</td>
                                         <td>{{.Address_ID}}</td>
                                         <td>{{.Order_ID}}</td>
-                                        <td>{{.Date}}</td>
+                                        <td>{{.Date.Format "2006-01-02"}} &nbsp; &nbsp; | &nbsp; &nbsp; 	&#9200; {{.Date.Format "15:04:05"}}</td>
+
                                         <td>{{.Payment_Type}}</td>
                                         <td>{{.Payment_ID}}</td>
                                         <td>{{.Total_Price}}</td>

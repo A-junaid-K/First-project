@@ -188,18 +188,19 @@
                             <td>₹{{.Total_Price}}</td>
                             {{if eq .Status "cancelled"}}
                             <td style="color: crimson;" >{{.Status}}</td>
-                            {{end}}
-                            {{if eq .Status "returned"}}
+                            {{else if eq .Status "returned"}}
                             <td style="color: crimson;" >{{.Status}}</td>
                             {{else}}
                             <td>{{.Status}}</td>
                             {{end}}
                             <td>{{.Payment_Type}}</td>
-                            <td>{{.Created_at}}</td>
+                            <td> {{.Created_at.Format "2006-01-02 | 5:04:05"}}</td>
+
+                           
                             <td>
                         </td>
                             <td class="text">
-                                {{if and (ne .Status "delivered") (ne .Status "cancelled")}}
+                                {{if and (ne .Status "delivered") (ne .Status "cancelled") (ne .Status "returned") }}
                             <form action="/user/cancel-order/{{.Order_ItemID}}" method="get">
                             <button class="btn btn-sm btn-outline-dark rounded font-sm mt-15">Cancel</button>
                             </form>
