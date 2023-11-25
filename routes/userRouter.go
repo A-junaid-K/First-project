@@ -88,6 +88,8 @@ func UserRouter(r *gin.Engine) {
 		router.GET("/payment-single-razorpay", middleware.UserAuthentication, controllers.SingleRazorpay)
 		router.GET("/payment-single-razorpay-success", middleware.UserAuthentication, controllers.SingleRazorpaySuccess)
 
+		router.GET("/payment-single-wallet", middleware.UserAuthentication, controllers.SinglePaywithWallet)
+		router.GET("/payment-single-wallet-success", middleware.UserAuthentication, controllers.SingleWalletSuccess)
 
 		// COD
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.GetCod)
