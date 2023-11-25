@@ -140,7 +140,7 @@ button{
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form action="/user/add-address" method="post" >
+    <form action="/user/add-address" method="post"  id="register_form" onsubmit="return validateform()" >
         <h3>Add Address</h3>
       
           <label for="username">Building name</label>
@@ -157,6 +157,7 @@ button{
 
         <label for="Confirmpassword">PIN code</label>
         <input type="number" name="zip" placeholder="PIN code" id="zip" required>
+        <div id="errorContainer1" style="color: crimson;" class="text-danger"></div>
         <br>
         <p style="color: crimson;" >{{.error}}</p>
         <button type="submit" >Add address</button>
@@ -165,3 +166,24 @@ button{
     </form>
 </body>
 </html>
+<script>
+    document.getElementById("register_form").addEventListener("submit", function (event) {
+      if (!validateform()) {
+        event.preventDefault();
+      }
+    });
+  
+    function validateform() {
+
+    var pinInput = document.getElementById("zip");
+    var pinValue = pinInput.value;
+
+    // Check if the PIN code is exactly 6 digits
+    if (pinValue.length != 6 ) {
+      // Valid PIN code
+      document.getElementById("errorContainer1").innerHTML = "Zip code must be 6 character";
+        return false;
+    }
+    return true;
+    }
+  </script>
