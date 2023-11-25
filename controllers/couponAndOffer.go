@@ -143,15 +143,6 @@ func ApplyCoupon(c *gin.Context) {
 		return
 	}
 
-	//calculating total amount
-	// var totalprice uint
-	// err := database.DB.Table("carts").Select("SUM(total_price * quantity)").Where("user_id=?", userId).Scan(&totalprice).Error
-	// if err != nil {
-	// 	log.Println("Cart is empty")
-	// 	c.HTML(400, "checkout.html", gin.H{"error": "cart is empty"})
-	// 	return
-	// }
-
 	//getting the cart data
 	var cart1 []models.Cart
 	err := database.DB.Where("user_id=?", userId).Find(&cart1).Error

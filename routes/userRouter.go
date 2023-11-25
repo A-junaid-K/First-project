@@ -1,8 +1,12 @@
 package routes
 
 import (
+	"os"
+
 	"github.com/first_project/controllers"
 	"github.com/first_project/middleware"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,6 +14,10 @@ func UserRouter(r *gin.Engine) {
 	r.LoadHTMLGlob("templates/*.html")
 	r.Static("/static", "./static")
 	r.GET("/", controllers.Home)
+	// Use cookie-based sessions
+	store := cookie.NewStore([]byte(os.Getenv("SECRET_KEY")))
+	r.Use(sessions.Sessions("mysession", store))
+
 	router := r.Group("/user")
 	{
 		//   User
@@ -72,6 +80,10 @@ func UserRouter(r *gin.Engine) {
 
 		//Instand Purchase
 		router.GET("/buy-now/:product_id", middleware.UserAuthentication, controllers.BuyNow)
+		router.POST("/single-checkout", middleware.UserAuthentication, controllers.ApplyCoupon, controllers.Wallet, controllers.PostBuyCheckout)
+		router.GET("/payment-single-cod", middleware.UserAuthentication, controllers.GetSingleCod)
+		router.GET("/payment-single-cod-success", middleware.UserAuthentication, controllers.SingleCod)
+
 
 		// COD
 		router.GET("/payment-cod", middleware.UserAuthentication, controllers.GetCod)

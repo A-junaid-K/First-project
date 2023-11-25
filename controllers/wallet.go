@@ -13,6 +13,7 @@ import (
 func Wallet(c *gin.Context) {
 	//Initializing DB
 	db := database.DB
+
 	//find user
 	user, _ := c.Get("user")
 	userid := user.(models.User).User_id

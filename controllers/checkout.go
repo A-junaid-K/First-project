@@ -132,6 +132,10 @@ func PostCheckout(c *gin.Context) {
 	}
 }
 
+var totalprice uint
+var productId int
+var qty int
+
 func BuyNow(c *gin.Context) {
 
 	// Retrieving user details
@@ -145,18 +149,22 @@ func BuyNow(c *gin.Context) {
 	database.DB.Where("user_id=?", userid).Find(&adr)
 
 	// Retreive product details
-	product_id, _ := strconv.Atoi(c.Param("product_id"))
+	productId, _ = strconv.Atoi(c.Param("product_id"))
 
 	// Get the size & quantity
 	pdsize := c.Query("size")
-	log.Println("pdsize : ", pdsize)
 	pdquantity, _ := strconv.Atoi(c.Query("qty"))
+	log.Println("pdsize : ", pdsize)
 	log.Println("pdquantity : ", pdquantity)
 
-	var product models.Product
-	database.DB.First(&product, product_id)
+	qty = pdquantity
 
-	totalprice := product.Price * uint(pdquantity)
+	log.Println("PRODFSD ID : ", productId)
+
+	var product models.Product
+	database.DB.First(&product, productId)
+
+	totalprice = product.Price * uint(pdquantity)
 
 	log.Println("total price : ", totalprice)
 
@@ -169,97 +177,76 @@ func BuyNow(c *gin.Context) {
 
 }
 
-// func PostBuyCheckout(c *gin.Context) {
-// 	user, _ := c.Get("user")
-// 	userid := user.(models.User).User_id
+func PostBuyCheckout(c *gin.Context) {
+	user, _ := c.Get("user")
+	userid := user.(models.User).User_id
 
-// 	size := c.PostForm("size")
-// 	qty := c.PostForm("qty")
+	// Recieve user details from Front-end
+	name := c.Request.FormValue("name")
+	email := c.Request.FormValue("email")
+	phone := c.Request.FormValue("number")
 
-// 	log.Println("size : ", size)
-// 	log.Println("qty : ", qty)
+	log.Println("name : ", name)
+	log.Println("phone : ", phone)
 
-// 	c.Writer.Size()
+	err := namevalidator(name)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "singleCheckout.html", gin.H{"error": err})
+	}
+	err = emailvalidator(email)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "singleCheckout.html", gin.H{"error": err})
+	}
+	err = numbervalidator(phone)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "singleCheckout.html", gin.H{"error": err})
+	}
 
-// 	// Recieve user details from Front-end
-// 	name := c.Request.FormValue("name")
-// 	email := c.Request.FormValue("email")
-// 	phone := c.Request.FormValue("number")
+	// recieving the address
+	adrid, _ := strconv.Atoi(c.PostForm("userchosenaddress"))
+	var postadr models.Address
+	err = database.DB.Where("address_id=?", adrid).First(&postadr).Error
+	if err != nil {
+		fmt.Println("errr in cod")
+	}
 
-// 	log.Println("name : ", name)
-// 	log.Println("phone : ", phone)
+	totalprice := totalprice
 
-// 	err := namevalidator(name)
-// 	if err != nil {
-// 		c.HTML(http.StatusBadRequest, "singleCheckout.html", gin.H{"error": err})
-// 	}
-// 	err = emailvalidator(email)
-// 	if err != nil {
-// 		c.HTML(http.StatusBadRequest, "singleCheckout.html", gin.H{"error": err})
-// 	}
-// 	err = numbervalidator(phone)
-// 	if err != nil {
-// 		c.HTML(http.StatusBadRequest, "singleCheckout.html", gin.H{"error": err})
-// 	}
+	var product models.Product
+	database.DB.First(&product, productId)
 
-// 	//get the user
-// 	var dtuser models.User
-// 	err = database.DB.First(&dtuser, userid).Error
-// 	if err != nil {
-// 		c.HTML(404, "singleCheckout.html", gin.H{"error": "This user not found"})
-// 		return
-// 	}
+	if product.Percentage != 0 {
+		discount := totalprice * product.Percentage / 100
+		newprice := totalprice - discount
+		log.Println("newprice : ", newprice)
+	}
 
-// 	//Fetching cart data and Count
-// 	var cartdata []models.Cart
-// 	database.DB.Where("user_id=?", userid).Find(&cartdata)
+	//user chosen payment method
+	paymentMethod := c.PostForm("payment")
+	cod := "cash-on-delivery"
+	razorpay := "razorpay"
+	wallet := "wallet"
 
-// 	for _, v := range cartdata {
-// 		if v.Category_Offer != 0 {
+	//creating contact details
+	result := database.DB.Where("user_id=?", userid).Create(&models.Contactdetails{
+		Name:           name,
+		Email:          email,
+		Address_ID:     uint(adrid),
+		Payment_Method: paymentMethod,
+		User_ID:        userid,
+		Phone:          phone,
+	})
+	if result.Error != nil {
+		c.HTML(400, "checkout.html", gin.H{"error": "Failed to creat contact details"})
+		return
+	}
 
-// 			discount := v.Total_Price * v.Category_Offer / 100
-// 			newprice := v.Total_Price - discount
-
-// 			database.DB.Model(&models.Cart{}).Where("user_id=? AND id=?", userid, v.ID).Update("total_price", newprice)
-// 			log.Println("Offer price updated")
-// 		}
-// 	}
-
-// 	// recieving the address
-// 	adrid, _ := strconv.Atoi(c.PostForm("userchosenaddress"))
-// 	var postadr models.Address
-// 	err = database.DB.Where("address_id=?", adrid).First(&postadr).Error
-// 	if err != nil {
-// 		fmt.Println("errr in cod")
-// 	}
-
-// 	//user chosen payment method
-// 	paymentMethod := c.PostForm("payment")
-// 	cod := "cash-on-delivery"
-// 	razorpay := "razorpay"
-// 	wallet := "wallet"
-
-// 	//creating contact details
-// 	result := database.DB.Where("user_id=?", userid).Create(&models.Contactdetails{
-// 		Name:           name,
-// 		Email:          email,
-// 		Address_ID:     uint(adrid),
-// 		Payment_Method: paymentMethod,
-// 		User_ID:        userid,
-// 		Phone:          phone,
-// 	})
-// 	if result.Error != nil {
-// 		c.HTML(400, "checkout.html", gin.H{"error": "Failed to creat contact details"})
-// 		return
-// 	}
-
-// 	//Redirecting to chosen payment method
-// 	if paymentMethod == cod {
-// 		// c.Redirect(303, "/user/payment-success")
-// 		c.Redirect(303, "/user/payment-cod")
-// 	} else if paymentMethod == razorpay {
-// 		c.Redirect(303, "/user/payment-razorpay")
-// 	} else if paymentMethod == wallet {
-// 		c.Redirect(303, "/user/payment-wallet")
-// 	}
-// }
+	//Redirecting to chosen payment method
+	if paymentMethod == cod {
+		c.Redirect(303, "/user/payment-single-cod")
+	} else if paymentMethod == razorpay {
+		c.Redirect(303, "/user/payment-razorpay")
+	} else if paymentMethod == wallet {
+		c.Redirect(303, "/user/payment-wallet")
+	}
+}
