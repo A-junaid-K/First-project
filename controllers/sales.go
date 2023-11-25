@@ -100,10 +100,10 @@ func convertintoPdf(c *gin.Context) {
 
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
-	pdf.SetMargins(20, 10, 20)
+	pdf.SetMargins(10, 10, 20)
 	pdf.Ln(-1)
 	pdf.SetFont("Arial", "B", 14)
-	pdf.Cell(10, 10, "Sales report")
+	pdf.Cell(5, 10, "Sales report")
 	pdf.Ln(20)
 	pdf.SetFont("Arial", "B", 8)
 	// Convertig each cell in the Excel file to a PDF cell
@@ -115,7 +115,7 @@ func convertintoPdf(c *gin.Context) {
 					continue
 				}
 
-				pdf.CellFormat(25, 10, cell.Value, "1", 0, "C", false, 0, "")
+				pdf.CellFormat(24, 8, cell.Value, "1", 0, "C", false, 0, "")
 			}
 			pdf.Ln(-1)
 		}
