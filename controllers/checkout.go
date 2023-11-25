@@ -245,8 +245,8 @@ func PostBuyCheckout(c *gin.Context) {
 	if paymentMethod == cod {
 		c.Redirect(303, "/user/payment-single-cod")
 	} else if paymentMethod == razorpay {
-		c.Redirect(303, "/user/payment-razorpay")
+		c.Redirect(303, "/user/payment-single-razorpay")
 	} else if paymentMethod == wallet {
-		c.Redirect(303, "/user/payment-wallet")
+		c.Redirect(303, "/user/payment-single-wallet")
 	}
 }

@@ -81,8 +81,12 @@ func UserRouter(r *gin.Engine) {
 		//Instand Purchase
 		router.GET("/buy-now/:product_id", middleware.UserAuthentication, controllers.BuyNow)
 		router.POST("/single-checkout", middleware.UserAuthentication, controllers.ApplyCoupon, controllers.Wallet, controllers.PostBuyCheckout)
+
 		router.GET("/payment-single-cod", middleware.UserAuthentication, controllers.GetSingleCod)
 		router.GET("/payment-single-cod-success", middleware.UserAuthentication, controllers.SingleCod)
+
+		router.GET("/payment-single-razorpay", middleware.UserAuthentication, controllers.SingleRazorpay)
+		router.GET("/payment-single-razorpay-success", middleware.UserAuthentication, controllers.SingleRazorpaySuccess)
 
 
 		// COD
