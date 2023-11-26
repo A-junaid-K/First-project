@@ -30,19 +30,41 @@ func PostAddAddress(c *gin.Context) {
 		})
 		return
 	}
-	err := database.DB.Create(&models.Address{
-		Building_Name: building_name,
-		City:          city,
-		State:         state,
-		Landmark:      landmark,
-		Zip_code:      zip,
-		User_ID:       userId,
-	}).Error
-	if err != nil {
-		c.HTML(400, "address.html", gin.H{
-			"error": "Failed to add address",
-		})
-		return
+
+	//Checking, Did he have an Address
+	var adr models.Address
+	database.DB.Where("user_id=?", userId).Find(&adr)
+
+	if adr == (models.Address{}) {
+		err := database.DB.Create(&models.Address{
+			Building_Name: building_name,
+			City:          city,
+			State:         state,
+			Landmark:      landmark,
+			Zip_code:      zip,
+			User_ID:       userId,
+			Primary:       true,
+		}).Error
+		if err != nil {
+			c.HTML(400, "address.html", gin.H{"error": "Failed to first add address"})
+			return
+		}
+		log.Println("Primary Address has added")
+	} else {
+		err := database.DB.Create(&models.Address{
+			Building_Name: building_name,
+			City:          city,
+			State:         state,
+			Landmark:      landmark,
+			Zip_code:      zip,
+			User_ID:       userId,
+		}).Error
+		if err != nil {
+			c.HTML(400, "address.html", gin.H{
+				"error": "Failed to add address",
+			})
+			return
+		}
 	}
 
 	c.Redirect(303, "/user/user-details")
