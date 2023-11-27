@@ -111,7 +111,8 @@
         url: `/user/payment-razorpay-success?user_id=${userid}&payment_id=${res.razorpay_payment_id}&order_id=${res.razorpay_order_id}&signature=${res.razorpay_signature}&total=${total}`,
         method: 'GET',
         success: (response) => {
-          if (response.status) {
+          console.log("response : ",response);
+          if (response.status == true) {
             console.log('test success')
             const id = response.payment_id
 
