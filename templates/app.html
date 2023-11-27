@@ -123,11 +123,6 @@
             console.log('test success')
             const id = response.payment_id
 
-            console.log("response : ", response)
-
-            console.log("id : ", id)
-
-
             location.href = `/user/payment-success?id=${encodeURIComponent(id)}`
 
             console.log("success id  : ", encodeURIComponent(id));
