@@ -122,7 +122,7 @@ func RazorpaySuccess(c *gin.Context) {
 		Total_Amount:   totalprice,
 		Payment_Status: "Completed",
 		User_ID:        userid,
-		Date:           time.Now(),
+		Date:           time.Now().Add(5*time.Hour + 30*time.Minute),
 	}).Error
 	if err != nil {
 		log.Println("Failed to creat payment : ", err)
@@ -144,7 +144,7 @@ func RazorpaySuccess(c *gin.Context) {
 		Total_Price:  totalprice,
 		Payment_ID:   payment.Payment_ID,
 		Status:       "processing",
-		Date:         time.Now(),
+		Date:         time.Now().Add(5*time.Hour + 30*time.Minute),
 		Payment_Type: "RAZOR PAY",
 	}).Error
 	if err != nil {
@@ -174,7 +174,7 @@ func RazorpaySuccess(c *gin.Context) {
 			Discount:    cartdata.Category_Offer + cartdata.Coupon_Discount,
 			Cart_ID:     cartdata.ID,
 			Status:      "processing",
-			Created_at:  time.Now(),
+			Created_at:  time.Now().Add(5*time.Hour + 30*time.Minute),
 		}).Error
 		if err != nil {
 			log.Println("Failed to creat OrderItem : ", err)
