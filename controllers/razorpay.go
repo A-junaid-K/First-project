@@ -200,9 +200,20 @@ func RazorpaySuccess(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(303, "/user/payment-success")
+	// c.Redirect(303, "/user/payment-success")
+
+	log.Println("message : successfully ordered your cart")
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":     true,
+		"payment_id": payment.Payment_ID,
+		"Message":    "Order Placed Successfully",
+		"notice":     "Item removed from cart",
+	})
 
 }
+
+//-------------------------------------------Instand Purchase-----------------------------------------//
 
 func SingleRazorpay(c *gin.Context) {
 	user, _ := c.Get("user")
