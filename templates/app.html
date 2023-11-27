@@ -119,7 +119,7 @@
         method: 'GET',
         success: (response) => {
           console.log("response : ", response);
-          if (response.status == true) {
+          if (response) {
             console.log('test success')
             const id = response.payment_id
 
