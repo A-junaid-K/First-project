@@ -77,7 +77,7 @@ func MultipleFilter(c *gin.Context) {
 
 func Search(c *gin.Context) {
 
-	name := c.Request.FormValue("name")
+	name := c.Query("name")
 
 	log.Println("name : ", name)
 
