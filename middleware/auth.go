@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,13 +16,31 @@ import (
 
 func UserAuthentication(c *gin.Context) {
 
+	// tokenString, err := c.Cookie("jwt_user")
+	// if err != nil {
+	// 	log.Println("error in jwt_user : ", err)
+	// 	c.Redirect(303, "/user/login")
+	// 	c.AbortWithStatus(400)
+	// 	return
+	// }
+
 	tokenString, err := c.Cookie("jwt_user")
 	if err != nil {
-		log.Println("error in jwt_user : ", err)
-		c.Redirect(303, "/user/login")
-		c.AbortWithStatus(400)
+		if errors.Is(err, http.ErrNoCookie) {
+			// Redirect to login page if the cookie is not found
+			log.Println("User not logged in. Redirecting to login page.")
+			c.Redirect(http.StatusSeeOther, "/user/login")
+			c.AbortWithStatus(http.StatusSeeOther)
+			return
+		}
+		// Handle other errors appropriately
+		log.Println("Error retrieving jwt_user cookie:", err)
+		c.AbortWithStatus(http.StatusInternalServerError) // or handle differently based on the type of error
 		return
 	}
+
+	//----------------
+
 	//Decode / validate it
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 
